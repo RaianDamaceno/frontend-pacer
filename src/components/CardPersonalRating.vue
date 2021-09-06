@@ -85,7 +85,7 @@
 					dark
 					>
 					<div class="grey--text text--lighten-1 text-body-2 mb-4">
-						{{ msg }}
+						Deseja confirmar a inserção da classificação do seu colega ?
 					</div>
 					<v-btn
 						class="ma-1"
@@ -118,13 +118,18 @@
     data: () => ({
         cardProps: false,
         card: false,
+        snackbar: false
     }),
     methods: {
         showCard: function() {
-            this.card = true;
+            this.card = true
         },
         hideCard: function() {
              this.card = false;
+        },
+        showSnackbar: function() {
+            this.snackbar = true
+            this.card = false
         }
     }
   })
