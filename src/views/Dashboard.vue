@@ -1,5 +1,8 @@
 <template>
-  <card-personal-rating />
+    <div>
+        <card-personal-rating />
+        <CardConfirmation msg="Deseja confirmar a sua avaliação ?"/>
+    </div>
 </template>
 
 <script lang="ts">
