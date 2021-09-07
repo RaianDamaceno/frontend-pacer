@@ -1,9 +1,9 @@
 <template>
     <div class="page">
         <div class="screen-registration">
-            <h1 class="description">Descrição de Projeto</h1>
-            <h1>Data de Inicio</h1>
-            <h1>Date de Fechamento</h1>
+            <h1 class="description">{{ descriptionTitle }}</h1>
+            <h1>{{ dateStart }}</h1>
+            <h1>{{ dateEnd }}</h1>
         </div>
         <div class="registration">
             <input type="text" placeholder="Descrição" class="description input-style" v-model="descriptionInput">
@@ -24,6 +24,8 @@
 <style lang="scss">
     .page
     {
+        background: linear-gradient(360deg, rgba(139,139,139,1) 20%, rgba(255,255,255,1) 100%);
+        padding-bottom: 10%;
         .screen-registration
         {
             padding: 0 100px;
@@ -50,7 +52,7 @@
 
             .description
             {
-                width: 48%;
+                width: 50%;
             }
 
             .config
@@ -59,7 +61,6 @@
                 display: flex;
                 flex-direction: row;
                 justify-content: center;
-                align-items: center;
                 gap: 10px;
 
                 .input-criteria
@@ -82,9 +83,18 @@
         .input-style
         {
             width: 100%;
-            height: 30px;
-            border-radius: 8px;
-            background-color: #ededed;
+            margin-bottom: 10px;
+            background: rgba(65, 65, 65, 0.3);
+            border: none;
+            outline: none;
+            padding: 10px;
+            font-size: 13px;
+            color: #fff;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+            border: 1px solid rgba(0,0,0,0.3);
+            border-radius: 4px;
+            box-shadow: inset 0 -5px 45px rgba(100,100,100,0.2), 0 1px 1px rgba(255,255,255,0.2);
+
         }
 
     }
@@ -93,21 +103,27 @@
 import Vue from 'vue'
 export default Vue.extend({
     data: () => ({
+        /**Variables to inputs */
         descriptionInput: '',
         min: '',
         max: '',
         weight: '',
-        inactive: false
+        inactive: false,
+
+        /**Variables to usage to show on template */
+        descriptionTitle: 'Descrição de Projeto',
+        dateStart: 'Data de Inicio',
+        dateEnd: 'Date de Fechamento'
     }),
 
     methods:
     {
         button: function(): void
         {
-            alert('Hello \n'
-                    + this.max + '\n'
-                    + this.min + '\n'
+            alert('Values \n'
                     + this.descriptionInput + '\n'
+                    + this.min + '\n'
+                    + this.max + '\n'
                     + this.weight + '\n'
                     + this.inactive + '\n'
             )
