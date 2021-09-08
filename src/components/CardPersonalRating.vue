@@ -72,10 +72,12 @@
 			<div class="text-center">
 				<v-snackbar
 					v-model="snackbar"
-					:timeout="timeout"  >
+					:timeout="timeout"
+                    type="success"
+                    >
 					Avaliação enviada com sucesso! 
 				</v-snackbar>
-			</div>
+			</div> 
 		</div>
 		<div>
 			<div class="text-center" v-if="card">
@@ -146,6 +148,8 @@
         background: rgb(2,0,36);
         background: linear-gradient(47deg, rgba(2,0,36,1) 0%, rgba(13,44,82,1) 31%, rgba(90,26,159,1) 97%);
         color: #fff;
+        position: absolute;
+        float: right;
     }
 
     .card-person {
