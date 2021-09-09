@@ -79,8 +79,8 @@
 				</v-snackbar>
 			</div> 
 		</div>
-		<div>
-			<div class="text-center" v-if="card">
+		<div class="confirmation" v-if="card">
+			<div class="text-center">
 				<v-sheet
 					class="px-7 pt-7 pb-4 mx-auto text-center d-inline-block"
 					color="blue-grey darken-3"
@@ -113,7 +113,6 @@
 
 <script lang="ts">
   import Vue from 'vue'
-
 
   export default Vue.extend({
     name: 'CardPersonalRating',
@@ -150,6 +149,8 @@
         color: #fff;
         position: absolute;
         float: right;
+		justify-content: center;
+		align-items: center;
     }
 
     .card-person {
@@ -179,4 +180,11 @@
         width: 100%;
         justify-content: flex-end;
     }
+
+	.confirmation {
+		display: flex;
+
+		justify-content: flex-end;
+	}
+	
 </style>
