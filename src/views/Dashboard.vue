@@ -3,7 +3,7 @@
 		<div class="card-rating" v-if="cards">
 			<card-personal-rating/>
 		</div>
-     <AdicionaCriteriosAva v-if="critAva"/>
+     
 		<div class="dashboard-myRating">
 			<div>
 			</div>
@@ -39,16 +39,8 @@
 		</div>
 
 		<div class="dashboard-info">
-			<div>
-
-        <v-btn class="button-critAva"
-        color="primary"
-          dark
-        v-bind="attrs"
-        v-on:click="showCritAva" >
-        Open Dialog
-        </v-btn>   
-
+			<div class="dashboard-info-criterios">
+        <AdicionaCriteriosAva/>
 			</div>
 			<div>
 			</div>
@@ -61,7 +53,7 @@
   import Vue from 'vue'
   import CardPersonalRating from '../components/CardPersonalRating.vue'
   import AdicionaCriteriosAva from '../components/AdicionaCriteriosAva.vue'
-
+  
   export default Vue.extend({
     name: 'Dashboard',
 
@@ -165,14 +157,12 @@
     display: flex;
     justify-content: end;
   }
-
-  .button-critAva {
-   display: flex;
-    margin-top: 25%;
-    margin-left: 25%;
-    height: 20%;
-    width: 50%;
-    cursor: pointer;
-  }
   
+  .dashboard-info-criterios {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    width: auto;
+  }
 </style>
