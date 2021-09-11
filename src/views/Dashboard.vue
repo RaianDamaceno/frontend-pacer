@@ -39,6 +39,7 @@
 
 		<div class="dashboard-info">
 			<div>
+        <modal-criacao-criterios />
 			</div>
 			<div>
 			</div>
@@ -105,7 +106,7 @@
     display: flex;
     align-items: center;
     justify-content: space-around;
-				background-color: white;
+		background-color: white;
 		
   }
 
