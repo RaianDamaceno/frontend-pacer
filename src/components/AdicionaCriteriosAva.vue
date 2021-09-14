@@ -12,36 +12,46 @@
           v-bind="attrs"
           v-on="on"
         >
-          Cadastrar criterios de avaliação
+          Critérios Avaliação
         </v-btn>
       </template>
+
       <v-card>
         <v-card-title>
-          <span class="text-h5">Cadastro de Criterios</span>
+          <span class="text-h5">Cadastro de Critérios de Avaliação</span>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
               <v-col cols="12">
-                <v-text-field
-                  label="Nome do Criterio*"
+                <v-autocomplete
+                  :items='this.projects'
+                  label="Grupos* "
+                  multiple
                   required
-                ></v-text-field>
+                ></v-autocomplete>
+              </v-col>
+              <v-col cols="12">
+                  <v-autocomplete
+                  :items='this.criterias'
+                  label="Critérios* "
+                  multiple
+                  required
+                ></v-autocomplete>
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                  label="Descrição do Criterio"
+                  label="Nota Minima*"
                   required
                 ></v-text-field>
-              </v-col>
-              <v-col
-                cols="12"
-              >
-                <v-autocomplete
-                  :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
-                  label="Grupos "
-                  multiple
-                ></v-autocomplete>
+                <v-text-field
+                  label="Nota Maxima*"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  label="Peso do Criterio*"
+                  required
+                ></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -70,10 +80,39 @@
 </template>
 
 <script>
+
+  import axios from 'axios'
+
   export default {
     data: () => ({
       dialog: false,
+      projects: [],
+      criterias: []
     }),
+
+    methods: {
+        async getProjects() {
+            await axios.get('http://localhost:3000/project').then((response) => {
+              this.projects = response.data.map(obj => {return obj['description'];});
+              console.log(response.data);
+            }, (error) => {
+              console.log(error);
+            });
+            console.log (this.projects)
+        },
+        async getcriterias() {
+            await axios.get('http://localhost:3000/project').then((response) => {
+              this.criterias = response.data.map(obj => {return obj['description'];});
+              console.log(response.data);
+            }, (error) => {
+              console.log(error);
+            });
+            console.log (this.criterias)
+        }
+    },
+    beforeMount() {
+        this.getProjects();
+    }
   }
 </script>
 

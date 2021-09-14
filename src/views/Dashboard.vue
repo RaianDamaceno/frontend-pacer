@@ -1,9 +1,10 @@
 <template>
+
 	<div class="dashboard">
 		<div class="card-rating" v-if="cards">
 			<card-personal-rating/>
 		</div>
-     
+
 		<div class="dashboard-myRating">
 			<div>
 			</div>
@@ -83,6 +84,7 @@
     flex-direction: column;
     justify-content: space-around;
     height: 100%;
+    width: 100%; 
   }
 
   .dashboard-myRating, .dashboard-info {
@@ -93,11 +95,25 @@
 
   }
 
-  .dashboard-myRating div, .dashboard-info div {
+  .dashboard-myRating div  {
     width: 30%;
     border: solid 1px black;
     border-radius: 10px;
 		background-color: white;
+  }
+
+  .dashboard-info div {
+    width: 30%;
+    height: 40%;
+    border: solid 1px black;
+    border-radius: 2px;
+		background-color: white;
+
+    .row{
+      border-style: none !important;
+      background-color: transparent !important;
+    }
+    
   }
 
   .dashboard-group {
@@ -165,4 +181,10 @@
     height: auto;
     width: auto;
   }
+
+  .v-tab {
+    margin-top: 25px;
+  }
+
+  
 </style>
