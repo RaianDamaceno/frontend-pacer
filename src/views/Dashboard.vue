@@ -135,7 +135,6 @@
     border-radius: 50%;
     height: 70%;
     width: 40%;
-    background-color: #fff;
   }
   
   .dashboard-group-person-button {
