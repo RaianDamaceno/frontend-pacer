@@ -1,8 +1,5 @@
 <template>
 	<div class="dashboard">
-		<div class="card-rating" v-if="cards">
-			<card-personal-rating/>
-		</div>
 		<div class="dashboard-myRating">
 			<div>
 			</div>
@@ -22,14 +19,7 @@
 						<span> John Doe </span>
 					</div>
 					<div class="dashboard-group-person-button">
-						<v-btn
-							color="accent"
-							small                 
-							fab
-							@click="showCard"
-							>
-							<v-icon>mdi-plus</v-icon>
-						</v-btn>
+            <card-student-rating />
 					</div>
 				</div>
 			</div>
@@ -50,13 +40,13 @@
 </template>
 <script lang="ts">
   import Vue from 'vue'
-  import CardPersonalRating from '../components/CardPersonalRating.vue'
+  import CardStudentRating from '../components/CardStudentRating.vue'
 
   export default Vue.extend({
     name: 'Dashboard',
 
     components: {
-      CardPersonalRating,
+      CardStudentRating 
     },
      data: () => ({
        cards: false
@@ -123,6 +113,8 @@
     border: solid 1px black;
     border-radius: 5px;
     text-align: center;
+    background: rgb(2,0,36);
+    background: linear-gradient(47deg, rgba(2,0,36,1) 0%, rgba(13,44,82,1) 31%, rgba(90,26,159,1) 97%);
 		
   }
 
@@ -143,6 +135,7 @@
     border-radius: 50%;
     height: 70%;
     width: 40%;
+    background-color: #fff;
   }
   
   .dashboard-group-person-button {
