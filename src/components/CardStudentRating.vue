@@ -1,5 +1,6 @@
 <template>
    <v-row justify="center" color="primary" >
+       
       <v-dialog
          v-model="dialog"
          persistent
@@ -28,30 +29,16 @@
                      <div class="card-person-image"></div>
                   </div>
                   <div class="card-rating">
-                     <div>
+                     <div v-for="criterio in criterios" :key="criterio.id">
                         <v-slider
-                           v-model="time"
+                           v-model="criterio.rating"
                            :tick-labels="labels"
                            always-dirty
-                           class="mx-5"
+                           class="mx-5 color__text"
                            min="0"
                            max="100"
                            thumb-label="always"
-                           label="Proatividade"
-                           color="green darken-1"
-                           />
-
-                    </div>
-                     <div>
-                        <v-slider
-                           v-model="time"
-                           :tick-labels="labels"
-                           always-dirty
-                           class="mx-5"
-                           min="0"
-                           max="100"
-                           thumb-label="always"
-                           label="Execução"
+                           :label="criterio.nome"
                            color="green darken-1"
                            />
                     </div>
@@ -72,6 +59,7 @@
                   text
                   @click="dialog = false"
                   >
+                 
                   Salvar
                </v-btn>
             </v-card-actions>
@@ -79,29 +67,34 @@
       </v-dialog>
    </v-row>
 </template>
+
 <script>
-  export default {
-    data () {
-      return {
-        dialog: false,
-        cardProps: false,
-        card: false,
-        snackbar: false
+   export default {
+      name:'CardStudentRating',
+      props: {
+            criterios: Object,
+      },
+      data () {
+         return {
+         dialog: false,
+         cardProps: false,
+         card: false,
+         snackbar: false
+         }
+      },
+      methods: {
+         showCard: function() {
+               this.card = true
+         },
+         hideCard: function() {
+                  this.card = false;
+         },
+         showSnackbar: function() {
+               this.snackbar = true
+               this.card = false
+         }
       }
-    },
-    methods: {
-        showCard: function() {
-            this.card = true
-        },
-        hideCard: function() {
-                this.card = false;
-        },
-        showSnackbar: function() {
-            this.snackbar = true
-            this.card = false
-        }
-    }
-  }
+   }
 </script>
 
 <style scoped lang="scss">
@@ -129,5 +122,9 @@
     .card-rating {
         min-height: 300px;
         width: 100%;
+    }
+
+    .color__text {
+       color: #fff,
     }
 </style>
