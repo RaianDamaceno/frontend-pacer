@@ -2,7 +2,8 @@
   <v-app>
     <v-navigation-drawer         
         permanent
-        app>
+        app
+        class="nav">
     </v-navigation-drawer>
     <v-main class="teste">
       <router-view/>
@@ -24,8 +25,14 @@ export default Vue.extend({
 </script>
 
 <style>
-.teste {
-  background-color: #DCE6EB;
-}
+  .teste {
+    background-color: #DCE6EB;
+  }
+
+  @media (min-width: 320px) and (max-width: 640px) { 
+      .nav {
+        visibility: hidden;
+      }
+  }
 </style>
 

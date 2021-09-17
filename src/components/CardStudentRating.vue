@@ -54,14 +54,7 @@
                   >
                   Fechar
                </v-btn>
-               <v-btn
-                  color="green darken-1"
-                  text
-                  @click="dialog = false"
-                  >
-                 
-                  Salvar
-               </v-btn>
+               <card-toast-validation text="Avaliação enviada com sucesso"/>
             </v-card-actions>
          </v-card>
       </v-dialog>
@@ -69,31 +62,24 @@
 </template>
 
 <script>
+   import CardToastValidation from './CardToastValidation.vue'
+
    export default {
       name:'CardStudentRating',
       props: {
-            criterios: Object,
+            criterios: Array,
+      },
+      components: {
+         CardToastValidation 
       },
       data () {
          return {
-         dialog: false,
-         cardProps: false,
-         card: false,
-         snackbar: false
+            dialog: false,
+            cardProps: false,
+            card: false,
+            snackbar: false
          }
       },
-      methods: {
-         showCard: function() {
-               this.card = true
-         },
-         hideCard: function() {
-                  this.card = false;
-         },
-         showSnackbar: function() {
-               this.snackbar = true
-               this.card = false
-         }
-      }
    }
 </script>
 

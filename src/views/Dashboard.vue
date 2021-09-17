@@ -1,22 +1,22 @@
 <template>
 	<div class="dashboard">
-		<div class="dashboard-myRating">
+		<!-- <div class="dashboard-myRating">
 			<div>
 			</div>
 			<div>
 			</div>
 			<div>
 			</div>
-		</div>
+		</div> -->
   
 		<div class="dashboard-group">
 			<div class="dashboard-group-person">
-				<div class="dashboard-group-person-minify">
+				<div class="dashboard-group-person-minify" v-for="estudante in estudantes" :key="estudante.data.id">
 					<div class="dashboard-group-person-minify-pictures">
 						<div></div>
 					</div>
 					<div class="dashboard-group-person-name">
-						<span> John Doe </span>
+						<span> {{ estudante.data[0].estudantes[0].nome}} </span>
 					</div>
 					<div class="dashboard-group-person-button">
             <card-student-rating :criterios="criterios" />
@@ -32,7 +32,6 @@
         <modal-criacao-criterios  />
 			</div>
 			<div>
-        {{ criterios }}
 			</div>
 			<div>
 			</div>
@@ -54,12 +53,14 @@
      data: () => ({
        cards: false,
        criterios: "",
+       estudantes: "",
        errors: ""
      }),
      created() {
         axios.get(`https://5acce45494587a0014eda8c3.mockapi.io/estudante`)
         .then(response => {
           this.criterios = response.data[0].data[0].estudantes[0].criterios
+          this.estudantes = response.data
         })
       },
       methods: {
@@ -71,6 +72,10 @@
 </script>
 
 <style scoped lang="scss">
+  .dashboard-myRating {
+    visibility: hidden;
+    display: none;
+  }
   .dashboard {
     display: flex;
     flex-direction: column;
@@ -142,10 +147,30 @@
     border-radius: 50%;
     height: 70%;
     width: 40%;
+    background-color: #fff;
   }
   
   .dashboard-group-person-button {
     display: flex;
     justify-content: end;
+  }
+
+  @media (min-width: 320px) and (max-width: 640px) { 
+    .dashboard {
+      min-height: 100%;
+    }
+    .dashboard-myRating, .dashboard-info, .dashboard-group  {
+      flex-direction: column;
+      height: 800px;
+      justify-content: space-around;
+      padding: 20px;
+    }
+
+    .dashboard-myRating div, .dashboard-group-myrating, .dashboard-info div, .dashboard-group-person {
+      width: 100%;
+      height: inherit;
+      margin-top: 3%;
+    } 
+
   }
 </style>
