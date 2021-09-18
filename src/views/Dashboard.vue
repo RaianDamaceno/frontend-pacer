@@ -1,42 +1,56 @@
 <template>
-	<div class="dashboard">
-		<!-- <div class="dashboard-myRating">
-			<div>
-			</div>
-			<div>
-			</div>
-			<div>
-			</div>
-		</div> -->
-  
-		<div class="dashboard-group">
-			<div class="dashboard-group-person">
-				<div class="dashboard-group-person-minify" v-for="estudante in estudantes" :key="estudante.data.id">
-					<div class="dashboard-group-person-minify-pictures">
-						<div></div>
-					</div>
-					<div class="dashboard-group-person-name">
-						<span> {{ estudante.data[0].estudantes[0].nome}} </span>
-					</div>
-					<div class="dashboard-group-person-button">
-            <card-student-rating :criterios="criterios" />
-					</div>
-				</div>
-			</div>
-			<div class="dashboard-group-myrating">
-			</div>
-		</div>
+    <div class="dashboard">
+        <div class="dashboard-group">
+            <div class="dashboard-group-person">
+                <v-slide-group
+                    v-model="model"
+                    class="pa-4"
+                    center-active
+                    show-arrows
+                    >
+                    <v-slide-item
+                        v-for="estudante in estudantes"
+                        :key="estudante.data.id"
+                        >
+                        <v-card
+                            class="ma-4"
+                            height="200"
+                            width="++++++180"
+                            >
+                            <div class="dashboard-group-person-minify">
+                              <div class="dashboard-group-person-minify-pictures">
+                                  <div></div>
+                              </div>
+                              <div class="dashboard-group-person-name">
+                                  <span> {{ estudante.data[0].estudantes[0].nome}} </span>
+                              </div>
+                              <div class="dashboard-group-person-button">
+                                  <card-student-rating :criterios="criterios" />
+                              </div>
+                            </div>
 
-		<div class="dashboard-info">
-			<div>
-        <modal-criacao-criterios  />
-			</div>
-			<div>
-			</div>
-			<div>
-			</div>
-		</div>
-	</div>
+                            <v-row
+                                class="fill-height"
+                                align="center"
+                                justify="center"
+                                >
+                            </v-row>
+                        </v-card>
+                    </v-slide-item>
+                </v-slide-group>
+            </div>
+            <div class="dashboard-group-myrating">
+            </div>
+        </div>
+        <div class="dashboard-info">
+            <div>
+            </div>
+            <div>
+            </div>
+            <div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script lang="ts">
@@ -72,10 +86,6 @@
 </script>
 
 <style scoped lang="scss">
-  .dashboard-myRating {
-    visibility: hidden;
-    display: none;
-  }
   .dashboard {
     display: flex;
     flex-direction: column;
@@ -83,14 +93,24 @@
     height: 100%;
   }
 
-  .dashboard-myRating, .dashboard-info {
+  span {
+    color: #fff;
+  }
+  .ma-4 {
+    background: rgb(2,0,36);
+    background: linear-gradient(47deg, rgba(2,0,36,1) 0%, rgba(13,44,82,1) 31%, rgba(90,26,159,1) 97%);
+    border-radius: 5px;
+    text-align: center;
+  }
+
+  .dashboard-info {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     height: 30%;
   }
 
-  .dashboard-myRating div, .dashboard-info div {
+  .dashboard-info div {
     width: 30%;
     border: solid 1px black;
     border-radius: 10px;
@@ -122,13 +142,8 @@
   }
 
   .dashboard-group-person-minify {
-    width: 16%;
-    height: 70%;
-    border: solid 1px black;
-    border-radius: 5px;
+    height: 200px;
     text-align: center;
-    background: rgb(2,0,36);
-    background: linear-gradient(47deg, rgba(2,0,36,1) 0%, rgba(13,44,82,1) 31%, rgba(90,26,159,1) 97%);
   }
 
   .dashboard-group-person-minify div {
@@ -145,8 +160,8 @@
   .dashboard-group-person-minify-pictures div {
     border: solid 1px;
     border-radius: 50%;
-    height: 70%;
-    width: 40%;
+    height: 70px;
+    width: 70px;
     background-color: #fff;
   }
   
@@ -159,14 +174,14 @@
     .dashboard {
       min-height: 100%;
     }
-    .dashboard-myRating, .dashboard-info, .dashboard-group  {
+    .dashboard-info, .dashboard-group  {
       flex-direction: column;
       height: 800px;
       justify-content: space-around;
       padding: 20px;
     }
 
-    .dashboard-myRating div, .dashboard-group-myrating, .dashboard-info div, .dashboard-group-person {
+    .dashboard-group-myrating, .dashboard-info div, .dashboard-group-person {
       width: 100%;
       height: inherit;
       margin-top: 3%;
