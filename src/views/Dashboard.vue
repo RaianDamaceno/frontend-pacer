@@ -4,7 +4,24 @@
 		<div class="card-rating" v-if="cards">
 			<card-personal-rating/>
 		</div>
+     <template>
+      <v-card >
+        <v-app-bar
+          absolute
+          color="#6A76AB"
+          dark
+          prominent
+          height="70%"
+        >
+          <v-spacer>
+            <v-toolbar-title>PACER</v-toolbar-title>
+          </v-spacer>
+          <v-tab ><AdicionaCriteriosAva/></v-tab>
 
+        </v-app-bar>
+      
+      </v-card>
+    </template>
 		<div class="dashboard-myRating">
 			<div>
 			</div>
@@ -41,7 +58,7 @@
 
 		<div class="dashboard-info">
 			<div class="dashboard-info-criterios">
-        <AdicionaCriteriosAva/>
+        
 			</div>
 			<div>
 			</div>
@@ -92,6 +109,7 @@
     flex-direction: row;
     justify-content: space-around;
     height: 30%;
+    margin-top: 100px;
 
   }
 

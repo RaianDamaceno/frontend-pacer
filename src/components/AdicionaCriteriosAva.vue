@@ -22,38 +22,55 @@
         </v-card-title>
         <v-card-text>
           <v-container>
-            <v-row>
-              <v-col cols="12">
-                <v-autocomplete
-                  :items='this.projects'
-                  label="Grupos* "
-                  multiple
-                  required
-                ></v-autocomplete>
-              </v-col>
-              <v-col cols="12">
+            <v-form ref="form">
+              <v-row>
+                <v-col cols="12">
                   <v-autocomplete
-                  :items='this.criterias'
-                  label="Critérios* "
-                  multiple
-                  required
-                ></v-autocomplete>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  label="Nota Minima*"
-                  required
-                ></v-text-field>
-                <v-text-field
-                  label="Nota Maxima*"
-                  required
-                ></v-text-field>
-                <v-text-field
-                  label="Peso do Criterio*"
-                  required
-                ></v-text-field>
-              </v-col>
-            </v-row>
+                    :items='this.projects'
+                    label="Grupos* "
+                    required
+                    id="project"
+                    item-text="description"
+                    item-value="idProject"
+                    v-model="formProject"
+                  ></v-autocomplete>
+                </v-col>
+                <v-col cols="12">
+                    <v-autocomplete
+                    :items='this.criterias'
+                    label="Critérios*"
+                    required
+                    id="criteria"
+                    item-text="descCriteria"
+                    item-value="idCriteria"
+                    v-model="formCriteria"
+                  ></v-autocomplete>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    label="Nota Minima*"
+                    type="number"
+                    required
+                    id="notaMinima"
+                    v-model="formNotaMinima"
+                  ></v-text-field>
+                  <v-text-field
+                    label="Nota Maxima*"
+                    type="number"
+                    required
+                    id="notaMaxima"
+                    v-model="formNotaMaxima"
+                  ></v-text-field>
+                  <v-text-field
+                    label="Peso do Criterio*"
+                    type="number"
+                    required
+                    id="PesoCriterio"
+                    v-model="formPesoNota"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </v-form>
           </v-container>
           <small>*Campos obrigatorios</small>
         </v-card-text>
@@ -69,7 +86,7 @@
           <v-btn
             color="blue darken-1"
             text
-            @click="dialog = false"
+            @click="submitForm"
           >
             Salvar
           </v-btn>
@@ -87,31 +104,57 @@
     data: () => ({
       dialog: false,
       projects: [],
-      criterias: []
+      criterias: [],
+      formProject: '',
+      formCriteria: '',
+      formNotaMinima: '',
+      formNotaMaxima: '',
+      formPesoNota: '',
     }),
 
     methods: {
         async getProjects() {
             await axios.get('http://localhost:3000/project').then((response) => {
-              this.projects = response.data.map(obj => {return obj['description'];});
+              this.projects = response.data;
               console.log(response.data);
             }, (error) => {
               console.log(error);
             });
             console.log (this.projects)
         },
-        async getcriterias() {
-            await axios.get('http://localhost:3000/project').then((response) => {
-              this.criterias = response.data.map(obj => {return obj['description'];});
+        async getCriterias() {
+            await axios.get('http://localhost:3000/criteria').then((response) => {
+              this.criterias = response.data;
               console.log(response.data);
             }, (error) => {
               console.log(error);
             });
             console.log (this.criterias)
+        },
+        async submitForm(){
+          this.dialog=false
+          const associateCriteria = {
+            'idProject': this.formProject,
+            'idCriteria': this.formCriteria,
+            'minGrade': parseInt(this.formNotaMinima, 10),
+            'maxGrade': parseInt(this.formNotaMaxima, 10),
+            'gradeWeight':parseInt(this.formPesoNota, 10),
+            'snActivated': "s"
+          }
+
+           await axios.post('http://localhost:3000/criteria-project', associateCriteria).then((response) => {
+              console.log(response.data);
+              alert("Cadastro feito com sucesso");
+            }, (error) => {
+              console.log(error);
+              alert("Erro no cadastro");
+            });
+            this.$refs.form.reset();
         }
     },
     beforeMount() {
         this.getProjects();
+        this.getCriterias();
     }
   }
 </script>
