@@ -15,7 +15,7 @@
                         <v-card
                             class="ma-4"
                             height="200"
-                            width="++++++180"
+                            width="180"
                             >
                             <div class="dashboard-group-person-minify">
                               <div class="dashboard-group-person-minify-pictures">
@@ -86,6 +86,9 @@
 </script>
 
 <style scoped lang="scss">
+  span {
+    color: #fff;
+  }
   .dashboard {
     display: flex;
     flex-direction: column;
@@ -93,9 +96,6 @@
     height: 100%;
   }
 
-  span {
-    color: #fff;
-  }
   .ma-4 {
     background: rgb(2,0,36);
     background: linear-gradient(47deg, rgba(2,0,36,1) 0%, rgba(13,44,82,1) 31%, rgba(90,26,159,1) 97%);
