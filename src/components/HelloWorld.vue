@@ -87,13 +87,6 @@
           </a>
         </v-row>
       </v-col>
-      <v-col>
-          <router-link :to="{ name: 'Criteria Registration'}">
-            <v-btn elevation="2">
-                Teste
-            </v-btn>
-          </router-link>
-      </v-col>
     </v-row>
   </v-container>
 </template>
