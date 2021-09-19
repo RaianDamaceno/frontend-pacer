@@ -21,7 +21,7 @@
          </template>
          <v-card class="card">
             <v-card-title class="text-h5">
-               John Doe
+               <span> John Doe </span>
             </v-card-title> 
             <div>
                <div>
@@ -34,7 +34,8 @@
                            v-model="criterio.rating"
                            :tick-labels="labels"
                            always-dirty
-                           class="mx-5 color__text"
+                           class="mx-5"
+                           id="slider"
                            min="0"
                            max="100"
                            thumb-label="always"
@@ -84,9 +85,17 @@
 </script>
 
 <style scoped lang="scss">
+   span {
+      color: #fff;
+   }
+   #slider {
+      background-color: #fff !important;
+   }
    .card {
-      background: rgb(2,0,36);
-      background: linear-gradient(47deg, rgba(2,0,36,1) 0%, rgba(13,44,82,1) 31%, rgba(90,26,159,1) 97%);
+      background: rgb(226,225,237);
+      background: linear-gradient(38deg, rgba(226,225,237,1) 0%,
+         rgba(86,116,186,1) 17%, rgba(37,68,117,1) 39%, rgba(24,55,98,1) 45%, 
+         rgba(13,44,82,1) 55%, rgba(85,27,154,1) 85%, rgba(90,26,159,1) 97%);
    }
     .card-person {
         height: 200px;
