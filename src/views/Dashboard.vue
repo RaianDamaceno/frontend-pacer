@@ -1,5 +1,26 @@
 <template>
     <div class="dashboard">
+        <template>
+          <v-card >
+            <v-app-bar
+              absolute
+              color="#6A76AB"
+              dark
+              prominent
+              height="70%"
+            >
+              <v-spacer>
+                <v-toolbar-title >PACER</v-toolbar-title>
+              </v-spacer>
+              <v-tab >
+                <AdicionaCriteriosAva style="margin-top:13px"/>
+              </v-tab>
+              <v-tab >
+                <CriteriaRegistration style="margin-top:13px"/>
+              </v-tab>
+            </v-app-bar>
+          </v-card>
+        </template>
         <div class="dashboard-group">
             <div class="dashboard-group-person">
                 <v-slide-group
@@ -55,20 +76,25 @@
 
 <script lang="ts">
   import Vue from 'vue'
+  import AdicionaCriteriosAva from '../components/AdicionaCriteriosAva.vue'
   import CardStudentRating from '../components/CardStudentRating.vue'
+  import CriteriaRegistration from '../components/criteria-registration.vue'
   import axios from 'axios';
 
   export default Vue.extend({
     name: 'Dashboard',
 
     components: {
-      CardStudentRating 
+      CardStudentRating,
+      AdicionaCriteriosAva,
+      CriteriaRegistration
     },
      data: () => ({
        cards: false,
        criterios: "",
        estudantes: "",
-       errors: ""
+       errors: "",
+       critAva: false
      }),
      created() {
         axios.get(`https://5acce45494587a0014eda8c3.mockapi.io/estudante`)
@@ -81,6 +107,10 @@
         showCard: function() {
             this.cards = true
         },
+        showCritAva: function() {
+            this.critAva = true
+        }
+      
     }
  })
 </script>
@@ -94,6 +124,7 @@
     flex-direction: column;
     justify-content: space-around;
     height: 100%;
+    width: 100%; 
   }
 
   .ma-4 {
@@ -115,6 +146,20 @@
     border: solid 1px black;
     border-radius: 10px;
 		background-color: white;
+  }
+
+  .dashboard-info div {
+    width: 30%;
+    height: 40%;
+    border: solid 1px black;
+    border-radius: 2px;
+		background-color: white;
+
+    .row{
+      border-style: none !important;
+      background-color: transparent !important;
+    }
+    
   }
 
   .dashboard-group {
