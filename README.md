@@ -5,6 +5,7 @@ Projeto para o 6° Semestre de Banco de Dados da FATEC - São José dos Campos.
 <br>O projeto consiste em criar um sistema de avaliações alunos durante um processo de Scrum. Será criado um modelo de avaliação no estilo Pacer. 
 Onde os alunos poderao avaliar o desempenho, colaboração, participação dos seus colegas de turma. 
 
+#### OBS.: Projeto RECRIADO para realizar um downgrade de versão do VUE.JS
 
 ## 📋 Pré-requisitos
 
