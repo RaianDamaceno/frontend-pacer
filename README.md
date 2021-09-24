@@ -18,7 +18,7 @@ Onde os alunos poderao avaliar o desempenho, colaboração, participação dos s
 - Paulo Cesar Ferreira da Silva **(Developer)**
 - Gustavo Joshua **(Developer)**
 
-✨ MVP
+## ✨ MVP
 1° Sprint
 - Cadastro de Critério de Avaliação
 - Cadastro de critério para um Projeto
