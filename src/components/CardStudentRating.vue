@@ -21,7 +21,7 @@
          </template>
          <v-card class="card">
             <v-card-title class="text-h5">
-               <span> John Doe </span>
+               <span> {{ nome }} </span>
             </v-card-title> 
             <div>
                <div>
@@ -39,7 +39,7 @@
                            min="0"
                            max="100"
                            thumb-label="always"
-                           :label="criterio.nome"
+                           :label="criterio.descCriteria"
                            color="green darken-1"
                            />
                     </div>
@@ -68,7 +68,8 @@
    export default {
       name:'CardStudentRating',
       props: {
-            criterios: Array,
+         criterios: Array,
+         nome: String
       },
       components: {
          CardToastValidation 
