@@ -1,26 +1,5 @@
 <template>
     <div class="dashboard">
-        <template>
-          <v-card >
-            <v-app-bar
-              absolute
-              color="#6A76AB"
-              dark
-              prominent
-              height="70%"
-            >
-              <v-spacer>
-                <v-toolbar-title >PACER</v-toolbar-title>
-              </v-spacer>
-              <v-tab >
-                <AdicionaCriteriosAva style="margin-top:13px"/>
-              </v-tab>
-              <v-tab >
-                <CriteriaRegistration style="margin-top:13px"/>
-              </v-tab>
-            </v-app-bar>
-          </v-card>
-        </template>
         <div class="dashboard-group">
             <div class="dashboard-group-person">
                 <v-slide-group
@@ -46,7 +25,7 @@
                                   <span> {{ estudante.data[0].estudantes[0].nome}} </span>
                               </div>
                               <div class="dashboard-group-person-button">
-                                  <card-student-rating :criterios="criterios" />
+                                  <card-student-rating :criterios="criterios" :nome="estudante.data[0].estudantes[0].nome" />
                               </div>
                             </div>
 
@@ -76,9 +55,9 @@
 
 <script lang="ts">
   import Vue from 'vue'
-  import AdicionaCriteriosAva from '../components/AdicionaCriteriosAva.vue'
+  // import AdicionaCriteriosAva from '../components/AdicionaCriteriosAva.vue'
   import CardStudentRating from '../components/CardStudentRating.vue'
-  import CriteriaRegistration from '../components/criteria-registration.vue'
+  // import CriteriaRegistration from '../components/criteria-registration.vue'
   import axios from 'axios';
 
   export default Vue.extend({
@@ -86,8 +65,8 @@
 
     components: {
       CardStudentRating,
-      AdicionaCriteriosAva,
-      CriteriaRegistration
+      // AdicionaCriteriosAva,
+      // CriteriaRegistration
     },
      data: () => ({
        cards: false,
@@ -99,9 +78,14 @@
      created() {
         axios.get(`https://5acce45494587a0014eda8c3.mockapi.io/estudante`)
         .then(response => {
-          this.criterios = response.data[0].data[0].estudantes[0].criterios
+          // this.criterios = response.data[0].data[0].estudantes[0].criterios
           this.estudantes = response.data
         })
+        axios.get(`http://localhost:3000/criteria`)
+          .then(response => {
+            this.criterios = response.data
+            console.log(this.criterios)
+          })
       },
       methods: {
         showCard: function() {
