@@ -7,8 +7,6 @@ Onde os alunos poderao avaliar o desempenho, colaboração, participação dos s
 
 #### OBS.: Projeto RECRIADO para realizar um downgrade de versão do VUE.JS
 
-🤓 Integrantes do Grupo
-
 ## 🤓 Integrantes do Grupo
 
 - Marcos Vinicio Pereira **(PO and Developer)**
