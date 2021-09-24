@@ -7,6 +7,39 @@ Onde os alunos poderao avaliar o desempenho, colaboração, participação dos s
 
 #### OBS.: Projeto RECRIADO para realizar um downgrade de versão do VUE.JS
 
+🤓 Integrantes do Grupo
+
+Marcos Vinicio Pereira (PO and Developer)
+Guilherme Anderson (Scrum Master and Developer)
+Lucas Magno de Andrade Bastos (Developer)
+Jonathas Henrique de Moraes (FullStack Developer)
+Raian Silva Damaceno (Developer)
+João Pedro Filipini (Developer)
+Paulo Cesar Ferreira da Silva (Developer)
+
+✨ MVP
+1° Sprint
+
+Cadastro de Critério de Avaliação
+Cadastro de critério para um Projeto
+Cadastro de nota por integrante
+2ª Sprint
+
+Cadastrar projetos
+Cadastrar equipes
+Cadastrar sprints
+Cadastrar Usuários
+Exibir pendências por parte do avaliador
+Modificar nota antes do fim da Sprint
+
+3ª Sprint
+Gerar relatórios (graficos)
+Sistema de Login
+
+4ª Sprint
+Alteração de dados cadastrais
+Método de recuperação de senha
+Página de Apresentação do sistema
 ## 📋 Pré-requisitos
 
 É necessario a instalação do [Node](https://nodejs.org/en/). Com a versão acima de 14.
