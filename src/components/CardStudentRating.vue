@@ -9,12 +9,14 @@
          >
          <template v-slot:activator="{ on, attrs }">
             <v-btn
-               color="accent"
+               color="red accent-2"
                small                 
                fab
                v-bind="attrs"
                v-on="on"
-               @click="showCard"
+               @click="card = true"
+               right 
+               bottom
                >
                <v-icon>mdi-plus</v-icon>
             </v-btn>
@@ -32,7 +34,6 @@
                      <div v-for="criterio in criterios" :key="criterio.id">
                         <v-slider
                            v-model="criterio.rating"
-                           :tick-labels="labels"
                            always-dirty
                            class="mx-5"
                            id="slider"

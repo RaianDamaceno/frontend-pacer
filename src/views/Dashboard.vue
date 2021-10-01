@@ -1,9 +1,8 @@
 <template>
     <div class="dashboard">
         <div class="dashboard-group">
-            <div class="dashboard-group-person">
+            <div class="dashboard-group-person" v-if="teacher">
                 <v-slide-group
-                    v-model="model"
                     class="pa-4"
                     center-active
                     show-arrows
@@ -17,15 +16,15 @@
                             height="200"
                             width="180"
                             >
-                            <div class="dashboard-group-person-minify">
+                            <div class="dashboard-group-person-minify" >
                               <div class="dashboard-group-person-minify-pictures">
                                   <div></div>
                               </div>
                               <div class="dashboard-group-person-name">
-                                  <span> {{ estudante.data[0].estudantes[0].nome}} </span>
+                                  <span> {{ estudante.data[0].grupo[0].estudantes[0].nome}} </span>
                               </div>
                               <div class="dashboard-group-person-button">
-                                  <card-student-rating :criterios="criterios" :nome="estudante.data[0].estudantes[0].nome" />
+                                  <card-student-rating :criterios="criterios" :nome="estudante.data[0].grupo[0].estudantes[0].nome" />
                               </div>
                             </div>
 
@@ -38,12 +37,51 @@
                         </v-card>
                     </v-slide-item>
                 </v-slide-group>
+              <card-create-equipe />
             </div>
-            <div class="dashboard-group-myrating">
+            <div class="dashboard-group-person" v-if="!teacher">
+                <v-slide-group
+                    class="pa-4"
+                    center-active
+                    show-arrows
+                    >
+                    <v-slide-item
+                        v-for="(grupo) in grupo"
+                        :key="grupo.data.id"
+                        >
+                        <v-card
+                            class="ma-4"
+                            height="200"
+                            width="180"
+                            >
+                            <div class="dashboard-group-person-minify" >
+                              <div class="dashboard-group-person-minify-pictures">
+                                  <div></div>
+                              </div>
+                              <div class="dashboard-group-person-name">
+                                   <!-- <span> {{ grupo }} </span>  -->
+                              </div>
+                              <div class="dashboard-group-person-button">
+                                  <!-- <card-student-rating :criterios="criterios" :nome="estudante.data[0].grupo[0].estudantes[0].nome" /> -->
+                                <!-- <card-create-equipe /> -->
+                              </div>
+                              <card-create-equipe />
+                            </div>
+                            
+                            <v-row
+                                class="fill-height"
+                                align="center"
+                                justify="center"
+                                >
+                            </v-row>
+                        </v-card>
+                    </v-slide-item>
+                </v-slide-group>
             </div>
         </div>
         <div class="dashboard-info">
-            <div>
+            <div v-for="grup in grupos" :key="grup.data.id">
+              {{ grup.data.grupo.nome }}
             </div>
             <div>
             </div>
@@ -55,9 +93,8 @@
 
 <script lang="ts">
   import Vue from 'vue'
-  // import AdicionaCriteriosAva from '../components/AdicionaCriteriosAva.vue'
   import CardStudentRating from '../components/CardStudentRating.vue'
-  // import CriteriaRegistration from '../components/criteria-registration.vue'
+  import CardCreateEquipe from '../components/CardCreateEquipe.vue'
   import axios from 'axios';
 
   export default Vue.extend({
@@ -65,25 +102,28 @@
 
     components: {
       CardStudentRating,
-      // AdicionaCriteriosAva,
-      // CriteriaRegistration
+      CardCreateEquipe
     },
      data: () => ({
        cards: false,
        criterios: "",
        estudantes: "",
        errors: "",
-       critAva: false
+       critAva: false,
+       teacher: true,
+       grupo: "",
+       grupos: ""
      }),
      created() {
         axios.get(`https://5acce45494587a0014eda8c3.mockapi.io/estudante`)
         .then(response => {
-          // this.criterios = response.data[0].data[0].estudantes[0].criterios
+          // this.criterios = response.data[0].data[0].grupo[0].estudantes[0].criterios;
           this.estudantes = response.data
+          this.grupo = response.data
         })
         axios.get(`http://localhost:3000/criteria`)
           .then(response => {
-            this.criterios = response.data
+            this.criterios = response.data.grupo
             console.log(this.criterios)
           })
       },
@@ -150,7 +190,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    height: 30%;
+    height: 40%;
   }
 
   .dashboard-group-person {
