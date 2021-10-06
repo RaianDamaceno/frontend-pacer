@@ -1,172 +1,186 @@
 <template>
-  <v-row justify="center">
-    <v-dialog
-      v-model="dialog"
-      persistent
-      max-width="600px"
+  <div v-if="role === 'P'">
+    <v-row
+      justify="center"
     >
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          color="primary"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          Critérios Avaliação
-        </v-btn>
-      </template>
-
-      <v-card>
-        <v-card-title>
-          <span class="text-h5">Cadastro de Critérios de Avaliação</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-form ref="form">
-              <v-row>
-                <v-col cols="12">
-                  <v-autocomplete
-                    :items='this.projects'
-                    label="Grupos* "
-                    required
-                    id="project"
-                    item-text="description"
-                    item-value="idProject"
-                    v-model="formProject"
-                  ></v-autocomplete>
-                </v-col>
-                <v-col cols="12">
-                    <v-autocomplete
-                    :items='this.criterias'
-                    label="Critérios*"
-                    required
-                    id="criteria"
-                    item-text="descCriteria"
-                    item-value="idCriteria"
-                    v-model="formCriteria"
-                  ></v-autocomplete>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field
-                    label="Nota Minima*"
-                    type="number"
-                    required
-                    id="notaMinima"
-                    v-model="formNotaMinima"
-                  ></v-text-field>
-                  <v-text-field
-                    label="Nota Maxima*"
-                    type="number"
-                    required
-                    id="notaMaxima"
-                    v-model="formNotaMaxima"
-                  ></v-text-field>
-                  <v-text-field
-                    label="Peso do Criterio*"
-                    type="number"
-                    required
-                    id="PesoCriterio"
-                    v-model="formPesoNota"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-            </v-form>
-          </v-container>
-          <small>*Campos obrigatorios</small>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="blue darken-1"
-            text
-            @click="dialog = false"
+      <v-btn
+        color="primary"
+        class="ma-2"
+        dark
+        @click="dialog = true"
+      >
+        Usuários para aprovação
+      </v-btn>
+      <v-menu
+        bottom
+        offset-y
+      >
+        
+      </v-menu>
+      <v-dialog
+        v-model="dialog"
+        fullscreen
+        hide-overlay
+        transition="dialog-bottom-transition"
+        scrollable
+      >
+        <v-card tile>
+          <v-toolbar
+            flat
+            dark
+            color="primary"
           >
-            Fechar
-          </v-btn>
-          <v-btn
-            color="blue darken-1"
-            text
-            @click="submitForm"
-          >
-            Salvar
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-row>
+            <v-btn
+              icon
+              dark
+              @click="dialog = false"
+            >
+            <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <v-toolbar-title>Usuários para Aprovação</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn
+                dark
+                text
+                @click="dialog = false"
+              >
+                Salvar
+              </v-btn>
+            </v-toolbar-items>
+            <v-menu
+              bottom
+              right
+              offset-y
+            >
+            </v-menu>
+          </v-toolbar>
+          <v-card-text>
+            
+            <v-list
+              three-line
+              subheader
+            >
+              <v-subheader>Lista de Usuários para aprovação</v-subheader>
+              <v-data-table
+                :headers="headers"
+                :items="desserts"
+                :items-per-page="8"
+                class="elevation-1"
+              ></v-data-table>
+              <v-list-item></v-list-item>
+            </v-list>
+          </v-card-text>
+          <div style="flex: 1 1 auto;"></div>
+        </v-card>
+      </v-dialog>
+    </v-row>
+  </div>
 </template>
 
 <script>
-
-  import axios from 'axios'
-
   export default {
-    data: () => ({
-      dialog: false,
-      projects: [],
-      criterias: [],
-      formProject: '',
-      formCriteria: '',
-      formNotaMinima: '',
-      formNotaMaxima: '',
-      formPesoNota: '',
-    }),
-
-    methods: {
-        async getProjects() {
-            await axios.get('http://localhost:3000/project').then((response) => {
-              this.projects = response.data;
-              console.log(response.data);
-            }, (error) => {
-              console.log(error);
-            });
-            console.log (this.projects)
-        },
-        async getCriterias() {
-            await axios.get('http://localhost:3000/criteria').then((response) => {
-              this.criterias = response.data;
-              console.log(response.data);
-            }, (error) => {
-              console.log(error);
-            });
-            console.log (this.criterias)
-        },
-        async submitForm(){
-          this.dialog=false
-          const associateCriteria = {
-            'idProject': this.formProject,
-            'idCriteria': this.formCriteria,
-            'minGrade': parseInt(this.formNotaMinima, 10),
-            'maxGrade': parseInt(this.formNotaMaxima, 10),
-            'gradeWeight':parseInt(this.formPesoNota, 10),
-            'snActivated': "s"
-          }
-
-           await axios.post('http://localhost:3000/criteria-project', associateCriteria).then((response) => {
-              console.log(response.data);
-              alert("Cadastro feito com sucesso");
-            }, (error) => {
-              console.log(error);
-              alert("Erro no cadastro");
-            });
-            this.$refs.form.reset();
-        }
+    data () {
+      return {
+        dialog: false,
+        widgets: false,
+        role: 'P',
+        headers: [
+          {
+            text: 'Nome',
+            align: 'start',
+            sortable: false,
+            value: 'name',
+          },
+          { text: 'email', value: 'calories' },
+          { text: 'Documento', value: 'fat' },
+          { text: 'RA', value: 'carbs' },
+          { text: 'Role', value: 'protein' },
+          { text: 'Status', value: 'iron' },
+        ],
+        desserts: [
+          {
+            name: 'Frozen Yogurt',
+            calories: 159,
+            fat: 6.0,
+            carbs: 24,
+            protein: 4.0,
+            iron: '1%',
+          },
+          {
+            name: 'Ice cream sandwich',
+            calories: 237,
+            fat: 9.0,
+            carbs: 37,
+            protein: 4.3,
+            iron: '1%',
+          },
+          {
+            name: 'Eclair',
+            calories: 262,
+            fat: 16.0,
+            carbs: 23,
+            protein: 6.0,
+            iron: '7%',
+          },
+          {
+            name: 'Cupcake',
+            calories: 305,
+            fat: 3.7,
+            carbs: 67,
+            protein: 4.3,
+            iron: '8%',
+          },
+          {
+            name: 'Gingerbread',
+            calories: 356,
+            fat: 16.0,
+            carbs: 49,
+            protein: 3.9,
+            iron: '16%',
+          },
+          {
+            name: 'Jelly bean',
+            calories: 375,
+            fat: 0.0,
+            carbs: 94,
+            protein: 0.0,
+            iron: '0%',
+          },
+          {
+            name: 'Lollipop',
+            calories: 392,
+            fat: 0.2,
+            carbs: 98,
+            protein: 0,
+            iron: '2%',
+          },
+          {
+            name: 'Honeycomb',
+            calories: 408,
+            fat: 3.2,
+            carbs: 87,
+            protein: 6.5,
+            iron: '45%',
+          },
+          {
+            name: 'Donut',
+            calories: 452,
+            fat: 25.0,
+            carbs: 51,
+            protein: 4.9,
+            iron: '22%',
+          },
+          {
+            name: 'KitKat',
+            calories: 518,
+            fat: 26.0,
+            carbs: 65,
+            protein: 7,
+            iron: '6%',
+          },
+        ],
+      }
     },
-    beforeMount() {
-        this.getProjects();
-        this.getCriterias();
-    }
   }
 </script>
-
-<style scoped lang="scss">
-
-    .card {
-       width: 100%;
-       height: 100%;
-    }
-    .container{
-        width: 100%;
-       height: 100%;
-    }
-</style>

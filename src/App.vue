@@ -8,7 +8,6 @@
       <div class="d-flex align-center">
         <v-toolbar-title>Pacer</v-toolbar-title>
       </div>
-
       <v-spacer></v-spacer>
         <v-tab >
           <AdicionaCriteriosAva />
@@ -16,8 +15,10 @@
         <v-tab >
           <CriteriaRegistration />
         </v-tab>
+        <v-tab>
+          <UsersAprovation />
+        </v-tab>
     </v-app-bar>
-
     <v-main>
       <router-view/>
     </v-main>
@@ -28,12 +29,14 @@
 import Vue from 'vue';
 import CriteriaRegistration from './components/criteria-registration.vue'
 import AdicionaCriteriosAva from './components/AdicionaCriteriosAva.vue'
+import UsersAprovation      from './components/UsersAprovation.vue'
 
 export default Vue.extend({
   name: 'App',
   components: {
       AdicionaCriteriosAva,
-      CriteriaRegistration
+      CriteriaRegistration,
+      UsersAprovation
   },
   data: () => ({
     //
