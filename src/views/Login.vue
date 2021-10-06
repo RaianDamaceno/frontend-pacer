@@ -3,10 +3,19 @@
         <v-row justify='center' align='center'>
 
             <v-col cols='4' class='inputs' v-if='login.login'>
+
+                <v-row justify='center' align='center'>
+                    <v-img
+                        class="mt-16"
+                        src="../assets/login.png"
+                        max-height="150"
+                        max-width="150"
+                    ></v-img>
+                </v-row>
+
                 <v-col cols='12'>
                     <v-text-field
                         v-model='login.firstname'
-                        :rules='login.nameRules'
                         label='RA'
                         required
                     ></v-text-field>
@@ -16,7 +25,6 @@
                     <v-text-field
                         v-model='login.password'
                         :append-icon="login.show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                        :rules='login.passwordRules'
                         :type="login.show1 ? 'text' : 'password'"
                         name='input-10-1'
                         label='Senha'
@@ -49,7 +57,6 @@
                 <v-col cols='12'>
                     <v-text-field
                         v-model='signUp.nome'
-                        :rules='signUp.nameRules'
                         label='Nome'
                         required
                     ></v-text-field>
@@ -58,7 +65,6 @@
                 <v-col cols='12'>
                     <v-text-field
                         v-model='signUp.ra'
-                        :rules='signUp.nameRules'
                         label='RA'
                         required
                     ></v-text-field>
@@ -67,7 +73,6 @@
                 <v-col cols='12'>
                     <v-text-field
                         v-model='signUp.email'
-                        :rules='signUp.emailRules'
                         label='E-mail Institucional'
                         required
                     ></v-text-field>
@@ -75,8 +80,8 @@
 
                 <v-col cols='12'>
                     <v-text-field
+                        type='password'
                         v-model='signUp.password'
-                        :rules='signUp.passwordRules'
                         label='Password'
                         required
                     ></v-text-field>
@@ -139,7 +144,7 @@
 <style>
     .body
     {
-        background: #b1b1b1;
+        background-image: url('https://www.drumangle.com/sandbox/wp/21813/wp-content/uploads/2014/01/Login-Screen-Background-Wood-4.jpg');
         width: 100%;
     }
     .inputs
@@ -157,32 +162,23 @@
 </style>
 <script lang='ts'>
 import router from '@/router';
-export default {
-    data: () => ({
+import Vue from 'vue';
+import axios from 'axios';
 
+export default Vue.extend({
+    data: () => ({
         login:{
             show1: false,
             login: true,
             signUp: false,
             firstname: '',
-            nameRules: [(v: any) => !!v || 'RA is required'],
-            password: '',
-            passwordRules: [
-                (v: any) => !!v || 'Password is required',
-                (v: any) => v.length >= 8 || 'Min 8 characters',
-            ]
+            password: ''
         },
         signUp:{
             nome: '',
             ra: '',
             email: '',
-            emailRules: [(v: any) => /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'E-mail invalido'],
             password: '',
-            nameRules: [(v: any) => !!v || 'RA is required'],
-            passwordRules: [
-                (v: any) => !!v || 'Password is required',
-                (v: any) => v.length >= 8 || 'Min 8 characters',
-            ],
             radioGroup: 'Aluno'
         },
         snackbar: false,
@@ -207,37 +203,53 @@ export default {
                 this.signUp.ra.trim() === '' ||
                 this.signUp.email.trim() === '' ||
                 this.signUp.password.trim() === '' ||
-                this.validateRulesRegister()
+                this.signUp.nome.trim().length < 2 ||
+                this.signUp.ra.trim().length < 6||
+                this.signUp.email.trim().length < 7||
+                this.signUp.password.trim().length < 7
             )
             {
                 this.snackbarShow('Todos campos são obrigatórios e Validos, por favor preenche-los Corretamente', 'red');
                 return;
             }
 
-            router.push('/dashboard');
-        },
-        validateRulesRegister(): boolean
-        {
-            if(this.signUp.emailRules)
-            {
-                return true;
-            }
-            else if(this.signUp.nameRules)
-            {
-                return true;
-            }
-            else if(this.signUp.passwordRules)
-            {
-                return true;
-            }
-            return false;
+            this.registration();
         },
         snackbarShow: function(text: string, color = 'green'): void
         {
             this.text = text;
             this.colorBtn = color;
             this.snackbar = true;
+        },
+        registration: function(): void
+        {
+            console.log(
+                this.signUp.nome,
+                this.signUp.ra,
+                this.signUp.email,
+                this.signUp.radioGroup
+            );
+            axios
+                .post('http://localhost:3000/user', {
+                    login: this.signUp.nome,
+                    name: this.signUp.nome,
+                    document: this.signUp.ra,
+                    email: this.signUp.email,
+                    rule: this.signUp.radioGroup,
+                    snAtivo: '1'
+                })
+                .then((response) => {
+                    console.log('Success ',response);
+                    // router.push('/dashboard');
+                })
+                .catch((error) => {
+                    this.snackbarShow(
+                        'Ocorreu um erro ao realizar a operação :( por favor repita daqui a alguns instantes',
+                        'red'
+                    );
+                    console.error('Ocorreu um erro ao realizar a operação :( por favor repita daqui instantes', error)
+                });
         }
     }
-};
+});
 </script>
