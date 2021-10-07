@@ -16,7 +16,15 @@
                 <v-col cols='12'>
                     <v-text-field
                         v-model='login.firstname'
-                        label='Entre com seu ID'
+                        label='Nome'
+                        required
+                    ></v-text-field>
+                </v-col>
+
+                <v-col cols='12'>
+                     <v-text-field
+                        v-model='login.ra'
+                        label='RA'
                         required
                     ></v-text-field>
                 </v-col>
@@ -130,7 +138,8 @@ export default Vue.extend({
             show1: false,
             login: true,
             signUp: false,
-            firstname: ''
+            firstname: '',
+            ra: ''
         },
         signUp:{
             nome: '',
@@ -140,39 +149,34 @@ export default Vue.extend({
         snackbar: false,
         text: '',
         colorBtn: 'green',
-        timeout: 2000
+        timeout: 2000,
     }),
     methods: {
         validate: function(): void
         {
-            if(this.login.firstname.trim() === '')
+            if(this.login.firstname.trim() === '' || this.login.ra.trim() === '')
             {
                 this.snackbarShow('Ambos campos são obrigatórios', 'red');
                 return;
             }
 
-            axios
-                .get('http://localhost:3000/user/' + this.login.firstname)
-                .then((response) =>
+            else
+            {
+                if(this.login.firstname.trim().toString() === 'adm' && this.login.ra.trim().toString() === '12345678')
                 {
-                    if(response.status === 200)
+                    this.snackbarShow('Login realizado com sucesso', 'blue');
+                    setTimeout(() =>
                     {
-                        this.snackbarShow(
-                            'Login Efetuado com sucesso!',
-                            'blue'
-                        );
-                        setTimeout(() =>
-                        {
-                            router.push('/dashboard');
-                        }, 1500)
-                    }
-                })
-                .catch(() => {
-                    this.snackbarShow(
-                        'Falha ao realizar o login, por favor tente novamente',
-                        'red'
-                    );
-                });
+                        router.push('/dashboard');
+                    }, 1200)
+                }
+                else
+                {
+                    this.snackbarShow('Falha no login', 'red');
+                    return;
+                }
+            }
+
         },
         validateRegister: function(): void
         {
@@ -211,8 +215,7 @@ export default Vue.extend({
                     if(response.status === 201)
                     {
                         this.snackbarShow(
-                            'Cadastro Realizado com sucesso, você será direcionado ao DashBoard',
-                            'green'
+                            'Cadastro Realizado com sucesso, você será direcionado ao DashBoard'
                         );
                         setTimeout(() => {
                             router.push('/dashboard');
