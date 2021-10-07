@@ -1,172 +1,121 @@
 <template>
-  <v-row justify="center">
-    <v-dialog
-      v-model="dialog"
-      persistent
-      max-width="600px"
+  <div v-if="role === 'P'">
+    <v-row
+      justify="center"
     >
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          color="primary"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          Critérios Avaliação
-        </v-btn>
-      </template>
-
-      <v-card>
-        <v-card-title>
-          <span class="text-h5">Cadastro de Critérios de Avaliação</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-form ref="form">
-              <v-row>
-                <v-col cols="12">
-                  <v-autocomplete
-                    :items='this.projects'
-                    label="Grupos* "
-                    required
-                    id="project"
-                    item-text="description"
-                    item-value="idProject"
-                    v-model="formProject"
-                  ></v-autocomplete>
-                </v-col>
-                <v-col cols="12">
-                    <v-autocomplete
-                    :items='this.criterias'
-                    label="Critérios*"
-                    required
-                    id="criteria"
-                    item-text="descCriteria"
-                    item-value="idCriteria"
-                    v-model="formCriteria"
-                  ></v-autocomplete>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field
-                    label="Nota Minima*"
-                    type="number"
-                    required
-                    id="notaMinima"
-                    v-model="formNotaMinima"
-                  ></v-text-field>
-                  <v-text-field
-                    label="Nota Maxima*"
-                    type="number"
-                    required
-                    id="notaMaxima"
-                    v-model="formNotaMaxima"
-                  ></v-text-field>
-                  <v-text-field
-                    label="Peso do Criterio*"
-                    type="number"
-                    required
-                    id="PesoCriterio"
-                    v-model="formPesoNota"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-            </v-form>
-          </v-container>
-          <small>*Campos obrigatorios</small>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="blue darken-1"
-            text
-            @click="dialog = false"
+      <v-btn
+        color="primary"
+        class="ma-2"
+        dark
+        @click="dialog = true"
+      >
+        Usuários para aprovação
+      </v-btn>
+      <v-menu
+        bottom
+        offset-y
+      >
+        AdicionaCriteriosAva
+      </v-menu>
+      <v-dialog
+        v-model="dialog"
+        fullscreen
+        hide-overlay
+        transition="dialog-bottom-transition"
+        scrollable
+      >
+        <v-card tile>
+          <v-toolbar
+            flat
+            dark
+            color="primary"
           >
-            Fechar
-          </v-btn>
-          <v-btn
-            color="blue darken-1"
-            text
-            @click="submitForm"
-          >
-            Salvar
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-row>
+            <v-btn
+              icon
+              dark
+              @click="dialog = false"
+            >
+            <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <v-toolbar-title>Usuários para Aprovação</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn
+                dark
+                text
+                @click="dialog = false"
+              >
+                Salvar
+              </v-btn>
+            </v-toolbar-items>
+            <v-menu
+              bottom
+              right
+              offset-y
+            >
+            </v-menu>
+          </v-toolbar>
+          <v-card-text>
+            
+            <v-list
+              three-line
+              subheader
+            >
+              <v-subheader>Lista de Usuários para aprovação</v-subheader>
+              <v-data-table
+                :headers="headers"
+                :items="teste"
+                :items-per-page="10"
+                class="elevation-1"
+              />
+              <v-list-item></v-list-item>
+            </v-list>
+          </v-card-text>
+          <div style="flex: 1 1 auto;"></div>
+        </v-card>
+      </v-dialog>
+    </v-row>
+  </div>
 </template>
 
 <script>
-
-  import axios from 'axios'
+  import api from '../services/api'
 
   export default {
-    data: () => ({
-      dialog: false,
-      projects: [],
-      criterias: [],
-      formProject: '',
-      formCriteria: '',
-      formNotaMinima: '',
-      formNotaMaxima: '',
-      formPesoNota: '',
-    }),
-
-    methods: {
-        async getProjects() {
-            await axios.get('http://localhost:3000/project').then((response) => {
-              this.projects = response.data;
-              console.log(response.data);
-            }, (error) => {
-              console.log(error);
-            });
-            console.log (this.projects)
-        },
-        async getCriterias() {
-            await axios.get('http://localhost:3000/criteria').then((response) => {
-              this.criterias = response.data;
-              console.log(response.data);
-            }, (error) => {
-              console.log(error);
-            });
-            console.log (this.criterias)
-        },
-        async submitForm(){
-          this.dialog=false
-          const associateCriteria = {
-            'idProject': this.formProject,
-            'idCriteria': this.formCriteria,
-            'minGrade': parseInt(this.formNotaMinima, 10),
-            'maxGrade': parseInt(this.formNotaMaxima, 10),
-            'gradeWeight':parseInt(this.formPesoNota, 10),
-            'snActivated': "s"
-          }
-
-           await axios.post('http://localhost:3000/criteria-project', associateCriteria).then((response) => {
-              console.log(response.data);
-              alert("Cadastro feito com sucesso");
-            }, (error) => {
-              console.log(error);
-              alert("Erro no cadastro");
-            });
-            this.$refs.form.reset();
-        }
+    data () {
+      return {
+        dialog: false,
+        widgets: false,
+        role: 'P',
+        teste: null,
+        headers: [
+          {
+            text: 'Nome',
+            align: 'start',
+            sortable: false,
+            value: 'name',
+          },
+          { text: 'Login', value: 'login' },
+          { text: 'Nome', value: 'name' },
+          { text: 'CPF', value: 'document' },
+          { text: 'Email', value: 'email' },
+          { text: "Ativo", value: 'snAtivo'}
+        ],
+      }
     },
     beforeMount() {
-        this.getProjects();
-        this.getCriterias();
+      api.get('user').then(response => {
+        for(let i = 0; i < response.data.length; i++) {
+            this.teste = response.data
+            if(this.teste[i].snAtivo == 'S') {
+              this.teste.splice(i, 1)
+            } 
+            if (this.teste[i].snAtivo== 'N') {
+              this.teste[i].snAtivo = false
+            }
+        }
+        console.log(this.teste)
+      })
     }
   }
 </script>
-
-<style scoped lang="scss">
-
-    .card {
-       width: 100%;
-       height: 100%;
-    }
-    .container{
-        width: 100%;
-       height: 100%;
-    }
-</style>
