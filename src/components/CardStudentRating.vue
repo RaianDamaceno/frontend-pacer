@@ -17,6 +17,8 @@
                @click="card = true"
                right 
                bottom
+               absolute
+               
                >
                <v-icon>mdi-plus</v-icon>
             </v-btn>
@@ -31,18 +33,22 @@
                      <div class="card-person-image"></div>
                   </div>
                   <div class="card-rating">
-                     <div v-for="criterio in criterios" :key="criterio.id">
-                        <v-slider
-                           v-model="criterio.rating"
-                           always-dirty
-                           class="mx-5"
-                           id="slider"
-                           min="0"
-                           max="100"
-                           thumb-label="always"
-                           :label="criterio.descCriteria"
-                           color="green darken-1"
-                           />
+                     <div 
+                        v-for="criterio in criterios" 
+                        :key="criterio.idCriteria">
+                           <v-slider
+                              v-model="criterio.rating"
+                              always-dirty
+                              class="mx-5"
+                              id="slider"
+                              min="0"
+                              max="100"
+                              thumb-label="always"
+                              :label="criterio.descCriteria"
+                              color="green darken-1"
+                              v-on:change="vChange(criterio.idCriteria, criterio.rating)"
+                              />
+                              {{criterio.rating}} : {{criterio.idCriteria}}
                     </div>
                   </div>
                </div>
@@ -56,7 +62,13 @@
                   >
                   Fechar
                </v-btn>
-               <card-toast-validation text="Avaliação enviada com sucesso"/>
+               <v-btn
+                  color="green darken-1"
+                  text
+                  @click="ratingEstudant"
+               >
+                  Salvar
+               </v-btn>
             </v-card-actions>
          </v-card>
       </v-dialog>
@@ -64,25 +76,58 @@
 </template>
 
 <script>
-   import CardToastValidation from './CardToastValidation.vue'
+   import api from '../services/api'
 
    export default {
       name:'CardStudentRating',
       props: {
          criterios: Array,
-         nome: String
+         nome: String,
+         estudanteID: String,
+         sprintID: String,
+         notasFeitas: Array
       },
       components: {
-         CardToastValidation 
       },
       data () {
          return {
             dialog: false,
             cardProps: false,
             card: false,
-            snackbar: false
+            snackbar: false,
+            idEvaluator: "249e5625-9e9d-4b3f-9f14-3e4679a2333e",
+            idGroup: "40d96119-2698-432b-8d58-dfb6efb615e0",
+            note: null,
+            idSelectedCriteria: null,
+            teste: [],
+            rating: {},
          }
       },
+      beforeMount() {
+         console.log(this.notasFeitas)
+      },
+      methods: {
+         vChange: function(id, rating) {
+            this.rating = {"id": id, "rating": rating}
+            this.teste.push(this.rating)
+            console.log(this.teste)
+         },
+         ratingEstudant: function() {
+            console.log(this.teste.length)
+            for(let i=0; i < this.teste.length; i++){
+                  let payload = {
+                     "idEvaluator": this.idEvaluator,
+                     "idEvaluated": this.estudanteID,
+                     "idGroup": this.idGroup,
+                     "idCriteria": this.teste[i].id,
+                     "idSprint": this.sprintID,
+                     "note": this.teste[i].rating,
+                     "obs": "Teste"
+                  }
+                  api.post("notes-store", payload)
+            }
+         }
+      }
    }
 </script>
 

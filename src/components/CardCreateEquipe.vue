@@ -24,36 +24,35 @@
           <span class="text-h5">Criar Grupo</span>
         </v-card-title>
         <v-card-text>
+          
           <v-container>
             <v-row>
               <v-col cols="12">
                 <v-text-field
                   label="Nome Grupo*"
+                  v-model="teamName"
                   required
+
                 ></v-text-field>
               </v-col>
               <v-col
                 cols="12"
               >
-                <v-select
-                  :items="['0-17', '18-29', '30-54', '54+']"
-                  label="Projetos*"
-                  multiple
-                ></v-select>
-              </v-col>
-            <v-col
-                cols="12"
-              >
-                <v-select
-                  :items="['0-17', '18-29', '30-54', '54+']"
-                  label="Alunos*"
-                  multiple
+              <v-select
+                  v-model="select"
+                  :items="projetos"
+                  label="Projetos"
+                  item-text="description"
+                  persistent-hint
+                  return-object
+                  single-line
                 ></v-select>
               </v-col>
             </v-row>
           </v-container>
           <small>* Campos obrigatorios</small>
         </v-card-text>
+        
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
@@ -61,14 +60,14 @@
             text
             @click="dialog = false"
           >
-            Close
+            Fechar
           </v-btn>
           <v-btn
             color="blue darken-1"
             text
-            @click="dialog = false"
+            @click="dialog = false, createTeam()"
           >
-            Save
+            Salvar
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -77,9 +76,27 @@
 </template>
 
 <script>
+  import api from '../services/api'
   export default {
+    props: {
+         projetos: Array,
+    },
     data: () => ({
       dialog: false,
+      select: "",
+      idProjeto: "",
+      teamName: "",
+      snActivated: "s"
     }),
+     methods: {
+        createTeam: function() {
+            let payload = { 
+                idProject: this.select.idProject, 
+                teamName: this.teamName, 
+                snActivated: this.snActivated 
+            };
+            api.post("team", payload)
+        },
+    }
   }
 </script>

@@ -1,0 +1,102 @@
+<template>
+    <v-card id="create">
+        <v-speed-dial
+            v-model="fab"
+            :top="top"
+            :bottom="bottom"
+            :right="right"
+            :left="left"
+            :direction="direction"
+            :open-on-hover="hover"
+            :transition="transition"
+            background
+        >
+        <template v-slot:activator>
+            <v-btn
+            v-model="fab"
+            color="blue darken-2"
+            dark
+            fab
+            small
+            >
+            <v-icon v-if="fab">
+                mdi-close
+            </v-icon>
+            <v-icon v-else>
+                mdi-plus
+            </v-icon>
+            </v-btn>
+        </template>
+        <v-btn
+            fab
+            dark
+            small
+            color="green"
+        >
+            <v-icon>mdi-pencil</v-icon>
+        </v-btn>
+        <v-btn
+            fab
+            dark
+            small
+            color="red"
+        >
+            <v-icon v-on:click="deleteTeam">mdi-delete</v-icon>
+        </v-btn>
+        </v-speed-dial>
+    </v-card>
+</template>
+
+<script>
+  import api from '../services/api'
+  export default {
+    props: {
+         team: String,
+    },
+    data: () => ({
+      direction: 'left',
+      fab: false,
+      fling: false,
+      hover: false,
+      tabs: null,
+      top: false,
+      right: false,
+      bottom: false,
+      left: true,
+      transition: 'slide-y-reverse-transition',
+    }),
+    watch: {
+      top (val) {
+        this.bottom = !val
+      },
+      right (val) {
+        this.left = !val
+      },
+      bottom (val) {
+        this.top = !val
+      },
+      left (val) {
+        this.right = !val
+      },
+    },
+    methods: {
+        deleteTeam: function() {
+            api.delete(`team/${this.team}`)
+        },
+    }
+  }
+</script>
+
+<style>
+  .theme--light.v-sheet {
+    background: none;
+    border: none;
+  }
+  #create .v-speed-dial {
+    position: relative;
+  }
+
+  #create .v-btn--floating {
+    position: relative;
+  }
+</style>

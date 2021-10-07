@@ -4,7 +4,8 @@
       app
       color="primary"
       dark
-    >
+    > 
+    
       <div class="d-flex align-center">
         <v-toolbar-title>Pacer</v-toolbar-title>
       </div>
