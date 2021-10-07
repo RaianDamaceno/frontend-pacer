@@ -112,19 +112,12 @@
     .body
     {
         background-image: url('https://www.drumangle.com/sandbox/wp/21813/wp-content/uploads/2014/01/Login-Screen-Background-Wood-4.jpg');
-        width: 100%;
     }
     .inputs
     {
         background: white;
         padding: 0 50px 30px;
         border-radius: 5px;
-    }
-
-    .radios
-    {
-        display: flex;
-        gap: 10px;
     }
 </style>
 <script lang='ts'>
