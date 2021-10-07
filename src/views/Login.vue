@@ -16,21 +16,8 @@
                 <v-col cols='12'>
                     <v-text-field
                         v-model='login.firstname'
-                        label='RA'
+                        label='Entre com seu ID'
                         required
-                    ></v-text-field>
-                </v-col>
-
-                <v-col cols='12'>
-                    <v-text-field
-                        v-model='login.password'
-                        :append-icon="login.show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                        :type="login.show1 ? 'text' : 'password'"
-                        name='input-10-1'
-                        label='Senha'
-                        hint='At least 8 characters'
-                        counter
-                        @click:append='login.show1 = !login.show1'
                     ></v-text-field>
                 </v-col>
 
@@ -77,34 +64,6 @@
                         required
                     ></v-text-field>
                 </v-col>
-
-                <v-col cols='12'>
-                    <v-text-field
-                        type='password'
-                        v-model='signUp.password'
-                        label='Password'
-                        required
-                    ></v-text-field>
-                </v-col>
-
-                    <v-radio-group v-model="signUp.radioGroup">
-                        <v-row class="radios mb-6" justify='center' align='center'>
-                            <v-radio
-                                :label="'Aluno'"
-                                :value="'Aluno'"
-                            ></v-radio>
-
-                            <v-radio
-                                :label="'Professor'"
-                                :value="'Professor'"
-                            ></v-radio>
-
-                            <v-radio
-                                :label="'Admin'"
-                                :value="'Admin'"
-                            ></v-radio>
-                        </v-row>
-                    </v-radio-group>
 
                 <v-row justify='center' align='center'>
                     <v-btn
@@ -171,30 +130,49 @@ export default Vue.extend({
             show1: false,
             login: true,
             signUp: false,
-            firstname: '',
-            password: ''
+            firstname: ''
         },
         signUp:{
             nome: '',
             ra: '',
-            email: '',
-            password: '',
-            radioGroup: 'Aluno'
+            email: ''
         },
         snackbar: false,
         text: '',
         colorBtn: 'green',
-        timeout: 2000,
+        timeout: 2000
     }),
     methods: {
         validate: function(): void
         {
-            if(this.login.firstname.trim() === '' || this.login.password.trim() === '')
+            if(this.login.firstname.trim() === '')
             {
                 this.snackbarShow('Ambos campos são obrigatórios', 'red');
                 return;
             }
-            router.push('/dashboard');
+
+            axios
+                .get('http://localhost:3000/user/' + this.login.firstname)
+                .then((response) =>
+                {
+                    if(response.status === 200)
+                    {
+                        this.snackbarShow(
+                            'Login Efetuado com sucesso!',
+                            'blue'
+                        );
+                        setTimeout(() =>
+                        {
+                            router.push('/dashboard');
+                        }, 1500)
+                    }
+                })
+                .catch(() => {
+                    this.snackbarShow(
+                        'Falha ao realizar o login, por favor tente novamente',
+                        'red'
+                    );
+                });
         },
         validateRegister: function(): void
         {
@@ -202,11 +180,9 @@ export default Vue.extend({
                 this.signUp.nome.trim() === '' ||
                 this.signUp.ra.trim() === '' ||
                 this.signUp.email.trim() === '' ||
-                this.signUp.password.trim() === '' ||
                 this.signUp.nome.trim().length < 2 ||
-                this.signUp.ra.trim().length < 6||
-                this.signUp.email.trim().length < 7||
-                this.signUp.password.trim().length < 7
+                this.signUp.ra.trim().length < 6 ||
+                this.signUp.email.trim().length < 7
             )
             {
                 this.snackbarShow('Todos campos são obrigatórios e Validos, por favor preenche-los Corretamente', 'red');
@@ -223,31 +199,31 @@ export default Vue.extend({
         },
         registration: function(): void
         {
-            console.log(
-                this.signUp.nome,
-                this.signUp.ra,
-                this.signUp.email,
-                this.signUp.radioGroup
-            );
             axios
                 .post('http://localhost:3000/user', {
                     login: this.signUp.nome,
                     name: this.signUp.nome,
                     document: this.signUp.ra,
                     email: this.signUp.email,
-                    rule: this.signUp.radioGroup,
-                    snAtivo: '1'
+                    rule: 'USER'
                 })
                 .then((response) => {
-                    console.log('Success ',response);
-                    // router.push('/dashboard');
+                    if(response.status === 201)
+                    {
+                        this.snackbarShow(
+                            'Cadastro Realizado com sucesso, você será direcionado ao DashBoard',
+                            'green'
+                        );
+                        setTimeout(() => {
+                            router.push('/dashboard');
+                        }, 2200);
+                    }
                 })
-                .catch((error) => {
+                .catch(() => {
                     this.snackbarShow(
                         'Ocorreu um erro ao realizar a operação :( por favor repita daqui a alguns instantes',
                         'red'
                     );
-                    console.error('Ocorreu um erro ao realizar a operação :( por favor repita daqui instantes', error)
                 });
         }
     }
