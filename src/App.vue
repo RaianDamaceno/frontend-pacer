@@ -19,6 +19,9 @@
          <v-tab >
           <sprintRegistration />
         </v-tab>
+        <v-tab >
+          <CreateProject />
+        </v-tab>
     </v-app-bar>
 
     <v-main>
@@ -31,14 +34,16 @@
 import Vue from 'vue';
 import CriteriaRegistration from './components/criteria-registration.vue'
 import AdicionaCriteriosAva from './components/AdicionaCriteriosAva.vue'
-import SprintRegistration from './components/SprintRegistration.vue';
+import SprintRegistration from './components/SprintRegistration.vue'
+import CreateProject from './components/CreateProject.vue';
 
 export default Vue.extend({
   name: 'App',
   components: {
       AdicionaCriteriosAva,
       CriteriaRegistration,
-    SprintRegistration
+      SprintRegistration,
+      CreateProject
   },
   data: () => ({
     //
