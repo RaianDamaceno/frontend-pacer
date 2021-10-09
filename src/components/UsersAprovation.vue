@@ -35,6 +35,7 @@
               dark
               @click="dialog = false"
             >
+            
             <v-icon>mdi-close</v-icon>
             </v-btn>
             <v-toolbar-title>Usuários para Aprovação</v-toolbar-title>
@@ -56,19 +57,12 @@
             </v-menu>
           </v-toolbar>
           <v-card-text>
-            
             <v-list
               three-line
               subheader
             >
               <v-subheader>Lista de Usuários para aprovação</v-subheader>
-              <v-data-table
-                :headers="headers"
-                :items="teste"
-                :items-per-page="10"
-                class="elevation-1"
-              />
-              <v-list-item></v-list-item>
+              <v-data-table :headers="headers" :items="teste" :items-per-page="10" class="elevation-1"></v-data-table>
             </v-list>
           </v-card-text>
           <div style="flex: 1 1 auto;"></div>
@@ -90,16 +84,15 @@
         teste: null,
         headers: [
           {
-            text: 'Nome',
             align: 'start',
             sortable: false,
-            value: 'name',
           },
-          { text: 'Login', value: 'login' },
           { text: 'Nome', value: 'name' },
+          { text: 'Login', value: 'login' },
           { text: 'CPF', value: 'document' },
           { text: 'Email', value: 'email' },
-          { text: "Ativo", value: 'snAtivo'}
+          { text: "Ativo", value: 'snAtivo'},
+          { text: "Status", value: ''}
         ],
       }
     },
@@ -110,7 +103,7 @@
             if(this.teste[i].snAtivo == 'S') {
               this.teste.splice(i, 1)
             } 
-            if (this.teste[i].snAtivo== 'N') {
+            if (this.teste[i].snAtivo == 'N') {
               this.teste[i].snAtivo = false
             }
         }

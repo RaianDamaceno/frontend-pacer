@@ -18,6 +18,12 @@
         <v-tab>
           <UsersAprovation />
         </v-tab>
+        <v-tab >
+          <sprintRegistration />
+        </v-tab>
+        <v-tab >
+          <CreateProject />
+        </v-tab>
     </v-app-bar>
     <v-main>
       <router-view/>
@@ -30,13 +36,17 @@ import Vue from 'vue';
 import CriteriaRegistration from './components/criteria-registration.vue'
 import AdicionaCriteriosAva from './components/AdicionaCriteriosAva.vue'
 import UsersAprovation      from './components/UsersAprovation.vue'
+import SprintRegistration from './components/SprintRegistration.vue'
+import CreateProject from './components/CreateProject.vue';
 
 export default Vue.extend({
   name: 'App',
   components: {
       AdicionaCriteriosAva,
       CriteriaRegistration,
-      UsersAprovation
+      UsersAprovation,
+      SprintRegistration,
+      CreateProject
   },
   data: () => ({
     //
