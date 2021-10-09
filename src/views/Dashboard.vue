@@ -33,7 +33,7 @@
             </v-card>
           </v-slide-item>
         </v-slide-group>
-        <card-create-equipe :projetos="projetos"/>
+        <card-create-equipe :projetos="projetos" :estudantes="estudantes"/>
       </div>
       <div class="dashboard-group-person" v-if="!teacher">
         <v-slide-group
@@ -92,7 +92,6 @@
         </button>
       </div>
     </div>
-    {{sprintSelected}}
   </div>
 </template>
 
@@ -116,18 +115,19 @@
      data: () => ({
        cards: false,
        criterios: [],
-       estudantes: "",
+       estudantes: [],
        errors: "",
-       teacher: false,
+       teacher: true,
        grupo: "",
        grupos: "",
-       projetos: "",
+       projetos: [],
        teams: "",
        sprints: "",
        sprintSelected: "",
        activeSprint: true,
        snackbar: false,
-       notasFeitas: []
+       notasFeitas: [],
+       novoCriterio: [],
      }),
      beforeMount() {
         api.get('user').then(response => {
@@ -147,7 +147,6 @@
         })
         api.get('notes-store').then(response => {
           this.notasFeitas = response.data
-          console.log(this.notasFeitas)
         })
       },
       methods: {
@@ -171,7 +170,6 @@
           } else {
             this.activeSprint = false
           }
-          console.log(this.activeSprint)
         }
     }
  })

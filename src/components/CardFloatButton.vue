@@ -88,9 +88,9 @@
 </script>
 
 <style>
-  .theme--light.v-sheet {
-    background: none;
-    border: none;
+  .theme--light.v-sheet #create {
+    background: rgb(2,0,36);
+    background: linear-gradient(47deg, rgba(13,44,82,1) 31%, rgba(90,26,159,1));
   }
   #create .v-speed-dial {
     position: relative;

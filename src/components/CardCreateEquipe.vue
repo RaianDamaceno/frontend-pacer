@@ -39,10 +39,23 @@
                 cols="12"
               >
               <v-select
-                  v-model="select"
+                  v-model="selectProjeto"
                   :items="projetos"
                   label="Projetos"
                   item-text="description"
+                  persistent-hint
+                  return-object
+                  single-line
+                ></v-select>
+              </v-col>
+              <v-col
+                cols="12"
+              >
+              <v-select
+                  v-model="selectUsuario"
+                  :items="estudantes"
+                  label="Alunos"
+                  item-text="name"
                   persistent-hint
                   return-object
                   single-line
@@ -80,10 +93,12 @@
   export default {
     props: {
          projetos: Array,
+         estudantes: Array
     },
     data: () => ({
       dialog: false,
-      select: "",
+      selectProjeto: "",
+      selectUsuario: "",
       idProjeto: "",
       teamName: "",
       snActivated: "s"

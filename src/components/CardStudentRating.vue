@@ -103,17 +103,24 @@
             rating: {},
          }
       },
-      beforeMount() {
-         console.log(this.notasFeitas)
+      created() {
+         for(let i = 0; i < this.notasFeitas.length; i++) {
+            if(this.notasFeitas[i].idEvaluator == this.idEvaluator) {
+               console.log(this.notasFeitas[i])
+            }
+         }
       },
       methods: {
          vChange: function(id, rating) {
             this.rating = {"id": id, "rating": rating}
+            for(let i = 0; i < this.teste.length; i++) {
+               if(this.teste[i].id == id) {
+                  this.teste.splice(i, 1)
+               }
+            }
             this.teste.push(this.rating)
-            console.log(this.teste)
          },
          ratingEstudant: function() {
-            console.log(this.teste.length)
             for(let i=0; i < this.teste.length; i++){
                   let payload = {
                      "idEvaluator": this.idEvaluator,
