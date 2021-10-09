@@ -67,7 +67,6 @@
                <template v-slot:item.status="{ item }">
                 <v-switch
                   v-model="item.status"
-                  :label="`Switch 1: ${item.status}`"
                 ></v-switch>
               </template>
               
@@ -101,7 +100,7 @@
           { text: 'Login', value: 'login' },
           { text: 'CPF', value: 'document' },
           { text: 'Email', value: 'email' },
-          { text: "Ativo", value: 'status'},
+          { text: "Aprovar", value: 'status'},
         ],
       }
     },
@@ -131,12 +130,11 @@
 
     beforeMount() {
       api.get('user').then(response => {
-        for(let i = 0; i < response.data.length; i++) {
-            this.teste = response.data
-            if(this.teste[i].status.toUpperCase() === 'ENABLED') {
-              this.teste.splice(i, 1)
-            } 
-            if (this.teste[i].status !== 'ENABLED') {
+
+        this.teste = response.data
+        this.teste = this.teste.filter(item => item.status.toUpperCase() === 'PENDING');
+        for(let i = 0; i < this.teste.length; i++) {
+            if (this.teste[i].status !== 'ENABLED' ) {
               this.teste[i].status = false
             }
         }
