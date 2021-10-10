@@ -16,6 +16,8 @@
         <v-tab >
           <CriteriaRegistration />
         </v-tab>
+        <v-tab >
+          <PendingToScore />
         <v-tab>
           <UsersAprovation />
         </v-tab>
@@ -36,6 +38,7 @@
 import Vue from 'vue';
 import CriteriaRegistration from './components/criteria-registration.vue'
 import AdicionaCriteriosAva from './components/AdicionaCriteriosAva.vue'
+import PendingToScore from './components/PendingToScore.vue'
 import UsersAprovation      from './components/UsersAprovation.vue'
 import SprintRegistration from './components/SprintRegistration.vue'
 import CreateProject from './components/CreateProject.vue';
@@ -45,6 +48,7 @@ export default Vue.extend({
   components: {
       AdicionaCriteriosAva,
       CriteriaRegistration,
+      PendingToScore
       UsersAprovation,
       SprintRegistration,
       CreateProject

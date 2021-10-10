@@ -3,7 +3,7 @@
         <v-dialog v-model="dialog" scrollable max-width="300px">
             <template v-slot:activator="{ on, attrs }">
                 <v-btn color="primary" dark v-bind="attrs" v-on="on">
-                    Cadastrar Criterio
+                    Cadastrar Critério
                 </v-btn>
             </template>
             <v-card>
