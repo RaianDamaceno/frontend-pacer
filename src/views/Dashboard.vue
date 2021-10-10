@@ -1,5 +1,20 @@
 <template>
   <div class="dashboard">
+    <v-btn
+      color="red darken-5"
+      dark
+      small
+      fab
+      v-if="!teacher"
+      v-on:click="teacher = true"
+      >
+      <v-icon
+        dark
+        left
+        >
+        mdi-arrow-left
+      </v-icon>
+    </v-btn>
     <div class="dashboard-group">
       <div class="dashboard-group-person" v-if="teacher">
         <v-slide-group
@@ -37,58 +52,58 @@
       </div>
       <div class="dashboard-group-person" v-if="!teacher">
         <v-slide-group
-            class="pa-4"
-            center-active
-            show-arrows
+          class="pa-4"
+          center-active
+          show-arrows
+          >
+          <v-slide-item
+            v-for="estudante in estudantes"
+            :key="estudante.idUser"
             >
-            <v-slide-item
-                v-for="estudante in estudantes"
-                :key="estudante.idUser"
+            <v-card
+              class="ma-4"
+              height="200"
+              width="190"
+              >
+              <div class="dashboard-group-person-minify" >
+                <div class="dashboard-group-person-minify-pictures">
+                  <div></div>
+                </div>
+                <div class="dashboard-group-person-name">
+                  <span> {{ estudante.user.name }} </span>
+                </div>
+                <div class="dashboard-group-person-button" v-if="activeSprint">
+                  <card-student-rating 
+                    :criterios="criterios" 
+                    :nome="estudante.user.name"
+                    :estudanteID="estudante.idUser"
+                    :sprintID="sprintSelected"
+                    :notasFeitas="notasFeitas"
+                    />
+                </div>
+                <div class="dashboard-group-person-button" v-else>
+                  <card-toast-sprint text="Sprint finalizada"/>
+                </div>
+              </div>
+              <v-row
+                class="fill-height"
+                align="center"
+                justify="center"
                 >
-                <v-card
-                    class="ma-4"
-                    height="200"
-                    width="190"
-                    >
-                    <div class="dashboard-group-person-minify" >
-                      <div class="dashboard-group-person-minify-pictures">
-                          <div></div>
-                      </div>
-                      <div class="dashboard-group-person-name">
-                          <span> {{ estudante.user.name }} </span>
-                      </div>
-                      <div class="dashboard-group-person-button" v-if="activeSprint">
-                          <card-student-rating 
-                            :criterios="criterios" 
-                            :nome="estudante.user.name"
-                            :estudanteID="estudante.idUser"
-                            :sprintID="sprintSelected"
-                            :notasFeitas="notasFeitas"
-                           /> 
-                      </div>
-                      <div class="dashboard-group-person-button" v-else>
-                          <card-toast-sprint text="Sprint finalizada"/>
-                      </div>
-                    </div>
-                    <v-row
-                        class="fill-height"
-                        align="center"
-                        justify="center"
-                        >
-                    </v-row>
-                </v-card>
-            </v-slide-item>
+              </v-row>
+            </v-card>
+          </v-slide-item>
         </v-slide-group>
-        </div>
+      </div>
     </div>
     <div class="dashboard-info">
       <div v-for="sprint in sprints" :key="sprint.idSprint">
         <button 
           :value="sprint.idSprint"
           v-on:click="checkSprintAtiva(sprint)">
-            <p> Sprint</p>
-            <p> Data Inicial: {{ sprint.initialDate }} </p>
-            <p> Data Final: {{ sprint.finalDate }} </p>
+          <p> Sprint</p>
+          <p> Data Inicial: {{ sprint.initialDate }} </p>
+          <p> Data Final: {{ sprint.finalDate }} </p>
         </button>
       </div>
     </div>
