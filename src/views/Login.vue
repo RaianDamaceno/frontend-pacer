@@ -33,8 +33,7 @@
                     <v-btn
                         color='green'
                         elevation='2'
-                        class='mr-6'
-                        v-on:click='validate'>
+                        class='mr-6'>
                         Entrar
                     </v-btn>
 
@@ -52,7 +51,7 @@
                 <v-col cols='12'>
                     <v-text-field
                         v-model='signUp.nome'
-                        label='Nome'
+                        label='Nome De Usuario'
                         required
                     ></v-text-field>
                 </v-col>
@@ -60,11 +59,18 @@
                 <v-col cols='12'>
                     <v-text-field
                         v-model='signUp.ra'
-                        label='RA'
+                        label='Nome'
                         required
                     ></v-text-field>
                 </v-col>
-
+                <v-col cols='12'>
+                    <v-text-field
+                        v-model='signUp.document'
+                        :mask="['###.###.###-##', '##.###.###/####-##']"
+                        label='CPF'
+                        required
+                    ></v-text-field>
+                </v-col>
                 <v-col cols='12'>
                     <v-text-field
                         v-model='signUp.email'
@@ -72,13 +78,27 @@
                         required
                     ></v-text-field>
                 </v-col>
+              <v-col
+                cols="12"
+              >
+              <v-select
+                  v-model="selectRole"
+                  :value="roles.roleName"
+                  :items="roles"
+                  label="Função"
+                  item-text="roleName"
+                  persistent-hint
+                  return-object
+                  single-line
+                ></v-select>
+              </v-col>
 
                 <v-row justify='center' align='center'>
                     <v-btn
                         color='green'
                         elevation='2'
                         class='mr-6'
-                        v-on:click='validateRegister'>
+                        v-on:click='registration'>
                         Registrar
                     </v-btn>
 
@@ -123,7 +143,7 @@
 <script lang='ts'>
 import router from '@/router';
 import Vue from 'vue';
-import axios from 'axios';
+import api from '../services/api'
 
 export default Vue.extend({
     data: () => ({
@@ -136,77 +156,82 @@ export default Vue.extend({
         },
         signUp:{
             nome: '',
-            ra: '',
-            email: ''
+            email: '',
+            document: '',
+            ra: ''
         },
+        selectRole: Object,
+        roles: [],
         snackbar: false,
         text: '',
         colorBtn: 'green',
         timeout: 2000,
     }),
+    beforeMount() {
+        api.get('/role').then(response => {
+            this.roles = response.data
+        })
+    },
     methods: {
-        validate: function(): void
-        {
-            if(this.login.firstname.trim() === '' || this.login.ra.trim() === '')
-            {
-                this.snackbarShow('Ambos campos são obrigatórios', 'red');
-                return;
-            }
+        // validate: function(): void
+        // {
+        //     if(this.login.firstname.trim() === '' || this.login.ra.trim() === '')
+        //     {
+        //         this.snackbarShow('Ambos campos são obrigatórios', 'red');
+        //         return;
+        //     }
 
-            else
-            {
-                if(this.login.firstname.trim().toString() === 'adm' && this.login.ra.trim().toString() === '12345678')
-                {
-                    this.snackbarShow('Login realizado com sucesso', 'blue');
-                    setTimeout(() =>
-                    {
-                        router.push('/dashboard');
-                    }, 1200)
-                }
-                else
-                {
-                    this.snackbarShow('Falha no login', 'red');
-                    return;
-                }
-            }
+        //     else
+        //     {
+        //         if(this.login.firstname.trim().toString() === 'adm' && this.login.ra.trim().toString() === '12345678')
+        //         {
+        //             this.snackbarShow('Login realizado com sucesso', 'blue');
+        //             setTimeout(() =>
+        //             {
+        //                 router.push('/dashboard');
+        //             }, 1200)
+        //         }
+        //         else
+        //         {
+        //             this.snackbarShow('Falha no login', 'red');
+        //             return;
+        //         }
+        //     }
 
-        },
-        validateRegister: function(): void
-        {
-            if(
-                this.signUp.nome.trim() === '' ||
-                this.signUp.ra.trim() === '' ||
-                this.signUp.email.trim() === '' ||
-                this.signUp.nome.trim().length < 2 ||
-                this.signUp.ra.trim().length < 6 ||
-                this.signUp.email.trim().length < 7
-            )
-            {
-                this.snackbarShow('Todos campos são obrigatórios e Validos, por favor preenche-los Corretamente', 'red');
-                return;
-            }
+        // },
+        // validateRegister: function(): void
+        // {
+        //     if(
+        //         this.signUp.nome.trim() === '' ||
+        //         this.signUp.ra.trim() === '' ||
+        //         this.signUp.email.trim() === '' ||
+        //         this.signUp.nome.trim().length < 2 ||
+        //         this.signUp.ra.trim().length < 6 ||
+        //         this.signUp.email.trim().length < 7
+        //     )
+        //     {
+        //         this.snackbarShow('Todos campos são obrigatórios e Validos, por favor preenche-los Corretamente', 'red');
+        //         return;
+        //     }
 
-            this.registration();
-        },
-        snackbarShow: function(text: string, color = 'green'): void
-        {
+        //     this.registration();
+        // },
+        snackbarShow: function(text: string, color = 'green'): void {
             this.text = text;
             this.colorBtn = color;
             this.snackbar = true;
         },
-        registration: function(): void
-        {
-            axios
-                .post('http://localhost:3000/user', {
+        registration: function(): void {
+            let usuarioRegistro = {
                     login: this.signUp.nome,
                     name: this.signUp.nome,
                     document: this.signUp.ra,
                     email: this.signUp.email,
-                    rule: 'USER'
-                })
-                .then((response) => {
-                    if(response.status === 201)
-                    {
+                    role: this.selectRole.roleName
+            }   
+
+            api.post("user", usuarioRegistro).then(response =>{
+                 if(response.status === 201) {
                         this.snackbarShow(
                             'Cadastro Realizado com sucesso, você será direcionado ao DashBoard'
                         );
@@ -220,7 +245,7 @@ export default Vue.extend({
                         'Ocorreu um erro ao realizar a operação :( por favor repita daqui a alguns instantes',
                         'red'
                     );
-                });
+                })
         }
     }
 });

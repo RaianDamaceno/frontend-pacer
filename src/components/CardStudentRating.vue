@@ -102,91 +102,108 @@
 </template>
 
 <script>
-   import api from '../services/api'
+import api from '../services/api'
 
-   export default {
-      name:'CardStudentRating',
-      props: {
-         criterios: Array,
-         nome: String,
-         estudanteID: String,
-         sprintID: String,
-         notasFeitas: Array
-      },
-      components: {
-      },
-      data () {
-         return {
-            dialog: false,
-            cardProps: false,
-            card: false,
-            snackbar: false,
-            idEvaluator: "e61aaa2c-5cae-4394-b915-3f9fae0e7bc9",
-            idGroup: "6aa52af7-7672-48e1-8539-aa72e83c8663",
-            note: null,
-            idSelectedCriteria: null,
-            teste: [],
-            update: [],
-            rating: {},
-            flagRating: false,
-            notasFeitasAvaliador: []
-         }
-      },
-      created() {
-         for(let i = 0; i < this.notasFeitas.length; i++) {
-            if(this.notasFeitas[i].idEvaluator == this.idEvaluator && this.notasFeitas[i].idEvaluated == this.estudanteID) {
-               this.flagRating = true
-               this.notasFeitasAvaliador.push(this.notasFeitas[i])
-            } else {
-               this.flagRating == false
-            }
-         }
-      },
-      methods: {
-         vChange: function(id, rating) {
-            this.rating = {"id": id, "rating": rating}
-            for(let i = 0; i < this.teste.length; i++) {
-               if(this.teste[i].id == id) {
-                  this.teste.splice(i, 1)
-               }
-            }
-            this.teste.push(this.rating)
-         },
-         vChangeUpdate: function(idRating, idCriteira, nota ) {
-            this.rating = {"id": idRating, "idCriteria": idCriteira, "nota":nota}
-            for(let i = 0; i < this.update.length; i++) {
-               if(this.update[i].id == idRating) {
-                  this.update.splice(i, 1)
-               }
-            }
-            this.update.push(this.rating)
-            console.log(this.update)
-         },
-         ratingEstudant: function() {
-            for(let i=0; i < this.teste.length; i++){
-                  let payload = {
-                     "idEvaluator": this.idEvaluator,
-                     "idEvaluated": this.estudanteID,
-                     "idGroup": this.idGroup,
-                     "idCriteria": this.teste[i].id,
-                     "idSprint": this.sprintID,
-                     "note": this.teste[i].rating,
-                     "obs": "Teste"
-                  }
-                  api.post("notes-store", payload)
-            }
-         },
-         updateRating: function() {
-            for(let i=0; i < this.update.length; i++){
-                  let payload = {
-                     "note": this.update[i].nota,
-                  }
-                  api.put(`notes-store/${this.update[i].id}`, payload)
-            }
-         }
+export default {
+  name: 'CardStudentRating',
+  props: {
+    criterios: Array,
+    nome: String,
+    estudanteID: String,
+    sprintID: String,
+    notasFeitas: Array
+  },
+  components: {},
+  data() {
+    return {
+      dialog: false,
+      cardProps: false,
+      card: false,
+      snackbar: false,
+      idEvaluator: "e61aaa2c-5cae-4394-b915-3f9fae0e7bc9",
+      idGroup: "6aa52af7-7672-48e1-8539-aa72e83c8663",
+      note: null,
+      idSelectedCriteria: null,
+      teste: [],
+      update: [],
+      rating: {},
+      flagRating: false,
+      notasFeitasAvaliador: []
+    }
+  },
+  created() {
+    for (let i = 0; i < this.notasFeitas.length; i++) {
+      if (this.notasFeitas[i].idEvaluator == this.idEvaluator && this.notasFeitas[i].idEvaluated == this.estudanteID) {
+        this.flagRating = true
+        this.notasFeitasAvaliador.push(this.notasFeitas[i])
+      } else {
+        this.flagRating == false
       }
-   }
-</script>
+    }
+  },
+  methods: {
+    vChange: function (id, rating) {
+      this.rating = {
+        "id": id,
+        "rating": rating
+      }
+      for (let i = 0; i < this.teste.length; i++) {
+        if (this.teste[i].id == id) {
+          this.teste.splice(i, 1)
+        }
+      }
+      this.teste.push(this.rating)
+    },
+    vChangeUpdate: function (idRating, idCriteira, nota) {
+      this.rating = {
+        "id": idRating,
+        "idCriteria": idCriteira,
+        "nota": nota
+      }
+      for (let i = 0; i < this.update.length; i++) {
+        if (this.update[i].id == idRating) {
+          this.update.splice(i, 1)
+        }
+      }
+      this.update.push(this.rating)
+      console.log(this.update)
+    },
+    ratingEstudant: function () {
+      for (let i = 0; i < this.teste.length; i++) {
+        let payload = {
+          "idEvaluator": this.idEvaluator,
+          "idEvaluated": this.estudanteID,
+          "idGroup": this.idGroup,
+          "idCriteria": this.teste[i].id,
+          "idSprint": this.sprintID,
+          "note": this.teste[i].rating,
+          "obs": "Teste"
+        }
+        api.post("notes-store", payload).then(response => {
+          if (response.status === 201) {
+            alert("Nota Cadastrada Com sucesso")
+          } else {
+            alert("Ocorreu um erro ao realizar o cadastro das Notas")
+          }
+        })
+      }
+    },
+    updateRating: function () {
+      for (let i = 0; i < this.update.length; i++) {
+        let payload = {
+          "note": this.update[i].nota,
+        }
+        api.put(`notes-store/${this.update[i].id}`, payload).then(response => {
+          if (response.status === 200) {
+            alert("Nota Atualiza Com sucesso")
+          } else {
+            alert("Ocorreu um erro ao realizar a atualização das Notas")
+          }
+        })
+      }
+    }
+  }
+} </script>
 
 <style scoped lang="scss">
    span {
