@@ -18,6 +18,7 @@
         </v-tab>
         <v-tab >
           <PendingToScore />
+        </v-tab>
         <v-tab>
           <UsersAprovation />
         </v-tab>
@@ -48,7 +49,7 @@ export default Vue.extend({
   components: {
       AdicionaCriteriosAva,
       CriteriaRegistration,
-      PendingToScore
+      PendingToScore,
       UsersAprovation,
       SprintRegistration,
       CreateProject
