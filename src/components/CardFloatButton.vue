@@ -49,6 +49,7 @@
 
 <script>
   import api from '../services/api'
+  
   export default {
     props: {
          team: String,

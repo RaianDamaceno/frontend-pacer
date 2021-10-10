@@ -16,8 +16,8 @@
               height="200"
               width="180"
               >
-              <div class="dashboard-group-person-minify" >
-                <div class="dashboard-group-person-name" >
+              <div class="dashboard-group-person-minify">
+                <div class="dashboard-group-person-name" v-on:click="getUserFromTeam(team.idTeam)" >
                   <span> {{ team.teamName}} </span>
                 </div>
                 <div class="dashboard-group-person-button">
@@ -33,7 +33,7 @@
             </v-card>
           </v-slide-item>
         </v-slide-group>
-        <card-create-equipe :projetos="projetos" :estudantes="estudantes"/>
+        <card-create-equipe :projetos="projetos" :estudantes="allEstudantes"/>
       </div>
       <div class="dashboard-group-person" v-if="!teacher">
         <v-slide-group
@@ -55,12 +55,12 @@
                           <div></div>
                       </div>
                       <div class="dashboard-group-person-name">
-                          <span> {{ estudante.name }} </span>
+                          <span> {{ estudante.user.name }} </span>
                       </div>
                       <div class="dashboard-group-person-button" v-if="activeSprint">
                           <card-student-rating 
                             :criterios="criterios" 
-                            :nome="estudante.name"
+                            :nome="estudante.user.name"
                             :estudanteID="estudante.idUser"
                             :sprintID="sprintSelected"
                             :notasFeitas="notasFeitas"
@@ -116,6 +116,7 @@
        cards: false,
        criterios: [],
        estudantes: [],
+       allEstudantes: [],
        errors: "",
        teacher: true,
        grupo: "",
@@ -131,7 +132,7 @@
      }),
      beforeMount() {
         api.get('user').then(response => {
-          this.estudantes = response.data
+          this.allEstudantes = response.data
         })
         api.get('criteria').then(response => {
             this.criterios = response.data
@@ -152,6 +153,12 @@
       methods: {
         showCard: function() {
             this.cards = true
+        },
+        getUserFromTeam(teamID) {
+          api.get(`user-team?idTeam=${teamID}`).then(response => {
+            this.estudantes = response.data
+            this.teacher = false
+          })
         },
         checkSprintAtiva: function(teste) {
           let today = new Date();

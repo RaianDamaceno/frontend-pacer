@@ -32,8 +32,8 @@
                   <div class="card-person">
                      <div class="card-person-image"></div>
                   </div>
-                  <div class="card-rating">
-                     <div 
+                  <div class="card-rating" v-if="!flagRating" >
+                     <div
                         v-for="criterio in criterios" 
                         :key="criterio.idCriteria">
                            <v-slider
@@ -48,7 +48,24 @@
                               color="green darken-1"
                               v-on:change="vChange(criterio.idCriteria, criterio.rating)"
                               />
-                              {{criterio.rating}} : {{criterio.idCriteria}}
+                    </div>
+                  </div>
+                  <div class="card-rating" v-if="flagRating" >
+                     <div
+                        v-for="nota in notasFeitasAvaliador" 
+                        :key="nota.idEvaluation">
+                           <v-slider
+                              v-model="nota.note"
+                              always-dirty
+                              class="mx-5"
+                              id="slider"
+                              min="0"
+                              max="100"
+                              thumb-label="always"
+                              :label="nota.criterio.descCriteria"
+                              color="green darken-1"
+                              v-on:change="vChangeUpdate(nota.idEvaluation, nota.criterio.idCriteria, nota.note)"
+                              />
                     </div>
                   </div>
                </div>
@@ -66,6 +83,15 @@
                   color="green darken-1"
                   text
                   @click="ratingEstudant"
+                  v-if="!flagRating"
+               >
+                  Salvar
+               </v-btn>
+               <v-btn
+                  color="green darken-1"
+                  text
+                  @click="updateRating"
+                  v-if="flagRating"
                >
                   Salvar
                </v-btn>
@@ -95,18 +121,24 @@
             cardProps: false,
             card: false,
             snackbar: false,
-            idEvaluator: "249e5625-9e9d-4b3f-9f14-3e4679a2333e",
-            idGroup: "40d96119-2698-432b-8d58-dfb6efb615e0",
+            idEvaluator: "e61aaa2c-5cae-4394-b915-3f9fae0e7bc9",
+            idGroup: "6aa52af7-7672-48e1-8539-aa72e83c8663",
             note: null,
             idSelectedCriteria: null,
             teste: [],
+            update: [],
             rating: {},
+            flagRating: false,
+            notasFeitasAvaliador: []
          }
       },
       created() {
          for(let i = 0; i < this.notasFeitas.length; i++) {
-            if(this.notasFeitas[i].idEvaluator == this.idEvaluator) {
-               console.log(this.notasFeitas[i])
+            if(this.notasFeitas[i].idEvaluator == this.idEvaluator && this.notasFeitas[i].idEvaluated == this.estudanteID) {
+               this.flagRating = true
+               this.notasFeitasAvaliador.push(this.notasFeitas[i])
+            } else {
+               this.flagRating == false
             }
          }
       },
@@ -120,6 +152,16 @@
             }
             this.teste.push(this.rating)
          },
+         vChangeUpdate: function(idRating, idCriteira, nota ) {
+            this.rating = {"id": idRating, "idCriteria": idCriteira, "nota":nota}
+            for(let i = 0; i < this.update.length; i++) {
+               if(this.update[i].id == idRating) {
+                  this.update.splice(i, 1)
+               }
+            }
+            this.update.push(this.rating)
+            console.log(this.update)
+         },
          ratingEstudant: function() {
             for(let i=0; i < this.teste.length; i++){
                   let payload = {
@@ -132,6 +174,14 @@
                      "obs": "Teste"
                   }
                   api.post("notes-store", payload)
+            }
+         },
+         updateRating: function() {
+            for(let i=0; i < this.update.length; i++){
+                  let payload = {
+                     "note": this.update[i].nota,
+                  }
+                  api.put(`notes-store/${this.update[i].id}`, payload)
             }
          }
       }

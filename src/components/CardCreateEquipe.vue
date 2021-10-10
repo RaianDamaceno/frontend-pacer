@@ -32,7 +32,6 @@
                   label="Nome Grupo*"
                   v-model="teamName"
                   required
-
                 ></v-text-field>
               </v-col>
               <v-col
@@ -59,7 +58,17 @@
                   persistent-hint
                   return-object
                   single-line
+                  multiple
                 ></v-select>
+              </v-col>
+              <v-col
+                cols="12"
+              >
+                <v-switch
+                  v-model="isScrum"
+                  inset
+                  :label="'É Scrum Master'"
+                ></v-switch>
               </v-col>
             </v-row>
           </v-container>
@@ -98,20 +107,39 @@
     data: () => ({
       dialog: false,
       selectProjeto: "",
-      selectUsuario: "",
+      selectUsuario: [],
       idProjeto: "",
       teamName: "",
-      snActivated: "s"
+      snActivated: "s",
+      teamResponse: "",
+      isScrum: false,
     }),
      methods: {
         createTeam: function() {
             let payload = { 
-                idProject: this.select.idProject, 
+                idProject: this.selectProjeto.idProject, 
                 teamName: this.teamName, 
                 snActivated: this.snActivated 
             };
-            api.post("team", payload)
+            api.post("team", payload).then(response => {
+              this.teamResponse = response.data
+              if(this.selectUsuario.length != 0) {
+                this.addAlunos(this.teamResponse)
+
+              }
+          })
         },
+        addAlunos: function(teamResponse) {
+          for(let i = 0; i < this.selectUsuario.length; i++) {
+              let UserTeamPayload = {
+                "idUser": this.selectUsuario[i].idUser,
+                "idTeam": teamResponse.idTeam,
+                "isScrumMaster": this.isScrum,
+                "snActivated": "S"
+              }
+              api.post("user-team", UserTeamPayload)
+          }
+        }
     }
   }
 </script>
