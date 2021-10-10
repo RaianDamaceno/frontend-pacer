@@ -9,12 +9,16 @@
          >
          <template v-slot:activator="{ on, attrs }">
             <v-btn
-               color="accent"
+               color="red accent-2"
                small                 
                fab
                v-bind="attrs"
                v-on="on"
-               @click="showCard"
+               @click="card = true"
+               right 
+               bottom
+               absolute
+               
                >
                <v-icon>mdi-plus</v-icon>
             </v-btn>
@@ -28,20 +32,40 @@
                   <div class="card-person">
                      <div class="card-person-image"></div>
                   </div>
-                  <div class="card-rating">
-                     <div v-for="criterio in criterios" :key="criterio.id">
-                        <v-slider
-                           v-model="criterio.rating"
-                           :tick-labels="labels"
-                           always-dirty
-                           class="mx-5"
-                           id="slider"
-                           min="0"
-                           max="100"
-                           thumb-label="always"
-                           :label="criterio.descCriteria"
-                           color="green darken-1"
-                           />
+                  <div class="card-rating" v-if="!flagRating" >
+                     <div
+                        v-for="criterio in criterios" 
+                        :key="criterio.idCriteria">
+                           <v-slider
+                              v-model="criterio.rating"
+                              always-dirty
+                              class="mx-5"
+                              id="slider"
+                              min="0"
+                              max="100"
+                              thumb-label="always"
+                              :label="criterio.descCriteria"
+                              color="green darken-1"
+                              v-on:change="vChange(criterio.idCriteria, criterio.rating)"
+                              />
+                    </div>
+                  </div>
+                  <div class="card-rating" v-if="flagRating" >
+                     <div
+                        v-for="nota in notasFeitasAvaliador" 
+                        :key="nota.idEvaluation">
+                           <v-slider
+                              v-model="nota.note"
+                              always-dirty
+                              class="mx-5"
+                              id="slider"
+                              min="0"
+                              max="100"
+                              thumb-label="always"
+                              :label="nota.criterio.descCriteria"
+                              color="green darken-1"
+                              v-on:change="vChangeUpdate(nota.idEvaluation, nota.criterio.idCriteria, nota.note)"
+                              />
                     </div>
                   </div>
                </div>
@@ -55,7 +79,22 @@
                   >
                   Fechar
                </v-btn>
-               <card-toast-validation text="Avaliação enviada com sucesso"/>
+               <v-btn
+                  color="green darken-1"
+                  text
+                  @click="ratingEstudant"
+                  v-if="!flagRating"
+               >
+                  Salvar
+               </v-btn>
+               <v-btn
+                  color="green darken-1"
+                  text
+                  @click="updateRating"
+                  v-if="flagRating"
+               >
+                  Salvar
+               </v-btn>
             </v-card-actions>
          </v-card>
       </v-dialog>
@@ -63,25 +102,89 @@
 </template>
 
 <script>
-   import CardToastValidation from './CardToastValidation.vue'
+   import api from '../services/api'
 
    export default {
       name:'CardStudentRating',
       props: {
          criterios: Array,
-         nome: String
+         nome: String,
+         estudanteID: String,
+         sprintID: String,
+         notasFeitas: Array
       },
       components: {
-         CardToastValidation 
       },
       data () {
          return {
             dialog: false,
             cardProps: false,
             card: false,
-            snackbar: false
+            snackbar: false,
+            idEvaluator: "e61aaa2c-5cae-4394-b915-3f9fae0e7bc9",
+            idGroup: "6aa52af7-7672-48e1-8539-aa72e83c8663",
+            note: null,
+            idSelectedCriteria: null,
+            teste: [],
+            update: [],
+            rating: {},
+            flagRating: false,
+            notasFeitasAvaliador: []
          }
       },
+      created() {
+         for(let i = 0; i < this.notasFeitas.length; i++) {
+            if(this.notasFeitas[i].idEvaluator == this.idEvaluator && this.notasFeitas[i].idEvaluated == this.estudanteID) {
+               this.flagRating = true
+               this.notasFeitasAvaliador.push(this.notasFeitas[i])
+            } else {
+               this.flagRating == false
+            }
+         }
+      },
+      methods: {
+         vChange: function(id, rating) {
+            this.rating = {"id": id, "rating": rating}
+            for(let i = 0; i < this.teste.length; i++) {
+               if(this.teste[i].id == id) {
+                  this.teste.splice(i, 1)
+               }
+            }
+            this.teste.push(this.rating)
+         },
+         vChangeUpdate: function(idRating, idCriteira, nota ) {
+            this.rating = {"id": idRating, "idCriteria": idCriteira, "nota":nota}
+            for(let i = 0; i < this.update.length; i++) {
+               if(this.update[i].id == idRating) {
+                  this.update.splice(i, 1)
+               }
+            }
+            this.update.push(this.rating)
+            console.log(this.update)
+         },
+         ratingEstudant: function() {
+            for(let i=0; i < this.teste.length; i++){
+                  let payload = {
+                     "idEvaluator": this.idEvaluator,
+                     "idEvaluated": this.estudanteID,
+                     "idGroup": this.idGroup,
+                     "idCriteria": this.teste[i].id,
+                     "idSprint": this.sprintID,
+                     "note": this.teste[i].rating,
+                     "obs": "Teste"
+                  }
+                  api.post("notes-store", payload)
+            }
+         },
+         updateRating: function() {
+            for(let i=0; i < this.update.length; i++){
+                  let payload = {
+                     "note": this.update[i].nota,
+                  }
+                  api.put(`notes-store/${this.update[i].id}`, payload)
+            }
+         }
+      }
    }
 </script>
 

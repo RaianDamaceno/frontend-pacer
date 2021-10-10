@@ -1,100 +1,198 @@
 <template>
-    <div class="dashboard">
-        <div class="dashboard-group">
-            <div class="dashboard-group-person">
-                <v-slide-group
-                    v-model="model"
-                    class="pa-4"
-                    center-active
-                    show-arrows
-                    >
-                    <v-slide-item
-                        v-for="estudante in estudantes"
-                        :key="estudante.data.id"
-                        >
-                        <v-card
-                            class="ma-4"
-                            height="200"
-                            width="180"
-                            >
-                            <div class="dashboard-group-person-minify">
-                              <div class="dashboard-group-person-minify-pictures">
-                                  <div></div>
-                              </div>
-                              <div class="dashboard-group-person-name">
-                                  <span> {{ estudante.data[0].estudantes[0].nome}} </span>
-                              </div>
-                              <div class="dashboard-group-person-button">
-                                  <card-student-rating :criterios="criterios" :nome="estudante.data[0].estudantes[0].nome" />
-                              </div>
-                            </div>
-
-                            <v-row
-                                class="fill-height"
-                                align="center"
-                                justify="center"
-                                >
-                            </v-row>
-                        </v-card>
-                    </v-slide-item>
-                </v-slide-group>
-            </div>
-            <div class="dashboard-group-myrating">
-            </div>
-        </div>
-        <div class="dashboard-info">
-            <div>
-            </div>
-            <div>
-            </div>
-            <div>
-            </div>
-        </div>
+  <div class="dashboard">
+    <v-btn
+      color="red darken-5"
+      dark
+      small
+      fab
+      v-if="!teacher"
+      v-on:click="teacher = true"
+      >
+      <v-icon
+        dark
+        left
+        >
+        mdi-arrow-left
+      </v-icon>
+    </v-btn>
+    <div class="dashboard-group">
+      <div class="dashboard-group-person" v-if="teacher">
+        <v-slide-group
+          class="pa-4"
+          center-active
+          show-arrows
+          >
+          <v-slide-item
+            v-for="team in teams"
+            :key="team.idTeam"
+            >
+            <v-card
+              class="ma-4"
+              height="200"
+              width="180"
+              >
+              <div class="dashboard-group-person-minify">
+                <div class="dashboard-group-person-name" v-on:click="getUserFromTeam(team.idTeam)" >
+                  <span> {{ team.teamName}} </span>
+                </div>
+                <div class="dashboard-group-person-button">
+                  <card-float-button :team="team.idTeam"/>
+                </div>
+              </div>
+              <v-row
+                class="fill-height"
+                align="center"
+                justify="center"
+                >
+              </v-row>
+            </v-card>
+          </v-slide-item>
+        </v-slide-group>
+        <card-create-equipe :projetos="projetos" :estudantes="allEstudantes"/>
+      </div>
+      <div class="dashboard-group-person" v-if="!teacher">
+        <v-slide-group
+          class="pa-4"
+          center-active
+          show-arrows
+          >
+          <v-slide-item
+            v-for="estudante in estudantes"
+            :key="estudante.idUser"
+            >
+            <v-card
+              class="ma-4"
+              height="200"
+              width="190"
+              >
+              <div class="dashboard-group-person-minify" >
+                <div class="dashboard-group-person-minify-pictures">
+                  <div></div>
+                </div>
+                <div class="dashboard-group-person-name">
+                  <span> {{ estudante.user.name }} </span>
+                </div>
+                <div class="dashboard-group-person-button" v-if="activeSprint">
+                  <card-student-rating 
+                    :criterios="criterios" 
+                    :nome="estudante.user.name"
+                    :estudanteID="estudante.idUser"
+                    :sprintID="sprintSelected"
+                    :notasFeitas="notasFeitas"
+                    />
+                </div>
+                <div class="dashboard-group-person-button" v-else>
+                  <card-toast-sprint text="Sprint finalizada"/>
+                </div>
+              </div>
+              <v-row
+                class="fill-height"
+                align="center"
+                justify="center"
+                >
+              </v-row>
+            </v-card>
+          </v-slide-item>
+        </v-slide-group>
+      </div>
     </div>
+    <div class="dashboard-info">
+      <div v-for="sprint in sprints" :key="sprint.idSprint">
+        <button 
+          :value="sprint.idSprint"
+          v-on:click="checkSprintAtiva(sprint)">
+          <p> Sprint</p>
+          <p> Data Inicial: {{ sprint.initialDate }} </p>
+          <p> Data Final: {{ sprint.finalDate }} </p>
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
   import Vue from 'vue'
-  // import AdicionaCriteriosAva from '../components/AdicionaCriteriosAva.vue'
   import CardStudentRating from '../components/CardStudentRating.vue'
-  // import CriteriaRegistration from '../components/criteria-registration.vue'
-  import axios from 'axios';
+  import CardCreateEquipe from '../components/CardCreateEquipe.vue'
+  import CardFloatButton from '../components/CardFloatButton.vue'
+  import CardToastSprint from '../components/CardToastSprint.vue'
+  import api from '../services/api'
 
   export default Vue.extend({
     name: 'Dashboard',
 
     components: {
       CardStudentRating,
-      // AdicionaCriteriosAva,
-      // CriteriaRegistration
+      CardCreateEquipe,
+      CardFloatButton,
+      CardToastSprint
     },
      data: () => ({
        cards: false,
-       criterios: "",
-       estudantes: "",
+       criterios: [],
+       estudantes: [],
+       allEstudantes: [],
        errors: "",
-       critAva: false
+       teacher: true,
+       grupo: "",
+       grupos: "",
+       projetos: [],
+       teams: "",
+       sprints: "",
+       sprintSelected: "",
+       activeSprint: true,
+       snackbar: false,
+       notasFeitas: [],
+       novoCriterio: [],
      }),
-     created() {
-        axios.get(`https://5acce45494587a0014eda8c3.mockapi.io/estudante`)
-        .then(response => {
-          // this.criterios = response.data[0].data[0].estudantes[0].criterios
-          this.estudantes = response.data
+     beforeMount() {
+        api.get('user').then(response => {
+          this.allEstudantes = response.data
         })
-        axios.get(`http://localhost:3000/criteria`)
-          .then(response => {
+        api.get('criteria').then(response => {
             this.criterios = response.data
-            console.log(this.criterios)
-          })
+        })
+        api.get('project').then(response => {
+            this.projetos = response.data
+        })
+        api.get('team').then(response => {
+            this.teams = response.data
+        })
+        api.get('sprint').then(response => {
+            this.sprints = response.data
+        })
+        api.get('notes-store').then(response => {
+          this.notasFeitas = response.data
+        })
       },
       methods: {
         showCard: function() {
             this.cards = true
         },
-        showCritAva: function() {
-            this.critAva = true
+        getUserFromTeam(teamID) {
+          api.get(`user-team?idTeam=${teamID}`).then(response => {
+            this.estudantes = response.data
+            this.teacher = false
+          })
+        },
+        checkSprintAtiva: function(teste) {
+          let today = new Date();
+          let dd = String(today.getDate()).padStart(2, '0');
+          let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+          let yyyy = today.getFullYear();
+          let hoje = yyyy + '-' + mm  + '-' + dd
+
+          var d1 = hoje.split("/");
+          var d2 = teste.initialDate.split("/");
+          var c = teste.finalDate.split("/");
+
+          if(d1 > d2 && d1 < c) {
+            this.activeSprint = true
+            this.sprintSelected = teste.idSprint
+          } else {
+            this.activeSprint = false
+          }
         }
-      
     }
  })
 </script>
@@ -125,36 +223,15 @@
     height: 30%;
   }
 
-  .dashboard-info div {
-    width: 30%;
-    border: solid 1px black;
-    border-radius: 10px;
-		background-color: white;
-  }
-
-  .dashboard-info div {
-    width: 30%;
-    height: 40%;
-    border: solid 1px black;
-    border-radius: 2px;
-		background-color: white;
-
-    .row{
-      border-style: none !important;
-      background-color: transparent !important;
-    }
-    
-  }
-
   .dashboard-group {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    height: 30%;
+    height: 45%;
   }
 
   .dashboard-group-person {
-    width: 63.5%;
+    width: 60.5%;
     border: solid 1px black;
     border-radius: 10px;
     display: flex;
@@ -197,6 +274,14 @@
   .dashboard-group-person-button {
     display: flex;
     justify-content: end;
+    align-items: end;
+  }
+
+  button {
+      background: rgba(86,116,186,1);
+      width: 300px;
+      color: #fff;
+      border-radius: 100px;
   }
 
   @media (min-width: 320px) and (max-width: 640px) { 
@@ -215,6 +300,5 @@
       height: inherit;
       margin-top: 3%;
     } 
-
   }
 </style>

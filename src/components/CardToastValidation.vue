@@ -34,7 +34,7 @@
   export default {
     props: {
         snackbar: Boolean,
-        text: String
+        text: String,
     },
     data: () => ({
       timeout: 2000
