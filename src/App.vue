@@ -16,6 +16,9 @@
         <v-tab >
           <CriteriaRegistration />
         </v-tab>
+        <v-tab >
+          <PendingToScore />
+        </v-tab>
     </v-app-bar>
 
     <v-main>
@@ -28,12 +31,14 @@
 import Vue from 'vue';
 import CriteriaRegistration from './components/criteria-registration.vue'
 import AdicionaCriteriosAva from './components/AdicionaCriteriosAva.vue'
+import PendingToScore from './components/PendingToScore.vue'
 
 export default Vue.extend({
   name: 'App',
   components: {
       AdicionaCriteriosAva,
-      CriteriaRegistration
+      CriteriaRegistration,
+      PendingToScore
   },
   data: () => ({
     //
