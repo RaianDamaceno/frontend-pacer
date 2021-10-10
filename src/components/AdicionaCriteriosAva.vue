@@ -111,7 +111,6 @@
       formNotaMaxima: '',
       formPesoNota: '',
     }),
-
     methods: {
         async getProjects() {
             await axios.get('http://localhost:3000/project').then((response) => {

@@ -4,11 +4,11 @@
       app
       color="primary"
       dark
-    >
+    > 
+    
       <div class="d-flex align-center">
         <v-toolbar-title>Pacer</v-toolbar-title>
       </div>
-
       <v-spacer></v-spacer>
         <v-tab >
           <AdicionaCriteriosAva />
@@ -18,9 +18,16 @@
         </v-tab>
         <v-tab >
           <PendingToScore />
+        <v-tab>
+          <UsersAprovation />
+        </v-tab>
+        <v-tab >
+          <sprintRegistration />
+        </v-tab>
+        <v-tab >
+          <CreateProject />
         </v-tab>
     </v-app-bar>
-
     <v-main>
       <router-view/>
     </v-main>
@@ -32,6 +39,9 @@ import Vue from 'vue';
 import CriteriaRegistration from './components/criteria-registration.vue'
 import AdicionaCriteriosAva from './components/AdicionaCriteriosAva.vue'
 import PendingToScore from './components/PendingToScore.vue'
+import UsersAprovation      from './components/UsersAprovation.vue'
+import SprintRegistration from './components/SprintRegistration.vue'
+import CreateProject from './components/CreateProject.vue';
 
 export default Vue.extend({
   name: 'App',
@@ -39,6 +49,9 @@ export default Vue.extend({
       AdicionaCriteriosAva,
       CriteriaRegistration,
       PendingToScore
+      UsersAprovation,
+      SprintRegistration,
+      CreateProject
   },
   data: () => ({
     //
