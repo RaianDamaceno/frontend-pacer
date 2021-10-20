@@ -59,6 +59,7 @@
                   return-object
                   single-line
                   multiple
+                  v-on:change="checkScrumMaster"
                 ></v-select>
               </v-col>
               <v-col
@@ -66,6 +67,7 @@
               >
                 <v-switch
                   v-model="isScrum"
+                  v-if="scrumButton"
                   inset
                   :label="'É Scrum Master'"
                 ></v-switch>
@@ -113,8 +115,16 @@
       snActivated: "s",
       teamResponse: "",
       isScrum: false,
+      scrumButton: true
     }),
      methods: {
+        checkScrumMaster: function() {
+          if(this.selectUsuario.length > 1) {
+            this.scrumButton = false
+          } else {
+            this.scrumButton = true
+          }
+        },
         createTeam: function() {
             let payload = { 
                 idProject: this.selectProjeto.idProject, 
@@ -122,10 +132,14 @@
                 snActivated: this.snActivated 
             };
             api.post("team", payload).then(response => {
-              this.teamResponse = response.data
-              if(this.selectUsuario.length != 0) {
-                this.addAlunos(this.teamResponse)
-
+              if(response.status === 201) {
+                this.teamResponse = response.data
+                if(this.selectUsuario.length != 0) {
+                  this.addAlunos(this.teamResponse)
+                }
+                alert("Time Cadastrado Com sucesso")
+              } else {
+                alert("Ocorreu um erro ao realizar o cadastro do Time")
               }
           })
         },
