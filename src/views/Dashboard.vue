@@ -73,8 +73,8 @@
                   <span> {{ estudante.user.name }} </span>
                 </div>
                 <div class="dashboard-group-person-button" v-if="activeSprint">
-                  <card-student-rating 
-                    :criterios="criterios" 
+                  <card-student-rating
+                    :criterios="criterios"
                     :nome="estudante.user.name"
                     :estudanteID="estudante.idUser"
                     :sprintID="sprintSelected"
@@ -95,10 +95,11 @@
           </v-slide-item>
         </v-slide-group>
       </div>
+      <graph-spider />
     </div>
     <div class="dashboard-info">
       <div v-for="sprint in sprints" :key="sprint.idSprint">
-        <button 
+        <button
           :value="sprint.idSprint"
           v-on:click="checkSprintAtiva(sprint)">
           <p> Sprint</p>
@@ -116,6 +117,7 @@
   import CardCreateEquipe from '../components/CardCreateEquipe.vue'
   import CardFloatButton from '../components/CardFloatButton.vue'
   import CardToastSprint from '../components/CardToastSprint.vue'
+  import GraphSpider from '../components/GraphSpider.vue'
   import api from '../services/api'
 
   export default Vue.extend({
@@ -125,7 +127,8 @@
       CardStudentRating,
       CardCreateEquipe,
       CardFloatButton,
-      CardToastSprint
+      CardToastSprint,
+      GraphSpider
     },
      data: () => ({
        cards: false,
@@ -206,7 +209,7 @@
     flex-direction: column;
     justify-content: space-around;
     height: 100%;
-    width: 100%; 
+    width: 100%;
   }
 
   .ma-4 {
@@ -270,7 +273,7 @@
     width: 70px;
     background-color: #fff;
   }
-  
+
   .dashboard-group-person-button {
     display: flex;
     justify-content: end;
@@ -284,7 +287,7 @@
       border-radius: 100px;
   }
 
-  @media (min-width: 320px) and (max-width: 640px) { 
+  @media (min-width: 320px) and (max-width: 640px) {
     .dashboard {
       min-height: 100%;
     }
@@ -299,6 +302,6 @@
       width: 100%;
       height: inherit;
       margin-top: 3%;
-    } 
+    }
   }
 </style>
