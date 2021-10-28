@@ -58,6 +58,21 @@ export default Vue.extend({
                         name: "Sprint 1",
                         data: [0, 4, 6, 6, 7, 9.5],
                         pointPlacement: "on",
+                    },
+                    {
+                        name: "Sprint 2",
+                        data: [2, 3, 6, 8, 7, 2],
+                        pointPlacement: "on",
+                    },
+                    {
+                        name: "Sprint 3",
+                        data: [1, 4, 6, 5, 2, 3],
+                        pointPlacement: "on",
+                    },
+                    {
+                        name: "Sprint 4",
+                        data: [3, 4, 6, 3, 7, 8],
+                        pointPlacement: "on",
                     }
                 ]
             }
