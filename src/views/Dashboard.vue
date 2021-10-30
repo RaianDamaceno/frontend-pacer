@@ -95,7 +95,9 @@
           </v-slide-item>
         </v-slide-group>
       </div>
-      <graph-spider />
+      <graph-spider
+        :criterios="criterios"
+      />
     </div>
     <div class="dashboard-info">
       <div v-for="sprint in sprints" :key="sprint.idSprint">
@@ -150,22 +152,22 @@
      }),
      beforeMount() {
         api.get('user').then(response => {
-          this.allEstudantes = response.data
+          this.allEstudantes = response.data;
         })
         api.get('criteria').then(response => {
-            this.criterios = response.data
+            this.criterios = response.data;
         })
         api.get('project').then(response => {
-            this.projetos = response.data
+            this.projetos = response.data;
         })
         api.get('team').then(response => {
-            this.teams = response.data
+            this.teams = response.data;
         })
         api.get('sprint').then(response => {
-            this.sprints = response.data
+            this.sprints = response.data;
         })
         api.get('notes-store').then(response => {
-          this.notasFeitas = response.data
+            this.notasFeitas = response.data;
         })
       },
       methods: {
