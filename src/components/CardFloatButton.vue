@@ -33,7 +33,7 @@
             small
             color="green"
         >
-            <v-icon>mdi-pencil</v-icon>
+            <v-icon v-on:click="insertUser">mdi-account-multiple-plus</v-icon>
         </v-btn>
         <v-btn
             fab
@@ -64,6 +64,8 @@
       right: false,
       bottom: false,
       left: true,
+      scrumMaster: false,
+      id_user: '63f3c16b-324c-4ea0-9353-a421b01258a4',
       transition: 'slide-y-reverse-transition',
       user_team: null
     }),
@@ -100,6 +102,35 @@
       },
       sleep: function(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
+      },
+      insertUser: function(){
+        let UserTeamPayload = null
+        if(this.user_team.length > 0) {
+          for(let i = 0; i < this.user_team.length; i++) {
+            if(this.user_team[i].isScrumMaster == true){
+              this.scrumMaster = true;
+            }
+          }
+        }
+        if(this.scrumMaster == false) {
+              UserTeamPayload = {
+              "idUser": this.id_user,
+              "idTeam": this.team,
+              "isScrumMaster": 'S', //this.selectUsuario[i].idUser == this.scrumID.idUser ? true : false,
+              "snActivated": "S"
+              }
+          } else {
+              UserTeamPayload = {
+              "idUser": this.id_user,
+              "idTeam": this.team,
+              "isScrumMaster": 'N',
+              "snActivated": "S"
+              }
+          }
+        console.log(UserTeamPayload)
+        console.log(this.scrumMaster)
+        //api.post("user-team", UserTeamPayload)
+
       }
     }
 }
