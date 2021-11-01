@@ -65,7 +65,8 @@
       bottom: false,
       left: true,
       scrumMaster: false,
-      id_user: '63f3c16b-324c-4ea0-9353-a421b01258a4',
+      user_exist: false,
+      id_user: 'e56fbd82-d032-4c90-a7b8-76818c52e948',
       transition: 'slide-y-reverse-transition',
       user_team: null
     }),
@@ -105,32 +106,38 @@
       },
       insertUser: function(){
         let UserTeamPayload = null
+
         if(this.user_team.length > 0) {
           for(let i = 0; i < this.user_team.length; i++) {
-            if(this.user_team[i].isScrumMaster == true){
-              this.scrumMaster = true;
+              if(this.user_team[i].idUser == this.id_user){
+                this.user_exist = true;
+              }
+              if(this.user_team[i].isScrumMaster == true){
+                this.scrumMaster = true;
+              }
             }
           }
+        
+        if(this.this == false){
+          if(this.scrumMaster == false) {
+                UserTeamPayload = {
+                "idUser": this.id_user,
+                "idTeam": this.team,
+                "isScrumMaster": true, //this.selectUsuario[i].idUser == this.scrumID.idUser ? true : false,
+                "snActivated": "S"
+                }
+            } else {
+                UserTeamPayload = {
+                "idUser": this.id_user,
+                "idTeam": this.team,
+                "isScrumMaster": false,
+                "snActivated": "S"
+                }
+            } 
+          api.post("user-team", UserTeamPayload)
+        }else{
+          alert("Você já faz parte desta equipe!");
         }
-        if(this.scrumMaster == false) {
-              UserTeamPayload = {
-              "idUser": this.id_user,
-              "idTeam": this.team,
-              "isScrumMaster": 'S', //this.selectUsuario[i].idUser == this.scrumID.idUser ? true : false,
-              "snActivated": "S"
-              }
-          } else {
-              UserTeamPayload = {
-              "idUser": this.id_user,
-              "idTeam": this.team,
-              "isScrumMaster": 'N',
-              "snActivated": "S"
-              }
-          }
-        console.log(UserTeamPayload)
-        console.log(this.scrumMaster)
-        //api.post("user-team", UserTeamPayload)
-
       }
     }
 }
