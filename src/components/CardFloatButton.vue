@@ -68,7 +68,10 @@
       user_exist: false,
       id_user: 'e56fbd82-d032-4c90-a7b8-76818c52e948',
       transition: 'slide-y-reverse-transition',
-      user_team: null
+      user_team: null,
+      team_values: null,
+      sprint_values: null,
+      strint_started: false
     }),
     watch: {
       top (val) {
@@ -87,6 +90,12 @@
     created() {
       api.get('user-team',  { params: { idTeam: this.team } }).then(response => { 
         this.user_team = response.data;
+      }),
+      api.get('team',  { params: { idTeam: this.team } }).then(response => { 
+        this.team_values = response.data;
+      }),
+      api.get('sprint',  { params: { idTeam: this.idProject } }).then(response => { 
+        this.sprint_values = response.data;
       })
     },
     methods: {
@@ -105,10 +114,24 @@
         return new Promise(resolve => setTimeout(resolve, ms));
       },
       insertUser: function(){
+        var full_day = ''
         let UserTeamPayload = null
+        var currentDate = new Date()
+        var day = currentDate.getDate()
+        var month = currentDate.getMonth() + 1
+        var year = currentDate.getFullYear()
+
+        if (currentDate.getDate() < 10){
+          full_day = (year + "-" + month + "-0" + day);
+        }else{
+          full_day = (year + "-" + month + "-" + day);
+        }     
 
         if(this.user_team.length > 0) {
           for(let i = 0; i < this.user_team.length; i++) {
+              if(this.sprint_values[i].initialDate <= full_day){
+                this.strint_started = true
+              }
               if(this.user_team[i].idUser == this.id_user){
                 this.user_exist = true;
               }
@@ -117,26 +140,37 @@
               }
             }
           }
-        
-        if(this.this == false){
-          if(this.scrumMaster == false) {
-                UserTeamPayload = {
-                "idUser": this.id_user,
-                "idTeam": this.team,
-                "isScrumMaster": true, //this.selectUsuario[i].idUser == this.scrumID.idUser ? true : false,
-                "snActivated": "S"
-                }
-            } else {
-                UserTeamPayload = {
-                "idUser": this.id_user,
-                "idTeam": this.team,
-                "isScrumMaster": false,
-                "snActivated": "S"
-                }
-            } 
-          api.post("user-team", UserTeamPayload)
+
+        if(this.strint_started == false){
+          if(this.user_exist == false){
+            if(this.scrumMaster == false) {
+                  UserTeamPayload = {
+                  "idUser": this.id_user,
+                  "idTeam": this.team,
+                  "isScrumMaster": true, //this.selectUsuario[i].idUser == this.scrumID.idUser ? true : false,
+                  "snActivated": "S"
+                  }
+              } else {
+                  UserTeamPayload = {
+                  "idUser": this.id_user,
+                  "idTeam": this.team,
+                  "isScrumMaster": false,
+                  "snActivated": "S"
+                  }
+              }
+            //api.post("user-team", UserTeamPayload)
+          }else{
+            UserTeamPayload = {
+                  "idUser": this.id_user,
+                  "idTeam": this.team,
+                  "isScrumMaster": false,
+                  "snActivated": "S"
+                  }
+            console.log(UserTeamPayload)
+            alert("Você já faz parte desta equipe!");
+          }
         }else{
-          alert("Você já faz parte desta equipe!");
+          alert("Você não pode se juntar a este time, sprint ja iniciada")
         }
       }
     }
