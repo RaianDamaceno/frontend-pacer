@@ -225,7 +225,7 @@ export default Vue.extend({
             let usuarioRegistro = {
                     login: this.signUp.nome,
                     name: this.signUp.nome,
-                    document: this.signUp.ra,
+                    document: this.signUp.document,
                     email: this.signUp.email,
                     role: this.selectRole.roleName
             }   
