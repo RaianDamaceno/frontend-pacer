@@ -27,14 +27,57 @@
             </v-icon>
             </v-btn>
         </template>
-        <v-btn
-            fab
-            dark
-            small
-            color="green"
-        >
-            <v-icon v-on:click="insertUser">mdi-account-multiple-plus</v-icon>
-        </v-btn>
+
+         <v-dialog
+            v-model="dialog"
+            width="420"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                fab
+                dark
+                small
+                color="green"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon>mdi-account-multiple-plus</v-icon>
+              </v-btn>
+            </template>
+
+            <v-card>
+              <v-card-title class="text-h5 grey lighten-2" >
+                Ingressar na Equipe
+              </v-card-title>
+              
+              <v-card-actions>
+                
+                <v-btn
+                  color="green darken-1"
+                  text
+                  @click=" is_SM = true; insertUser();"
+                >
+                  Ingressar como SM
+                </v-btn>
+
+                <v-btn
+                  color="blue darken-1"
+                  text
+                  @click=" is_SM = false; insertUser();"
+                >
+                  Ingressar
+                </v-btn>
+
+                <v-btn
+                  color="red darken-1"
+                  text
+                  @click="dialog = false"
+                >
+                  Cancelar
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         <v-btn
             fab
             dark
@@ -66,12 +109,14 @@
       left: true,
       scrumMaster: false,
       user_exist: false,
-      id_user: 'e56fbd82-d032-4c90-a7b8-76818c52e948',
+      id_user: '9288a850-588d-4a18-86ff-77b6d21a8464',
       transition: 'slide-y-reverse-transition',
       user_team: null,
       team_values: null,
       sprint_values: null,
-      strint_started: false
+      strint_started: false,
+      dialog: false,
+      is_SM: ''
     }),
     watch: {
       top (val) {
@@ -97,7 +142,7 @@
       api.get('sprint',  { params: { idTeam: this.idProject } }).then(response => { 
         this.sprint_values = response.data;
       })
-    },
+    }, 
     methods: {
       deleteTeam: async function() {
         if(this.user_team.length > 0) {
@@ -143,30 +188,15 @@
 
         if(this.strint_started == false){
           if(this.user_exist == false){
-            if(this.scrumMaster == false) {
-                  UserTeamPayload = {
-                  "idUser": this.id_user,
-                  "idTeam": this.team,
-                  "isScrumMaster": true, //this.selectUsuario[i].idUser == this.scrumID.idUser ? true : false,
-                  "snActivated": "S"
-                  }
-              } else {
-                  UserTeamPayload = {
-                  "idUser": this.id_user,
-                  "idTeam": this.team,
-                  "isScrumMaster": false,
-                  "snActivated": "S"
-                  }
+              UserTeamPayload = {
+              "idUser": this.id_user,
+              "idTeam": this.team,
+              "isScrumMaster": this.is_SM,
+              "snActivated": "S"    
               }
-            //api.post("user-team", UserTeamPayload)
+            api.post("user-team", UserTeamPayload)
+            alert("Adicionado com sucesso!");
           }else{
-            UserTeamPayload = {
-                  "idUser": this.id_user,
-                  "idTeam": this.team,
-                  "isScrumMaster": false,
-                  "snActivated": "S"
-                  }
-            console.log(UserTeamPayload)
             alert("Você já faz parte desta equipe!");
           }
         }else{
