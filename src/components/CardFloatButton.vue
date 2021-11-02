@@ -107,7 +107,7 @@
       right: false,
       bottom: false,
       left: true,
-      scrumMaster: false,
+      scrumMaster: true,
       user_exist: false,
       id_user: '9288a850-588d-4a18-86ff-77b6d21a8464',
       transition: 'slide-y-reverse-transition',
@@ -181,27 +181,31 @@
                 this.user_exist = true;
               }
               
-              if(this.user_team[i].isScrumMaster == true){
-                this.scrumMaster = true;
+              if(!this.user_team[i].isScrumMaster){
+                this.scrumMaster = false;
               }
             }
           }
         
-        if(!this.strint_started){
-          if(!this.user_exist){
-              UserTeamPayload = {
-              "idUser": this.id_user,
-              "idTeam": this.team,
-              "isScrumMaster": this.is_SM,
-              "snActivated": "S"    
-              }
-            api.post("user-team", UserTeamPayload)
-            alert("Adicionado com sucesso!");
-          }else{
-            alert("Você já faz parte desta equipe!");
-          }
+        if(this.scrumMaster == true && this.is_SM == true){
+          alert("Esta equipe ja possui Scrum Master!");
         }else{
-          alert("Você não pode se juntar a este time, sprint ja iniciada")
+          if(!this.strint_started){
+            if(!this.user_exist){
+                UserTeamPayload = {
+                "idUser": this.id_user,
+                "idTeam": this.team,
+                "isScrumMaster": this.is_SM,
+                "snActivated": "S"    
+                }
+              api.post("user-team", UserTeamPayload)
+              alert("Adicionado com sucesso!");
+            }else{
+              alert("Você já faz parte desta equipe!");
+            }
+          }else{
+            alert("Você não pode se juntar a este time, sprint ja iniciada")
+          }
         }
       }
     }
