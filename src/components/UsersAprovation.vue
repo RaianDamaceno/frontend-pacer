@@ -64,7 +64,7 @@
               <v-subheader>Lista de Usuários para aprovação</v-subheader>
               <v-data-table :headers="headers" :items="teste" :items-per-page="10" class="elevation-1">
                
-               <template v-slot:item.status="{ item }">
+               <template v-slot:[`item.status`]="{ item }">
                 <v-switch
                   v-model="item.status"
                 ></v-switch>
