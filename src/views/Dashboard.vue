@@ -97,6 +97,8 @@
       </div>
       <graph-spider
         :criterios="criterios"
+        :sprints="sprints"
+        :notas="notasFeitas"
       />
     </div>
     <div class="dashboard-info">
