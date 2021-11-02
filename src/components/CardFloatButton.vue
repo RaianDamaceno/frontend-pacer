@@ -180,14 +180,15 @@
               if(this.user_team[i].idUser == this.id_user){
                 this.user_exist = true;
               }
+              
               if(this.user_team[i].isScrumMaster == true){
                 this.scrumMaster = true;
               }
             }
           }
-
-        if(this.strint_started == false){
-          if(this.user_exist == false){
+        
+        if(!this.strint_started){
+          if(!this.user_exist){
               UserTeamPayload = {
               "idUser": this.id_user,
               "idTeam": this.team,
