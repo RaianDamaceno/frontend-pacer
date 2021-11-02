@@ -188,7 +188,7 @@
           }
         
         if(this.scrumMaster == true && this.is_SM == true){
-          alert("Esta equipe ja possui Scrum Master!");
+          alert("Esta equipe ja possui Scrum Master");
         }else{
           if(!this.strint_started){
             if(!this.user_exist){
