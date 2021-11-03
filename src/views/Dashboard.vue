@@ -96,8 +96,6 @@
         </v-slide-group>
       </div>
       <graph-spider
-        :criterios="criterios"
-        :sprints="sprints"
         :notas="notasFeitas"
       />
     </div>

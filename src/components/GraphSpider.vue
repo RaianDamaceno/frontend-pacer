@@ -4,7 +4,7 @@
 
 <style>
 .hc {
-    height: 150%;
+    height: 100%;
 }
 </style>
 
@@ -14,40 +14,12 @@ Vue.prototype.total = [];
 export default Vue.extend({
     name: "GraphSpider",
     props: {
-        criterios: {
-            type: Array,
-            default: () => [],
-        },
-        sprints: {
-            type: Array,
-            default: () => [],
-        },
-        notas: {
-            type: Array,
-            default: () => [],
-        },
+        notas: [],
     },
     beforeMount() {
-        this.notas.map((not) => {
-            this.criterios
-                .filter((cr) => cr.idCriteria === not.criterio.idCriteria)
-                .map((crit) => {
-                    this.notasGraph.push({
-                        nome: crit.descCriteria,
-                        nota: not.note === null ? 0 : not.note,
-                    });
-                });
-        });
-
-        this.criterios.map((crit) => {
-            this.total.push(
-                this.notasGraph
-                    .filter((nt) => nt.nome === crit.descCriteria)
-                    .reduce(function(total, numero) {
-                        return total + numero.nota;
-                    }, 0)
-            );
-        });
+        this.notas
+            .filter((not) => not.idEvaluated === "33" && not.idSprint === '1')
+            .map((nt) => console.log(nt));
     },
     data() {
         return {
@@ -67,9 +39,7 @@ export default Vue.extend({
                 },
 
                 xAxis: {
-                    categories: this.criterios.map((data) => {
-                        return data.descCriteria;
-                    }),
+                    categories: [],
                     tickmarkPlacement: "on",
                     lineWidth: 0,
                 },
@@ -83,7 +53,7 @@ export default Vue.extend({
 
                 legend: {
                     title: {
-                        text: 'Tempo de Sprint'
+                        text: "Tempo de Sprint",
                     },
                     align: "center",
                     verticalAlign: "bottom",
@@ -97,8 +67,8 @@ export default Vue.extend({
 
                 series: [
                     {
-                        name: `${this.sprints[0].initialDate} | ${this.sprints[0].finalDate}`,
-                        data: this.total,
+                        name: "teste",
+                        data: [1, 2, 3, 4, 5, 6],
                         pointPlacement: "on",
                     },
                 ],
