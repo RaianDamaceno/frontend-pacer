@@ -3,16 +3,14 @@
 </template>
 
 <style>
-    .hc
-    {
-        height: 150%;
-    }
+.hc {
+    height: 150%;
+}
 </style>
 
 <script>
 import Vue from "vue";
 Vue.prototype.total = [];
-
 export default Vue.extend({
     name: "GraphSpider",
     props: {
@@ -46,7 +44,7 @@ export default Vue.extend({
                 this.notasGraph
                     .filter((nt) => nt.nome === crit.descCriteria)
                     .reduce(function(total, numero) {
-                        return parseInt(total + numero.nota);
+                        return total + numero.nota;
                     }, 0)
             );
         });
@@ -84,6 +82,9 @@ export default Vue.extend({
                 },
 
                 legend: {
+                    title: {
+                        text: 'Tempo de Sprint'
+                    },
                     align: "center",
                     verticalAlign: "bottom",
                     layout: "vertical",
@@ -96,7 +97,7 @@ export default Vue.extend({
 
                 series: [
                     {
-                        name: "Sprint 1",
+                        name: `${this.sprints[0].initialDate} | ${this.sprints[0].finalDate}`,
                         data: this.total,
                         pointPlacement: "on",
                     },
