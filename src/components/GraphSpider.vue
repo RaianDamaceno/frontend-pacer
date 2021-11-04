@@ -1,3 +1,4 @@
+/* eslint-disable vue/require-prop-type-constructor */
 <template>
     <highcharts class="hc" :options="chartOptions"></highcharts>
 </template>
@@ -11,15 +12,26 @@
 <script>
 import Vue from "vue";
 Vue.prototype.total = [];
+Vue.prototype.criterios = [];
+Vue.prototype.sprint = [];
 export default Vue.extend({
     name: "GraphSpider",
     props: {
-        notas: [],
+        notas: Array,
+        sprintSelected: String,
     },
     beforeMount() {
         this.notas
-            .filter((not) => not.idEvaluated === "33" && not.idSprint === '1')
-            .map((nt) => console.log(nt));
+            .filter((not) => not.idEvaluated === "33" && not.idSprint === "1")
+            .map((nt) => {
+                this.criterios.push(nt.criterio.descCriteria);
+                this.total.push(nt.note === null ? 0 : nt.note);
+                if (this.sprint.length === 0) {
+                    this.sprint.push(
+                        nt.sprint.initialDate + " | " + nt.sprint.finalDate
+                    );
+                }
+            });
     },
     data() {
         return {
@@ -39,7 +51,7 @@ export default Vue.extend({
                 },
 
                 xAxis: {
-                    categories: [],
+                    categories: this.criterios || [],
                     tickmarkPlacement: "on",
                     lineWidth: 0,
                 },
@@ -52,9 +64,6 @@ export default Vue.extend({
                 },
 
                 legend: {
-                    title: {
-                        text: "Tempo de Sprint",
-                    },
                     align: "center",
                     verticalAlign: "bottom",
                     layout: "vertical",
@@ -67,8 +76,8 @@ export default Vue.extend({
 
                 series: [
                     {
-                        name: "teste",
-                        data: [1, 2, 3, 4, 5, 6],
+                        name: this.sprint || "",
+                        data: this.total || [],
                         pointPlacement: "on",
                     },
                 ],

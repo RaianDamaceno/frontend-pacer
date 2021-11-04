@@ -96,7 +96,9 @@
         </v-slide-group>
       </div>
       <graph-spider
+        v-if="sprintSelected"
         :notas="notasFeitas"
+        :sprintSelected="sprintSelected || ''"
       />
     </div>
     <div class="dashboard-info">
