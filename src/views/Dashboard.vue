@@ -5,8 +5,8 @@
       dark
       small
       fab
-      v-if="!teacher"
-      v-on:click="teacher = true"
+      v-if="!Role"
+      v-on:click="Role = true"
       >
       <v-icon
         dark
@@ -16,15 +16,17 @@
       </v-icon>
     </v-btn>
     <div class="dashboard-group">
-      <div class="dashboard-group-person" v-if="teacher">
+      Projeto
+      <div class="dashboard-group-person" v-if="Projeto">
+        Projeto
         <v-slide-group
           class="pa-4"
           center-active
           show-arrows
           >
           <v-slide-item
-            v-for="team in teams"
-            :key="team.idTeam"
+            v-for="projeto in projetos"
+            :key="projeto.idProject"
             >
             <v-card
               class="ma-4"
@@ -32,11 +34,11 @@
               width="180"
               >
               <div class="dashboard-group-person-minify">
-                <div class="dashboard-group-person-name" v-on:click="getUserFromTeam(team.idTeam)" >
-                  <span> {{ team.teamName}} </span>
+                <div class="dashboard-group-person-name" v-on:click="getGruposFromProject(projeto.idProject)" >
+                  <span> {{ projeto.description}} </span>
                 </div>
                 <div class="dashboard-group-person-button">
-                  <card-float-button :team="team.idTeam"/>
+                  <!-- <card-float-button :team="projeto.idProjeto"/> -->
                 </div>
               </div>
               <v-row
@@ -50,7 +52,42 @@
         </v-slide-group>
         <card-create-equipe :projetos="projetos" :estudantes="allEstudantes"/>
       </div>
-      <div class="dashboard-group-person" v-if="!teacher">
+      <div class="dashboard-group-person" v-if="Times">
+        Times
+        <v-slide-group
+          class="pa-4"
+          center-active
+          show-arrows
+          >
+          <v-slide-item
+            v-for="projectGrupo in projectGrupos"
+            :key="projectGrupo.idTeam"
+            >
+            <v-card
+              class="ma-4"
+              height="200"
+              width="180"
+              >
+              <div class="dashboard-group-person-minify">
+                <div class="dashboard-group-person-name" v-on:click="getUserFromTeam(projectGrupo.idTeam), this.grupoAtivo = projectGrupo.idTeam" >
+                  <span> {{ projectGrupo.teamName}} </span>
+                </div>
+                <div class="dashboard-group-person-button">
+                  <card-float-button :team="projectGrupo.idTeam"/>
+                </div>
+              </div>
+              <v-row
+                class="fill-height"
+                align="center"
+                justify="center"
+                >
+              </v-row>
+            </v-card>
+          </v-slide-item>
+        </v-slide-group>
+        <card-create-equipe :projetos="projetos" :estudantes="allEstudantes"/>
+      </div>
+      <div class="dashboard-group-person" v-if="Alunos">
         <v-slide-group
           class="pa-4"
           center-active
@@ -79,6 +116,8 @@
                     :estudanteID="estudante.idUser"
                     :sprintID="sprintSelected"
                     :notasFeitas="notasFeitas"
+                    :idEvaluator="userLogged"
+                    :idGroup="grupoAtivo"
                     />
                 </div>
                 <div class="dashboard-group-person-button" v-else>
@@ -120,7 +159,6 @@
 
   export default Vue.extend({
     name: 'Dashboard',
-
     components: {
       CardStudentRating,
       CardCreateEquipe,
@@ -133,8 +171,8 @@
        estudantes: [],
        allEstudantes: [],
        errors: "",
-       teacher: true,
-       grupo: "",
+       Role: true,
+       grupoAtivo: "",
        grupos: "",
        projetos: [],
        teams: "",
@@ -144,10 +182,17 @@
        snackbar: false,
        notasFeitas: [],
        novoCriterio: [],
+       token: '',
+       userLogged: '',
+       Projeto: true,
+       Times: false,
+       Alunos: false,
+       projectGrupos: ''
      }),
      beforeMount() {
+        console.log(this.$route.query.token)
         api.get('user').then(response => {
-          this.allEstudantes = response.data
+          this.allEstudantes = response.data.filter(function(el) { return el.role == "ROLE ALUNO"; }); 
         })
         api.get('criteria').then(response => {
             this.criterios = response.data
@@ -165,14 +210,29 @@
           this.notasFeitas = response.data
         })
       },
+      mounted() {
+        this.decodeToken(this.$route.query.token);
+        this.getUserInformation();
+      },
       methods: {
         showCard: function() {
             this.cards = true
         },
+        getGruposFromProject(projectID) {
+           api.get(`project/${projectID}`).then(response => {
+            this.projectGrupos = response.data.teams
+            this.Projeto = false;
+            this.Times = true;
+            this.Alunos = false;
+
+          })
+        },
         getUserFromTeam(teamID) {
           api.get(`user-team?idTeam=${teamID}`).then(response => {
             this.estudantes = response.data
-            this.teacher = false
+            this.Projeto = false;
+            this.Times = false;
+            this.Alunos = true;
           })
         },
         checkSprintAtiva: function(teste) {
@@ -192,6 +252,21 @@
           } else {
             this.activeSprint = false
           }
+        },
+        decodeToken: function (token) {
+           var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+
+            let json = JSON.parse(jsonPayload);
+            this.userLogged = json.sub
+        },
+        getUserInformation: function() {
+          api.get(`/user/${this.userLogged}`).then(response => {
+            console.log(response)
+          })
         }
     }
  })

@@ -18,46 +18,52 @@
       <div class="login-display-form" v-if="telaCadastro">
          <h3> Quem Sou eu </h3>
         <div class="login-role-avatares">
-          <div>
+          <div :class="{ yellow : admSelected }">
             <v-avatar
               size="100"
             >
             <img
-              @click="cadastro.role='A'"
+              @click="cadastro.role='ROLE ADM', selectedRole('ADMIN')"
               src='../../public/img/administracao.png'
               alt="John"
             >
             </v-avatar>
          </div>
-          <div>
+          <div :class="{ yellow : professorSelected }">
             <v-avatar
               size="100"
             > 
             <img
               src='../../public/img/professores.png'
               alt="John"
-              @click="cadastro.role='P'"
+              @click="cadastro.role='ROLE PROFESSOR', selectedRole('PROF')"
             >
             </v-avatar>
             </div>
-          <div>    
+          <div :class="{ yellow : alunoSelected }">   
             <v-avatar
               size="100"
             >
             <img
               src='../../public/img/aluna.png'
-              @click="cadastro.role='E'"
+              @click="cadastro.role='ROLE ALUNO', selectedRole('ALUNO')"
               alt="John"
             >
             </v-avatar>
           </div>
         </div>
         <div>
-          <input class="form_field" placeholder="Usuario" v-model="cadastro.login"/>
-          <input class="form_field" placeholder="Nome" v-model="cadastro.name"/>
-          <input class="form_field" placeholder="CPF" v-model="cadastro.document"/>
-          <input class="form_field" placeholder="E-mail" v-model="cadastro.email"/>
-          <input class="form_field" placeholder="Senha" v-model="cadastro.password"/>
+          <v-form 
+            ref="form"
+            v-model="valid" 
+            lazy-validation
+            >
+            <v-text-field  v-on:change="onChangeRegister" style="width:330px" placeholder="Usuario" v-model="cadastro.login" :rules="[v => !!v || 'Usuario é obrigatorio']"/>
+            <v-text-field  v-on:change="onChangeRegister" placeholder="Nome" v-model="cadastro.name" :rules="[v => !!v || 'Nome é obrigatorio']" />
+            <v-text-field  v-on:change="onChangeRegister" v-mask="'###.###.###-##'" placeholder="CPF" v-model="cadastro.document" :rules="[v => !!v || 'CPF é obrigatorio']"/>
+            <v-text-field  v-on:change="onChangeRegister" placeholder="E-mail" v-model="cadastro.email" :rules="emailRules"/>
+            <v-text-field  v-on:change="onChangeRegister" placeholder="Senha" v-model="cadastro.password" :rules="[v => !!v || 'Senha é obrigatorio']"/>
+          </v-form>
         </div>
         <div>
           <button @click="createRegister"> Enviar Cadastro </button>
@@ -83,7 +89,13 @@
   import api from '../services/api'
   export default {
     name: 'Home',
+    components: {
+    },
      data: () => ({
+       admSelected: false,
+       alunoSelected: false,
+       professorSelected: false,
+       valid: true,
        login: {
          login: '',
          password: ''
@@ -105,26 +117,61 @@
           src: 'https://c.pxhere.com/images/de/c3/f9e9974b176510264173ebd4a8fc-1584093.jpg!d'
         }       
       ],
+      emailRules: [
+        v => !!v || 'E-mail é Obrigatorio',
+        v => /.+@.+\..+/.test(v) || 'E-mail precisa ser valido',
+      ],
     }),
     methods: {
         goToDashboard(){
             this.$router.push('/dashboard'); 
         },
         createRegister() {
+          if(this.cadastro.role == '') {
+            alert("Clique nos icones de Admin, Professor ou aluno para se identificar")
+          } else {
             api.post('/user', this.cadastro).then(response =>{
-              response.status == 201 ? this.$router.push('/login'):alert("Erro ao realizar cadastro"); 
+                this.telaCadastro = false;
+                
+            }).catch(function () { 
+              alert("Erro ao realizar cadastro")
             })
+          }
         },
         createLogin() {
           api.post('/auth/login', this.login).then(response => {
-            response.status == 201 ? this.$router.push('/dashboard') :alert("Erro ao realizar Login"); 
+            let token = response.data.token
+            this.$router.push({ path: '/dashboard', query: { token: token }})
+          }).catch(function (error) {
+            alert('Senha e/ou Email invalidos')
           })
+        },
+        onChangeRegister(){
+          this.$refs.form.validate()
+        },
+        selectedRole(role) {
+          if(role == 'ADMIN') {
+            this.admSelected = true;
+            this.alunoSelected = false;
+            this.professorSelected = false;
+          } else if(role == 'ALUNO') {
+            this.admSelected = false;
+            this.alunoSelected = true;
+            this.professorSelected = false;
+          } else {
+            this.admSelected = false;
+            this.alunoSelected = false;
+            this.professorSelected = true;
+          }
+          
+          console.log(this.admSelected)
         }
     }
   }
 </script>
 
 <style scoped lang="scss">
+
   .login {
     height: 100%;
     width: 100%;
@@ -198,6 +245,10 @@
   .login-role-avatares img {
     -webkit-box-shadow: 3px 27px 34px 5px rgba(0,0,0,0.53); 
     box-shadow: 3px 27px 34px 5px rgba(0,0,0,0.53);
+  }
+
+  .yellow {
+   background-color: yellow;
   }
 </style>
 

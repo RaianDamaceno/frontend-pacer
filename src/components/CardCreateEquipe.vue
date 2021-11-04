@@ -153,9 +153,9 @@
               this.addAlunos(this.teamResponse)
             }
             alert("Time Cadastrado Com sucesso")
-          } else {
-            alert("Ocorreu um erro ao realizar o cadastro do Time")
           }
+        }).catch(function () {
+           alert("Ocorreu um erro ao realizar o cadastro do Time")
         })
       },
       addAlunos: function(teamResponse) {
@@ -176,7 +176,9 @@
               "snActivated": "S"
               }
           }
-          api.post("user-team", UserTeamPayload)
+          api.post("user-team", UserTeamPayload).catch(function(){
+            alert('Erro ao adicionar usuarios para o time')
+          })
         }
       }
     }
