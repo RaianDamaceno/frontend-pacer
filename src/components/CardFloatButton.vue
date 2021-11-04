@@ -65,6 +65,7 @@
       bottom: false,
       left: true,
       transition: 'slide-y-reverse-transition',
+      user_team: null
     }),
     watch: {
       top (val) {
@@ -80,12 +81,28 @@
         this.right = !val
       },
     },
+    created() {
+      api.get('user-team',  { params: { idTeam: this.team } }).then(response => { 
+        this.user_team = response.data;
+      })
+    },
     methods: {
-        deleteTeam: function() {
-            api.delete(`team/${this.team}`)
-        },
+      deleteTeam: async function() {
+        if(this.user_team.length > 0) {
+          for(let i = 0; i < this.user_team.length; i++) {
+            api.delete('user-team',  { params: { idTeam: this.team, idUser: this.user_team[i].idUser } })
+          }
+        }
+        await this.sleep(3000)
+        api.delete(`team/${this.team}`).then(response => { 
+          response.status === 200 ? alert("Time deletado com sucesso") : alert("Erro ao deletar time")
+        })
+      },
+      sleep: function(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
     }
-  }
+}
 </script>
 
 <style>
