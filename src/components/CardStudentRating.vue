@@ -120,8 +120,8 @@ export default {
       cardProps: false,
       card: false,
       snackbar: false,
-      idEvaluator: "426e590a-a468-4d46-890e-8290a7611406",
-      idGroup: "9bbc55c0-5a1f-4110-81cc-974ea7106bc8",
+      idEvaluator: "435677d0-ad72-45af-9702-32cb41d32226",
+      idGroup: "400ae0aa-0b45-4107-8e1c-ab8baf2e2fad",
       note: null,
       idSelectedCriteria: null,
       teste: [],
@@ -185,7 +185,9 @@ export default {
           } else {
             alert("Ocorreu um erro ao realizar o cadastro das Notas")
           }
-        })
+        }).catch(error => {
+          console.log(error.response);
+        });
       }
     },
     updateRating: function () {

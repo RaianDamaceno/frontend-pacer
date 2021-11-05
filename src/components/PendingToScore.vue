@@ -10,11 +10,6 @@
       <v-card>
         <v-card-title>
           <span class="text-h5" id="texto-a-direita">Falta Pontuar</span>
-          <v-card-actions>
-            <v-btn color="blue darken-1" text @click="dialog = false">
-              Fechar
-            </v-btn>
-          </v-card-actions>
         </v-card-title>
 
         <v-card-text>
@@ -49,7 +44,6 @@
             </table>
             <table v-if="this.listaResumida.length > 0">
               <thead>
-                <!-- <th width="050">CÃ³d</th> -->
                 <th width="200px">Projeto/Sprint</th>
                 <th width="30px"></th>
                 <th width="390px">Avaliado</th>
@@ -88,7 +82,7 @@ export default {
   data: () => ({
     dialog: false,
     listaResumida: [],
-    idEvaluator: 12, //TODO
+    idEvaluator: "435677d0-ad72-45af-9702-32cb41d32226",
     erro: null,
     msg: null,
   }),
@@ -99,40 +93,36 @@ export default {
       await axios.get("notes-store/pending/" + this.idEvaluator).then(
         (response) => {
           this.pendencias = response.data;
-          if (this.pendencias.length > 0) {
-            
-            this.listaResumida = [];
-            
+
+          if (this.pendencias && this.pendencias.length > 0) {            
+            this.listaResumida = [];            
             let aluno;
-
             this.pendencias.forEach(element => {
-
-              aluno = {};
-              aluno.name = element.evaluated.name;
-              aluno.initialDate = element.sprint.initialDate;
-              aluno.finalDate = element.sprint.finalDate;
-              aluno.completo = element;
-
+              aluno = {
+                name: element.evaluated.name,
+                initialDate: element.sprint.initialDate,
+                finalDate: element.sprint.finalDate,
+                completo: element
+              };
               if(this.listaResumida.findIndex( array => array.name === aluno.name ) == -1){
                 this.listaResumida.push(aluno);
               }
-
-            });
-            
+            });            
           } else {
             this.mostraMsg("Você não tem pendências neste momento!");
           }
-          //console.log(response.data);
-        },
-        (error) => {
-          //console.log(error);
-          this.mostraErro("Erro!",10);
         }
-      );
+      ).catch(error => {
+        if (error.response.data.statusCode === 404) {
+          this.mostraMsg("Você não possui pendências neste momento.");
+        } else {
+          this.mostraErro(error.response.data.message,10);
+        }
+      });
+
       if (this.pendencias.length == 0) {
         this.mostraMsg("Você não possui pendências neste momento.");
       }
-      console.log(this.pendencias);
     },
     mostraErro(texto, segundos) {
       this.erro = texto;
@@ -159,10 +149,9 @@ export default {
     },
     btnPontuar(aluno){
       this.mostraMsg("Atalho para pontuação não resolvido para esta Sprint! Nome do Aluno: " + aluno.evaluated.name,3);
-      //alert("Nome do Aluno " + aluno.evaluated.name);
     },
   },
-  beforeMount() {
+  mounted() {
     this.getPendencias();
   },
 };

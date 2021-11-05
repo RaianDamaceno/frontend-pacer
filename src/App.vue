@@ -7,7 +7,7 @@
     > 
     
       <div class="d-flex align-center">
-        <v-toolbar-title>Pacer</v-toolbar-title>
+        <v-toolbar-title @click="goHome" class="title">Pacer</v-toolbar-title>
       </div>
       <v-spacer></v-spacer>
         <v-tab >
@@ -57,5 +57,16 @@ export default Vue.extend({
   data: () => ({
     //
   }),
+  methods: {
+    goHome() {
+      this.$router.push({ path: 'dashboard' })
+    }
+  }
 });
 </script>
+
+<style>
+  .title {
+    cursor: pointer; 
+  }
+</style>
