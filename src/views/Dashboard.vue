@@ -1,17 +1,8 @@
 <template>
   <div class="dashboard">
     <v-btn
-      color="red darken-5"
-      dark
-      small
-      fab
-      v-if="!Role"
-      v-on:click="Role = true"
-      >
-      <v-icon
-        dark
-        left
-        >
+      color="red darken-5" dark small fab v-if="!teacher" v-on:click="teacher = true">
+      <v-icon dark left >
         mdi-arrow-left
       </v-icon>
     </v-btn>
@@ -24,8 +15,8 @@
           show-arrows
           >
           <v-slide-item
-            v-for="projeto in projetos"
-            :key="projeto.idProject"
+            v-for="team in teams"
+            :key="team.idTeam"
             >
             <v-card
               class="ma-4"
@@ -33,11 +24,11 @@
               width="180"
               >
               <div class="dashboard-group-person-minify">
-                <div class="dashboard-group-person-name" v-on:click="getGruposFromProject(projeto.idProject)" >
-                  <span> {{ projeto.description}} </span>
+                <div class="dashboard-group-person-name" v-on:click="getUserFromTeam(team.idTeam)" >
+                  <span> {{ team.teamName}} </span>
                 </div>
                 <div class="dashboard-group-person-button">
-                  <!-- <card-float-button :team="projeto.idProjeto"/> -->
+                  <card-float-button :team="team.idTeam"/>
                 </div>
               </div>
               <v-row
@@ -126,8 +117,6 @@
                     :estudanteID="estudante.idUser"
                     :sprintID="sprintSelected"
                     :notasFeitas="notasFeitas"
-                    :idEvaluator="userLogged"
-                    :idGroup="grupoAtivo"
                     />
                 </div>
                 <div class="dashboard-group-person-button" v-else>
@@ -171,6 +160,7 @@
 
   export default Vue.extend({
     name: 'Dashboard',
+
     components: {
       CardStudentRating,
       CardCreateEquipe,
@@ -204,9 +194,8 @@
        showButtonScrum: false
      }),
      beforeMount() {
-        console.log(this.$route.query.token)
         api.get('user').then(response => {
-          this.allEstudantes = response.data.filter(function(el) { return el.role == "ROLE ALUNO"; }); 
+          this.allEstudantes = response.data
         })
         api.get('criteria').then(response => {
             this.criterios = response.data
@@ -223,10 +212,6 @@
         api.get('notes-store').then(response => {
           this.notasFeitas = response.data
         })
-      },
-      mounted() {
-        this.decodeToken(this.$route.query.token);
-        this.getUserInformation();
       },
       methods: {
         showCard: function() {
@@ -245,9 +230,7 @@
           api.get(`user-team?idTeam=${teamID}`).then(response => {
             this.idteam = teamID
             this.estudantes = response.data
-            this.Projeto = false;
-            this.Times = false;
-            this.Alunos = true;
+            this.teacher = false
             for (let i = 0; i < this.estudantes.length; i++) {
               if(this.estudantes[i].isScrumMaster){
                 this.haveSM = true
@@ -300,7 +283,6 @@
             var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
                 return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
             }).join(''));
-
             let json = JSON.parse(jsonPayload);
             this.userLogged = json.sub
         },
