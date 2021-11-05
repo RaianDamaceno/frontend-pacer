@@ -111,7 +111,9 @@ export default {
     nome: String,
     estudanteID: String,
     sprintID: String,
-    notasFeitas: Array
+    notasFeitas: Array,
+    idEvaluator: String,
+    idGroup: String
   },
   components: {},
   data() {
@@ -120,8 +122,6 @@ export default {
       cardProps: false,
       card: false,
       snackbar: false,
-      idEvaluator: "426e590a-a468-4d46-890e-8290a7611406",
-      idGroup: "9bbc55c0-5a1f-4110-81cc-974ea7106bc8",
       note: null,
       idSelectedCriteria: null,
       teste: [],

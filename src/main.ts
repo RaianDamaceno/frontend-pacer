@@ -5,7 +5,9 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 import axios    from 'axios'
+import { VueMaskDirective } from 'v-mask'
 
+Vue.directive('mask', VueMaskDirective);
 Vue.config.productionTip = false
 axios.defaults.baseURL = 'http://localhost:3000/'
 
