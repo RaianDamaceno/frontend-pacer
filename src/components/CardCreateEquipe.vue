@@ -64,27 +64,13 @@
               </v-col>
               <v-col
                 cols="12"
-                v-if="scrumButton"
               >
                 <v-switch
                   v-model="isScrum"
+                  v-if="scrumButton"
                   inset
                   :label="'É Scrum Master'"
                 ></v-switch>
-              </v-col>
-              <v-col
-                cols="12"
-                v-if="!scrumButton"
-              > 
-              <v-select
-                  v-model="scrumID"
-                  :items="selectUsuario"
-                  label="Escolha o Scrum Master"
-                  item-text="name"
-                  persistent-hint
-                  return-object
-                  single-line
-                />
               </v-col>
             </v-row>
           </v-container>
@@ -117,8 +103,8 @@
   import api from '../services/api'
   export default {
     props: {
-      projetos: Array,
-      estudantes: Array
+         projetos: Array,
+         estudantes: Array
     },
     data: () => ({
       dialog: false,
@@ -129,58 +115,45 @@
       snActivated: "s",
       teamResponse: "",
       isScrum: false,
-      scrumButton: true,
-      scrumID: ''
+      scrumButton: true
     }),
-    methods: {
-      checkScrumMaster: function() {
-        if (this.selectUsuario.length > 1) {
-          this.scrumButton = false
-        } else {
-          this.scrumButton = true
-        }
-      },
-      createTeam: function() {
-        let payload = {
-          idProject: this.selectProjeto.idProject,
-          teamName: this.teamName,
-          snActivated: this.snActivated
-        };
-        api.post("team", payload).then(response => {
-          if (response.status === 201) {
-            this.teamResponse = response.data
-            if (this.selectUsuario.length > 0) {
-              this.addAlunos(this.teamResponse)
-            }
-            alert("Time Cadastrado Com sucesso")
-          }
-        }).catch(function () {
-           alert("Ocorreu um erro ao realizar o cadastro do Time")
-        })
-      },
-      addAlunos: function(teamResponse) {
-        let UserTeamPayload = null
-        for (let i = 0; i < this.selectUsuario.length; i++) {
-          if(this.scrumID != '') {
-              UserTeamPayload = {
-              "idUser": this.selectUsuario[i].idUser,
-              "idTeam": teamResponse.idTeam,
-              "isScrumMaster": this.selectUsuario[i].idUser == this.scrumID.idUser ? true : false,
-              "snActivated": "S"
-              }
+     methods: {
+        checkScrumMaster: function() {
+          if(this.selectUsuario.length > 1) {
+            this.scrumButton = false
           } else {
-              UserTeamPayload = {
-              "idUser": this.selectUsuario[i].idUser,
-              "idTeam": teamResponse.idTeam,
-              "isScrumMaster": this.isScrum,
-              "snActivated": "S"
-              }
+            this.scrumButton = true
           }
-          api.post("user-team", UserTeamPayload).catch(function(){
-            alert('Erro ao adicionar usuarios para o time')
+        },
+        createTeam: function() {
+            let payload = { 
+                idProject: this.selectProjeto.idProject, 
+                teamName: this.teamName, 
+                snActivated: this.snActivated 
+            };
+            api.post("team", payload).then(response => {
+              if(response.status === 201) {
+                this.teamResponse = response.data
+                if(this.selectUsuario.length != 0) {
+                  this.addAlunos(this.teamResponse)
+                }
+                alert("Time Cadastrado Com sucesso")
+              } else {
+                alert("Ocorreu um erro ao realizar o cadastro do Time")
+              }
           })
+        },
+        addAlunos: function(teamResponse) {
+          for(let i = 0; i < this.selectUsuario.length; i++) {
+              let UserTeamPayload = {
+                "idUser": this.selectUsuario[i].idUser,
+                "idTeam": teamResponse.idTeam,
+                "isScrumMaster": this.isScrum,
+                "snActivated": "S"
+              }
+              api.post("user-team", UserTeamPayload)
+          }
         }
-      }
     }
-  } 
+  }
 </script>
