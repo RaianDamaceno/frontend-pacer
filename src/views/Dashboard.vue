@@ -88,7 +88,7 @@
             </v-btn>
           </v-row>
         </div>
-        <div> 
+        <div>
         <v-slide-group
           class="pa-4"
           center-active
@@ -155,7 +155,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
   import Vue from 'vue'
   import CardStudentRating from '../components/CardStudentRating.vue'
   import CardCreateEquipe from '../components/CardCreateEquipe.vue'
@@ -198,7 +198,8 @@
        haveSM: false,
        idteam: "",
        isAluno: false,
-       showButtonScrum: false
+       showButtonScrum: false,
+       teacher: false
      }),
      beforeMount() {
         api.get('user').then(response => {
