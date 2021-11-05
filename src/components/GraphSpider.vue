@@ -18,7 +18,7 @@ export default Vue.extend({
     name: "GraphSpider",
     props: {
         notas: Array,
-        sprintSelected: String,
+        sprintClicked: String,
     },
     beforeMount() {
         this.notas
