@@ -15,18 +15,7 @@
         mdi-arrow-left
       </v-icon>
     </v-btn>
-
-    <v-row align="center" justify="space-around">
-      <v-btn color="primary" v-if="!teacher && !this.haveSM" v-on:click="update2SM">
-        Tornar-se Scrum Master
-        <v-icon dark right>
-          mdi-crown
-        </v-icon>
-      </v-btn>
-    </v-row>
-
     <div class="dashboard-group">
-      Projeto
       <div class="dashboard-group-person" v-if="Projeto">
         Projeto
         <v-slide-group
@@ -79,7 +68,7 @@
               width="180"
               >
               <div class="dashboard-group-person-minify">
-                <div class="dashboard-group-person-name" v-on:click="getUserFromTeam(projectGrupo.idTeam), this.grupoAtivo = projectGrupo.idTeam" >
+                <div class="dashboard-group-person-name" v-on:click="getUserFromTeam(projectGrupo.idTeam)" >
                   <span> {{ projectGrupo.teamName}} </span>
                 </div>
                 <div class="dashboard-group-person-button">
@@ -98,6 +87,17 @@
         <card-create-equipe :projetos="projetos" :estudantes="allEstudantes"/>
       </div>
       <div class="dashboard-group-person" v-if="Alunos">
+        <div v-if="showButtonScrum">
+          <v-row align="center" justify="space-around" >
+            <v-btn color="primary"  v-on:click="update2SM">
+              Tornar-se Scrum Master
+              <v-icon dark right>
+                mdi-crown
+              </v-icon>
+            </v-btn>
+          </v-row>
+        </div>
+        <div> 
         <v-slide-group
           class="pa-4"
           center-active
@@ -143,6 +143,8 @@
             </v-card>
           </v-slide-item>
         </v-slide-group>
+        </div>
+
       </div>
     </div>
     <div class="dashboard-info">
@@ -180,7 +182,6 @@
        criterios: [],
        estudantes: [],
        allEstudantes: [],
-       errors: "",
        Role: true,
        grupoAtivo: "",
        grupos: "",
@@ -189,7 +190,6 @@
        sprints: "",
        sprintSelected: "",
        activeSprint: true,
-       snackbar: false,
        notasFeitas: [],
        novoCriterio: [],
        token: '',
@@ -197,10 +197,11 @@
        Projeto: true,
        Times: false,
        Alunos: false,
-       projectGrupos: ''
-       user_id: '9288a850-588d-4a18-86ff-77b6d21a8464',
+       projectGrupos: '',
        haveSM: false,
-       idteam: ""
+       idteam: "",
+       isAluno: false,
+       showButtonScrum: false
      }),
      beforeMount() {
         console.log(this.$route.query.token)
@@ -237,10 +238,10 @@
             this.Projeto = false;
             this.Times = true;
             this.Alunos = false;
-
           })
         },
         getUserFromTeam(teamID) {
+          this.grupoAtivo = teamID.idTeam
           api.get(`user-team?idTeam=${teamID}`).then(response => {
             this.idteam = teamID
             this.estudantes = response.data
@@ -248,21 +249,26 @@
             this.Times = false;
             this.Alunos = true;
             for (let i = 0; i < this.estudantes.length; i++) {
-              if(!this.estudantes[i].isScrumMaster){
-                this.haveSM = false
-              }else{
+              if(this.estudantes[i].isScrumMaster){
                 this.haveSM = true
+                break
+               } else {
+                this.haveSM = false
               }
             }
+          if(this.isAluno && !this.haveSM) {
+            this.showButtonScrum = true;
+          }
           })
         },
         update2SM: async function() {
           let payload = {
             "isScrumMaster": true
           }
-          await api.patch(`user-team?idUser=${this.user_id}&idTeam=${this.idteam}`, payload)
+          await api.patch(`user-team?idUser=${this.userLogged}&idTeam=${this.idteam}`, payload)
           .then(response => {
             if(response.status == 200){
+              this.showButtonScrum = false;
               alert('Parabéns, agora você é Scrum Master!')
             }
           })
@@ -300,7 +306,8 @@
         },
         getUserInformation: function() {
           api.get(`/user/${this.userLogged}`).then(response => {
-            console.log(response)
+          if(response.data.role === 'ROLE ALUNO')
+            this.isAluno = true
           })
         }
     }
@@ -348,6 +355,7 @@
     align-items: center;
     justify-content: space-around;
 		background-color: white;
+    flex-direction: column;
   }
 
   .dashboard-group-myrating {
