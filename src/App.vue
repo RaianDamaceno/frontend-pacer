@@ -10,24 +10,82 @@
         <v-toolbar-title>Pacer</v-toolbar-title>
       </div>
       <v-spacer></v-spacer>
-        <v-tab >
-          <AdicionaCriteriosAva />
-        </v-tab>
-        <v-tab >
-          <CriteriaRegistration />
-        </v-tab>
-        <v-tab >
+       <v-tab >
+       <v-menu offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              color="primary"
+              dark
+              v-bind="attrs"
+              v-on="on"
+            >
+              Sprint
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item>
+              <v-list-item-title> <sprintRegistration /></v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-title> <sprintTable /></v-list-item-title>
+            </v-list-item>
+          </v-list>
+      </v-menu>
+    </v-tab>
+
+    <v-tab >
+       <v-menu offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              color="primary"
+              dark
+              v-bind="attrs"
+              v-on="on"
+            >
+              Criterios
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item>
+              <v-list-item-title><AdicionaCriteriosAva /></v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+            <v-list-item-title><CriteriaRegistration /></v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+    </v-tab>
+
+    <v-tab >
+       <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            color="primary"
+            dark
+            v-bind="attrs"
+            v-on="on"
+          >
+            Projeto
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item>
+            <v-list-item-title><CreateProject /></v-list-item-title>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-title><projectTable /></v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-tab>
+
+     <v-tab >
           <PendingToScore />
-        </v-tab>
-        <v-tab>
+      </v-tab>
+
+      <v-tab>
           <UsersAprovation />
-        </v-tab>
-        <v-tab >
-          <sprintRegistration />
-        </v-tab>
-        <v-tab >
-          <CreateProject />
-        </v-tab>
+      </v-tab>
     </v-app-bar>
     <v-main>
       <router-view/>
@@ -42,7 +100,9 @@ import AdicionaCriteriosAva from './components/AdicionaCriteriosAva.vue'
 import PendingToScore from './components/PendingToScore.vue'
 import UsersAprovation      from './components/UsersAprovation.vue'
 import SprintRegistration from './components/SprintRegistration.vue'
-import CreateProject from './components/CreateProject.vue';
+import CreateProject from './components/CreateProject.vue'
+import projectTable from './components/projectTable.vue'
+import sprintTable from './components/SprintTable.vue';
 
 export default Vue.extend({
   name: 'App',
@@ -52,7 +112,9 @@ export default Vue.extend({
       PendingToScore,
       UsersAprovation,
       SprintRegistration,
-      CreateProject
+      CreateProject,
+      projectTable,
+      sprintTable
   },
   data: () => ({
     //

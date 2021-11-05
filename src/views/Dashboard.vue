@@ -1,20 +1,21 @@
 <template>
   <div class="dashboard">
     <v-btn
-      color="red darken-5"
-      dark
-      small
-      fab
-      v-if="!teacher"
-      v-on:click="teacher = true"
-      >
-      <v-icon
-        dark
-        left
-        >
+      color="red darken-5" dark small fab v-if="!teacher" v-on:click="teacher = true">
+      <v-icon dark left >
         mdi-arrow-left
       </v-icon>
     </v-btn>
+
+    <v-row align="center" justify="space-around">
+      <v-btn color="primary" v-if="!teacher && !this.haveSM" v-on:click="update2SM">
+        Tornar-se Scrum Master
+        <v-icon dark right>
+          mdi-crown
+        </v-icon>
+      </v-btn>
+    </v-row>
+
     <div class="dashboard-group">
       <div class="dashboard-group-person" v-if="teacher">
         <v-slide-group
@@ -144,6 +145,10 @@
        snackbar: false,
        notasFeitas: [],
        novoCriterio: [],
+       user_id: '9288a850-588d-4a18-86ff-77b6d21a8464',
+       haveSM: false,
+       idteam: "",
+       userLogged: ''
      }),
      beforeMount() {
         api.get('user').then(response => {
@@ -171,8 +176,30 @@
         },
         getUserFromTeam(teamID) {
           api.get(`user-team?idTeam=${teamID}`).then(response => {
+            this.idteam = teamID
             this.estudantes = response.data
             this.teacher = false
+            for (let i = 0; i < this.estudantes.length; i++) {
+              if(!this.estudantes[i].isScrumMaster){
+                this.haveSM = false
+              }else{
+                this.haveSM = true
+              }
+            }
+          })
+        },
+        update2SM: async function() {
+          let payload = {
+            "isScrumMaster": true
+          }
+          await api.patch(`user-team?idUser=${this.user_id}&idTeam=${this.idteam}`, payload)
+          .then(response => {
+            if(response.status == 200){
+              alert('Parabéns, agora você é Scrum Master!')
+            }
+          })
+          .catch(error=>{
+            console.log(error)
           })
         },
         checkSprintAtiva: function(teste) {
@@ -192,6 +219,20 @@
           } else {
             this.activeSprint = false
           }
+        },
+        decodeToken: function (token) {
+           var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            let json = JSON.parse(jsonPayload);
+            this.userLogged = json.sub
+        },
+        getUserInformation: function() {
+          api.get(`/user/${this.userLogged}`).then(response => {
+            console.log(response)
+          })
         }
     }
  })
