@@ -15,6 +15,16 @@
         mdi-arrow-left
       </v-icon>
     </v-btn>
+
+    <v-row align="center" justify="space-around">
+      <v-btn color="primary" v-if="!teacher && !this.haveSM" v-on:click="update2SM">
+        Tornar-se Scrum Master
+        <v-icon dark right>
+          mdi-crown
+        </v-icon>
+      </v-btn>
+    </v-row>
+
     <div class="dashboard-group">
       Projeto
       <div class="dashboard-group-person" v-if="Projeto">
@@ -188,6 +198,9 @@
        Times: false,
        Alunos: false,
        projectGrupos: ''
+       user_id: '9288a850-588d-4a18-86ff-77b6d21a8464',
+       haveSM: false,
+       idteam: ""
      }),
      beforeMount() {
         console.log(this.$route.query.token)
@@ -229,10 +242,32 @@
         },
         getUserFromTeam(teamID) {
           api.get(`user-team?idTeam=${teamID}`).then(response => {
+            this.idteam = teamID
             this.estudantes = response.data
             this.Projeto = false;
             this.Times = false;
             this.Alunos = true;
+            for (let i = 0; i < this.estudantes.length; i++) {
+              if(!this.estudantes[i].isScrumMaster){
+                this.haveSM = false
+              }else{
+                this.haveSM = true
+              }
+            }
+          })
+        },
+        update2SM: async function() {
+          let payload = {
+            "isScrumMaster": true
+          }
+          await api.patch(`user-team?idUser=${this.user_id}&idTeam=${this.idteam}`, payload)
+          .then(response => {
+            if(response.status == 200){
+              alert('Parabéns, agora você é Scrum Master!')
+            }
+          })
+          .catch(error=>{
+            console.log(error)
           })
         },
         checkSprintAtiva: function(teste) {
