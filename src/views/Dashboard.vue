@@ -158,9 +158,7 @@ export default Vue.extend({
     components: {
         CardStudentRating,
         CardCreateEquipe,
-        CardFloatButton,
-        CardToastSprint,
-        GraphSpider,
+        CardToastSprint
     },
     beforeMount() {
         api.get("user").then((response) => {
@@ -206,26 +204,6 @@ export default Vue.extend({
        idteam: "",
        userLogged: ''
      }),
-     beforeMount() {
-        api.get('user').then(response => {
-          this.allEstudantes = response.data
-        })
-        api.get('criteria').then(response => {
-            this.criterios = response.data
-        })
-        api.get('project').then(response => {
-            this.projetos = response.data
-        })
-        api.get('team').then(response => {
-            this.teams = response.data
-        })
-        api.get('sprint').then(response => {
-            this.sprints = response.data
-        })
-        api.get('notes-store').then(response => {
-          this.notasFeitas = response.data
-        })
-      },
       methods: {
         showCard: function() {
             this.cards = true;
