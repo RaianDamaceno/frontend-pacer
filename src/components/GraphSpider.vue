@@ -22,12 +22,10 @@ export default Vue.extend({
         user: String,
     },
     beforeMount() {
-        console.log("show");
-        console.log(this.sprintSelected);
         this.notas
             .filter(
-                (not) =>
-                    not.evaluated.idUser === this.user && not.idSprint === this.sprintSelected
+                (data) =>
+                    data.evaluated.idUser === this.user && data.idSprint === this.sprintSelected
             )
             .map((nt) => {
                 this.criterios.push(nt.criterio.descCriteria);
