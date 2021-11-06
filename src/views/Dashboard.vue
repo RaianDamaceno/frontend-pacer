@@ -1,31 +1,31 @@
 <template>
   <div class="dashboard">
     <v-btn
-      color="red darken-5" dark small fab v-if="!teacher" v-on:click="teacher = true">
-      <v-icon dark left >
+      color="red darken-5"
+      dark
+      small
+      fab
+      v-if="!Role"
+      v-on:click="Role = true"
+      >
+      <v-icon
+        dark
+        left
+        >
         mdi-arrow-left
       </v-icon>
     </v-btn>
-
-    <v-row align="center" justify="space-around">
-      <v-btn color="primary" v-if="!teacher && !this.haveSM" v-on:click="update2SM">
-        Tornar-se Scrum Master
-        <v-icon dark right>
-          mdi-crown
-        </v-icon>
-      </v-btn>
-    </v-row>
-
     <div class="dashboard-group">
-      <div class="dashboard-group-person" v-if="teacher">
+      <div class="dashboard-group-person" v-if="Projeto">
+        Projeto
         <v-slide-group
           class="pa-4"
           center-active
           show-arrows
           >
           <v-slide-item
-            v-for="team in teams"
-            :key="team.idTeam"
+            v-for="projeto in projetos"
+            :key="projeto.idProject"
             >
             <v-card
               class="ma-4"
@@ -33,11 +33,11 @@
               width="180"
               >
               <div class="dashboard-group-person-minify">
-                <div class="dashboard-group-person-name" v-on:click="getUserFromTeam(team.idTeam)" >
-                  <span> {{ team.teamName}} </span>
+                <div class="dashboard-group-person-name" v-on:click="getGruposFromProject(projeto.idProject)" >
+                  <span> {{ projeto.description}} </span>
                 </div>
                 <div class="dashboard-group-person-button">
-                  <card-float-button :team="team.idTeam"/>
+                  <!-- <card-float-button :team="projeto.idProjeto"/> -->
                 </div>
               </div>
               <v-row
@@ -51,7 +51,53 @@
         </v-slide-group>
         <card-create-equipe :projetos="projetos" :estudantes="allEstudantes"/>
       </div>
-      <div class="dashboard-group-person" v-if="!teacher">
+      <div class="dashboard-group-person" v-if="Times">
+        Times
+        <v-slide-group
+          class="pa-4"
+          center-active
+          show-arrows
+          >
+          <v-slide-item
+            v-for="projectGrupo in projectGrupos"
+            :key="projectGrupo.idTeam"
+            >
+            <v-card
+              class="ma-4"
+              height="200"
+              width="180"
+              >
+              <div class="dashboard-group-person-minify">
+                <div class="dashboard-group-person-name" v-on:click="getUserFromTeam(projectGrupo.idTeam)" >
+                  <span> {{ projectGrupo.teamName}} </span>
+                </div>
+                <div class="dashboard-group-person-button">
+                  <card-float-button :team="projectGrupo.idTeam"/>
+                </div>
+              </div>
+              <v-row
+                class="fill-height"
+                align="center"
+                justify="center"
+                >
+              </v-row>
+            </v-card>
+          </v-slide-item>
+        </v-slide-group>
+        <card-create-equipe :projetos="projetos" :estudantes="allEstudantes"/>
+      </div>
+      <div class="dashboard-group-person" v-if="Alunos">
+        <div v-if="showButtonScrum">
+          <v-row align="center" justify="space-around" >
+            <v-btn color="primary"  v-on:click="update2SM">
+              Tornar-se Scrum Master
+              <v-icon dark right>
+                mdi-crown
+              </v-icon>
+            </v-btn>
+          </v-row>
+        </div>
+        <div> 
         <v-slide-group
           class="pa-4"
           center-active
@@ -80,6 +126,8 @@
                     :estudanteID="estudante.idUser"
                     :sprintID="sprintSelected"
                     :notasFeitas="notasFeitas"
+                    :idEvaluator="userLogged"
+                    :idGroup="grupoAtivo"
                     />
                 </div>
                 <div class="dashboard-group-person-button" v-else>
@@ -95,6 +143,8 @@
             </v-card>
           </v-slide-item>
         </v-slide-group>
+        </div>
+
       </div>
     </div>
     <div class="dashboard-info">
@@ -121,7 +171,6 @@
 
   export default Vue.extend({
     name: 'Dashboard',
-
     components: {
       CardStudentRating,
       CardCreateEquipe,
@@ -133,26 +182,31 @@
        criterios: [],
        estudantes: [],
        allEstudantes: [],
-       errors: "",
-       teacher: true,
-       grupo: "",
+       Role: true,
+       grupoAtivo: "",
        grupos: "",
        projetos: [],
        teams: "",
        sprints: "",
        sprintSelected: "",
        activeSprint: true,
-       snackbar: false,
        notasFeitas: [],
        novoCriterio: [],
-       user_id: '9288a850-588d-4a18-86ff-77b6d21a8464',
+       token: '',
+       userLogged: '',
+       Projeto: true,
+       Times: false,
+       Alunos: false,
+       projectGrupos: '',
        haveSM: false,
        idteam: "",
-       userLogged: ''
+       isAluno: false,
+       showButtonScrum: false
      }),
      beforeMount() {
+        console.log(this.$route.query.token)
         api.get('user').then(response => {
-          this.allEstudantes = response.data
+          this.allEstudantes = response.data.filter(function(el) { return el.role == "ROLE ALUNO"; }); 
         })
         api.get('criteria').then(response => {
             this.criterios = response.data
@@ -170,30 +224,51 @@
           this.notasFeitas = response.data
         })
       },
+      mounted() {
+        this.decodeToken(this.$route.query.token);
+        this.getUserInformation();
+      },
       methods: {
         showCard: function() {
             this.cards = true
         },
+        getGruposFromProject(projectID) {
+           api.get(`project/${projectID}`).then(response => {
+            this.projectGrupos = response.data.teams
+            this.Projeto = false;
+            this.Times = true;
+            this.Alunos = false;
+          })
+        },
         getUserFromTeam(teamID) {
+          this.grupoAtivo = teamID.idTeam
           api.get(`user-team?idTeam=${teamID}`).then(response => {
             this.idteam = teamID
             this.estudantes = response.data
+            this.Projeto = false;
+            this.Times = false;
+            this.Alunos = true;
             for (let i = 0; i < this.estudantes.length; i++) {
-              if(!this.estudantes[i].isScrumMaster){
-                this.haveSM = false
-              }else{
+              if(this.estudantes[i].isScrumMaster){
                 this.haveSM = true
+                break
+               } else {
+                this.haveSM = false
               }
             }
+          if(this.isAluno && !this.haveSM) {
+            this.showButtonScrum = true;
+          }
           })
         },
         update2SM: async function() {
           let payload = {
             "isScrumMaster": true
           }
-          await api.patch(`user-team?idUser=${this.user_id}&idTeam=${this.idteam}`, payload)
+          await api.patch(`user-team?idUser=${this.userLogged}&idTeam=${this.idteam}`, payload)
           .then(response => {
             if(response.status == 200){
+              this.showButtonScrum = false;
               alert('Parabéns, agora você é Scrum Master!')
             }
           })
@@ -225,12 +300,14 @@
             var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
                 return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
             }).join(''));
+
             let json = JSON.parse(jsonPayload);
             this.userLogged = json.sub
         },
         getUserInformation: function() {
           api.get(`/user/${this.userLogged}`).then(response => {
-            console.log(response)
+          if(response.data.role === 'ROLE ALUNO')
+            this.isAluno = true
           })
         }
     }
@@ -278,6 +355,7 @@
     align-items: center;
     justify-content: space-around;
 		background-color: white;
+    flex-direction: column;
   }
 
   .dashboard-group-myrating {
