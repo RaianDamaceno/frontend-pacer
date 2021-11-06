@@ -1,97 +1,97 @@
 <template>
   <div class="dashboard">
-        <v-app-bar
+    <v-app-bar
       app
       color="primary"
       dark
     > 
     
-      <div class="d-flex align-center">
-        <v-toolbar-title>Pacer</v-toolbar-title>
-      </div>
-      <v-spacer></v-spacer>
-       <v-tab >
-       <v-menu offset-y>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              color="primary"
-              dark
-              v-bind="attrs"
-              v-on="on"
-            >
-              Sprint
-            </v-btn>
-          </template>
-          <v-list>
-            <v-list-item>
-              <v-list-item-title> <sprintRegistration /></v-list-item-title>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-title> <sprintTable /></v-list-item-title>
-            </v-list-item>
-          </v-list>
-      </v-menu>
-    </v-tab>
+        <div class="d-flex align-center">
+          <v-toolbar-title>Pacer</v-toolbar-title>
+        </div>
+        <v-spacer></v-spacer>
+        <v-tab >
+        <v-menu offset-y >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                color="primary"
+                dark
+                v-bind="attrs"
+                v-on="on"
+                width="100px"
+              >
+                Sprint
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item>
+                <v-list-item-title> <sprintRegistration /></v-list-item-title>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-title> <sprintTable /></v-list-item-title>
+              </v-list-item>
+            </v-list>
+        </v-menu>
+      </v-tab>
 
-    <v-tab >
-       <v-menu offset-y>
+      <v-tab >
+        <v-menu offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                color="primary"
+                dark
+                v-bind="attrs"
+                v-on="on"
+                width="100px"
+              >
+                Criterios
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item>
+                <v-list-item-title><AdicionaCriteriosAva /></v-list-item-title>
+              </v-list-item>
+              <v-list-item>
+              <v-list-item-title><CriteriaRegistration /></v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+      </v-tab>
+
+      <v-tab >
+        <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               color="primary"
               dark
               v-bind="attrs"
               v-on="on"
+              width="100px"
             >
-              Criterios
+              Projeto
             </v-btn>
           </template>
           <v-list>
             <v-list-item>
-              <v-list-item-title><AdicionaCriteriosAva /></v-list-item-title>
+              <v-list-item-title><CreateProject /></v-list-item-title>
             </v-list-item>
             <v-list-item>
-            <v-list-item-title><CriteriaRegistration /></v-list-item-title>
+              <v-list-item-title><projectTable /></v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
-    </v-tab>
-
-    <v-tab >
-       <v-menu offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            color="primary"
-            dark
-            v-bind="attrs"
-            v-on="on"
-          >
-            Projeto
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item>
-            <v-list-item-title><CreateProject /></v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title><projectTable /></v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </v-tab>
-
-     <v-tab >
-          <PendingToScore />
       </v-tab>
 
-      <v-tab>
-          <UsersAprovation />
-      </v-tab>
-      <v-spacer> 
-        
-      </v-spacer>
-      <v-tab>
-          <user-update :userID="this.userLogged" />
-      </v-tab>
+      <v-tab >
+            <PendingToScore />
+        </v-tab>
+
+        <v-tab>
+            <UsersAprovation />
+        </v-tab>
+        <v-tab>
+            <user-update :userID="this.userLogged" />
+        </v-tab>
     </v-app-bar>
     <!-- <div class='dashboard-drawer'> 
       <v-navigation-drawer 
@@ -573,6 +573,6 @@
       width: 100%;
       height: inherit;
       margin-top: 3%;
-    } 
+    }
   }
 </style>
