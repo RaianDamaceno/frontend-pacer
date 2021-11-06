@@ -149,7 +149,8 @@
             <div v-for="sprint in sprints" :key="sprint.idSprint">
                 <button
                     :value="sprint.idSprint"
-                    v-on:click="checkSprintAtiva(sprint)">
+                    v-on:click="checkSprintAtiva(sprint)"
+                >
                     <p>Sprint</p>
                     <p>Data Inicial: {{ sprint.initialDate }}</p>
                     <p>Data Final: {{ sprint.finalDate }}</p>
@@ -208,7 +209,9 @@ export default Vue.extend({
     }),
     beforeMount() {
         api.get("user").then((response) => {
-            this.allEstudantes = response.data;
+            this.allEstudantes = response.data.filter(
+                (data) => data.role.toUpperCase() === 'ALUNO'
+            );
         });
         api.get("criteria").then((response) => {
             this.criterios = response.data;
@@ -325,7 +328,7 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-span {
+    span {
     color: #fff;
 }
 .dashboard {
