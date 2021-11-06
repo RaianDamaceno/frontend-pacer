@@ -82,7 +82,8 @@ export default {
   data: () => ({
     dialog: false,
     listaResumida: [],
-    idEvaluator: "435677d0-ad72-45af-9702-32cb41d32226",
+    idEvaluator: this.$store.state.userId,
+    sprintId: "782274b5-d979-45ec-a8e5-8db9b9ddacbe",
     erro: null,
     msg: null,
   }),
@@ -90,7 +91,7 @@ export default {
     async getPendencias() {
       this.mostraErro();
       this.mostraMsg();
-      await axios.get("notes-store/pending/" + this.idEvaluator).then(
+      await axios.get(`notes-store/pending/${this.idEvaluator}/${this.sprintId}`).then(
         (response) => {
           this.pendencias = response.data;
 
