@@ -1,6 +1,123 @@
 <template>
   <div class="dashboard">
-    <v-btn
+        <v-app-bar
+      app
+      color="primary"
+      dark
+    > 
+    
+      <div class="d-flex align-center">
+        <v-toolbar-title>Pacer</v-toolbar-title>
+      </div>
+      <v-spacer></v-spacer>
+       <v-tab >
+       <v-menu offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              color="primary"
+              dark
+              v-bind="attrs"
+              v-on="on"
+            >
+              Sprint
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item>
+              <v-list-item-title> <sprintRegistration /></v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-title> <sprintTable /></v-list-item-title>
+            </v-list-item>
+          </v-list>
+      </v-menu>
+    </v-tab>
+
+    <v-tab >
+       <v-menu offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              color="primary"
+              dark
+              v-bind="attrs"
+              v-on="on"
+            >
+              Criterios
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item>
+              <v-list-item-title><AdicionaCriteriosAva /></v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+            <v-list-item-title><CriteriaRegistration /></v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+    </v-tab>
+
+    <v-tab >
+       <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            color="primary"
+            dark
+            v-bind="attrs"
+            v-on="on"
+          >
+            Projeto
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item>
+            <v-list-item-title><CreateProject /></v-list-item-title>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-title><projectTable /></v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-tab>
+
+     <v-tab >
+          <PendingToScore />
+      </v-tab>
+
+      <v-tab>
+          <UsersAprovation />
+      </v-tab>
+      <v-spacer> 
+        
+      </v-spacer>
+      <v-tab>
+          <user-update :userID="this.userLogged" />
+      </v-tab>
+    </v-app-bar>
+    <!-- <div class='dashboard-drawer'> 
+      <v-navigation-drawer 
+        width="100%" 
+        class="drawer"
+        permanent
+        >
+        <v-list
+          dense
+          rounded
+        >
+          <v-list-item
+          link
+          >
+             <v-list-item-icon>
+              <v-icon>mid-plus</v-icon>
+            </v-list-item-icon>
+          <v-list-item-content>
+              <v-list-item-title> Minha Conta</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-navigation-drawer>
+    </div> -->
+    <div class='dashboard-teste'> 
+      <v-btn
       color="red darken-5"
       dark
       small
@@ -158,6 +275,8 @@
         </button>
       </div>
     </div>
+
+    </div>
   </div>
 </template>
 
@@ -167,6 +286,15 @@
   import CardCreateEquipe from '../components/CardCreateEquipe.vue'
   import CardFloatButton from '../components/CardFloatButton.vue'
   import CardToastSprint from '../components/CardToastSprint.vue'
+  import CriteriaRegistration from '../components/criteria-registration.vue'
+  import AdicionaCriteriosAva from '../components/AdicionaCriteriosAva.vue'
+  import PendingToScore from '../components/PendingToScore.vue'
+  import UsersAprovation      from '../components/UsersAprovation.vue'
+  import SprintRegistration from '../components/SprintRegistration.vue'
+  import CreateProject from '../components/CreateProject.vue'
+  import projectTable from '../components/projectTable.vue'
+  import sprintTable from '../components/SprintTable.vue'
+  import UserUpdate from '../components/UserUpdate.vue'
   import api from '../services/api'
 
   export default Vue.extend({
@@ -175,7 +303,16 @@
       CardStudentRating,
       CardCreateEquipe,
       CardFloatButton,
-      CardToastSprint
+      CardToastSprint,
+      AdicionaCriteriosAva,
+      CriteriaRegistration,
+      PendingToScore,
+      UsersAprovation,
+      SprintRegistration,
+      CreateProject,
+      projectTable,
+      sprintTable,
+      UserUpdate
     },
      data: () => ({
        cards: false,
@@ -201,7 +338,8 @@
        haveSM: false,
        idteam: "",
        isAluno: false,
-       showButtonScrum: false
+       showButtonScrum: false,
+
      }),
      beforeMount() {
         console.log(this.$route.query.token)
@@ -315,15 +453,33 @@
 </script>
 
 <style scoped lang="scss">
+  .dashboard-drawer {
+    width: 20%;
+    height: 100%;
+    border: solid 1px red;
+  }
+  .drawer {
+    height: 100%;
+    width: 100%;
+  }
   span {
     color: #fff;
   }
   .dashboard {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: space-around;
     height: 100%;
     width: 100%; 
+    background-image: url('../../public/img/bg_login.jpg');
+  }
+
+  .dashboard-teste{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
+    width: 80%; 
   }
 
   .ma-4 {

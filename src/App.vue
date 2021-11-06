@@ -1,6 +1,9 @@
 <template>
   <v-app>
-    <v-app-bar
+     <!-- <v-navigation-drawer app>
+  </v-navigation-drawer> -->
+
+    <!-- <v-app-bar
       app
       color="primary"
       dark
@@ -86,7 +89,7 @@
       <v-tab>
           <UsersAprovation />
       </v-tab>
-    </v-app-bar>
+    </v-app-bar> -->
     <v-main>
       <router-view/>
     </v-main>
@@ -106,14 +109,14 @@ import sprintTable from './components/SprintTable.vue';
 export default Vue.extend({
   name: 'App',
   components: {
-      AdicionaCriteriosAva,
-      CriteriaRegistration,
-      PendingToScore,
-      UsersAprovation,
-      SprintRegistration,
-      CreateProject,
-      projectTable,
-      sprintTable
+      // AdicionaCriteriosAva,
+      // CriteriaRegistration,
+      // PendingToScore,
+      // UsersAprovation,
+      // SprintRegistration,
+      // CreateProject,
+      // projectTable,
+      // sprintTable
   },
   data: () => ({
     //
