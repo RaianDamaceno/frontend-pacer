@@ -117,14 +117,15 @@
             updateArray.push(updateUser);
             console.log(updateUser);  
           })
-          await axios.post('http://localhost:3000/user/approve', updateArray).then((response) => {
-                console.log(response.data);
-                alert("Cadastro feito com sucesso");
-              }, (error) => {
-                console.log(error);
-                alert("Erro no cadastro");
-              });
-              this.$refs.form.reset();
+          await axios.post('http://localhost:3000/user/approve', updateArray)
+            .then((response) => {
+              console.log(response.data);
+              alert("Cadastro feito com sucesso");
+            }, (error) => {
+              console.log(error);
+              alert("Erro no cadastro");
+            });
+            this.$refs.form.reset();
           }
     },
 

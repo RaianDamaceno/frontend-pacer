@@ -141,7 +141,8 @@
         createLogin() {
           api.post('/auth/login', this.login).then(response => {
             let token = response.data.token
-            this.$router.push({ path: '/dashboard', query: { token: token }})
+            this.$store.dispatch('setToken', token);
+            this.$router.push({ path: '/dashboard'})
           }).catch(function (error) {
             alert('Senha e/ou Email invalidos')
           })
@@ -163,8 +164,6 @@
             this.alunoSelected = false;
             this.professorSelected = true;
           }
-          
-          console.log(this.admSelected)
         }
     }
   }

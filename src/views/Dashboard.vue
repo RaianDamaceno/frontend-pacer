@@ -205,28 +205,27 @@
        showButtonScrum: false
      }),
      beforeMount() {
-        console.log(this.$route.query.token)
         api.get('user').then(response => {
           this.allEstudantes = response.data.filter(function(el) { return el.role == "ROLE ALUNO"; }); 
         })
         api.get('criteria').then(response => {
-            this.criterios = response.data
+          this.criterios = response.data
         })
         api.get('project').then(response => {
-            this.projetos = response.data
+          this.projetos = response.data
         })
         api.get('team').then(response => {
-            this.teams = response.data
+          this.teams = response.data
         })
         api.get('sprint').then(response => {
-            this.sprints = response.data
+          this.sprints = response.data
         })
         api.get('notes-store').then(response => {
           this.notasFeitas = response.data
         })
       },
       mounted() {
-        this.decodeToken(this.$route.query.token);
+        this.decodeToken(this.$store.state.token);
         this.getUserInformation();
       },
       methods: {
@@ -295,7 +294,7 @@
             this.activeSprint = false
           }
         },
-        decodeToken: function (token) {
+        decodeToken: function (token: string) {          
           var base64Url = token.split('.')[1];
           var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
           var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
