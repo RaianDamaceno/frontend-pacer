@@ -39,7 +39,6 @@ export default Vue.extend({
     },
     data() {
         return {
-            notasGraph: [],
             chartOptions: {
                 chart: {
                     type: "line",
