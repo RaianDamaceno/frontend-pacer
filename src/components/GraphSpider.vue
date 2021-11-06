@@ -18,11 +18,17 @@ export default Vue.extend({
     name: "GraphSpider",
     props: {
         notas: Array,
-        sprintClicked: String,
+        sprintSelected: String,
+        user: String,
     },
     beforeMount() {
+        console.log("show");
+        console.log(this.sprintSelected);
         this.notas
-            .filter((not) => not.idEvaluated === "33" && not.idSprint === "1")
+            .filter(
+                (not) =>
+                    not.evaluated.idUser === this.user && not.idSprint === this.sprintSelected
+            )
             .map((nt) => {
                 this.criterios.push(nt.criterio.descCriteria);
                 this.total.push(nt.note === null ? 0 : nt.note);
