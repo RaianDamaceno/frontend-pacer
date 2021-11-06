@@ -149,8 +149,8 @@
             <graph-spider
                 v-if="sprintSelected"
                 :notas="notasFeitas"
-                :sprintSelected="'1'"
-                :user="userLogged || ''"
+                :sprintSelected="sprintSelected"
+                :user="userLogged"
             />
         </div>
 
@@ -211,6 +211,7 @@ export default Vue.extend({
         idteam: "",
         isAluno: false,
         showButtonScrum: false,
+        minhaAvaliação:[]
     }),
     beforeMount() {
         console.log(this.$route.query.token);
@@ -233,6 +234,7 @@ export default Vue.extend({
         });
         api.get("notes-store").then((response) => {
             this.notasFeitas = response.data;
+            console.log(this.notasFeitas)
         });
     },
     mounted() {
@@ -252,7 +254,7 @@ export default Vue.extend({
             });
         },
         getUserFromTeam(teamID) {
-            this.grupoAtivo = teamID.idTeam;
+            this.grupoAtivo = teamID;
             api.get(`user-team?idTeam=${teamID}`).then((response) => {
                 this.idteam = teamID;
                 this.estudantes = response.data;
