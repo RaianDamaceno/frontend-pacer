@@ -138,7 +138,6 @@
               this.teste[i].status = false
             }
         }
-        console.log(this.teste)
       })
     }
   }
