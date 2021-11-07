@@ -7,7 +7,7 @@
     > 
     
       <div class="d-flex align-center">
-        <v-toolbar-title>Pacer</v-toolbar-title>
+        <v-toolbar-title @click="goHome" class="title">Pacer</v-toolbar-title>
       </div>
       <v-spacer></v-spacer>
        <v-tab >
@@ -80,11 +80,27 @@
     </v-tab>
 
      <v-tab >
-          <PendingToScore />
+        <v-menu offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              color="primary"
+              dark
+              v-bind="attrs"
+              v-on="on"
+            >
+              Pendências
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item>
+              <v-list-item-title><PendingToScore /></v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </v-tab>
 
       <v-tab>
-          <UsersAprovation />
+        <UsersAprovation />
       </v-tab>
     </v-app-bar>
     <v-main>
@@ -118,5 +134,16 @@ export default Vue.extend({
   data: () => ({
     //
   }),
+  methods: {
+    goHome() {
+      this.$router.push({ path: 'dashboard' })
+    }
+  }
 });
 </script>
+
+<style>
+  .title {
+    cursor: pointer; 
+  }
+</style>

@@ -169,14 +169,15 @@
     </div>
 </template>
 
-<script>
-import Vue from "vue";
-import CardStudentRating from "../components/CardStudentRating.vue";
-import CardCreateEquipe from "../components/CardCreateEquipe.vue";
-import CardFloatButton from "../components/CardFloatButton.vue";
-import CardToastSprint from "../components/CardToastSprint.vue";
-import GraphSpider from "../components/GraphSpider.vue";
-import api from "../services/api";
+<script lang="ts">
+  import Vue from 'vue'
+  import CardStudentRating from '../components/CardStudentRating.vue'
+  import CardCreateEquipe from '../components/CardCreateEquipe.vue'
+  import CardFloatButton from '../components/CardFloatButton.vue'
+  import CardToastSprint from '../components/CardToastSprint.vue'
+  import GraphSpider from "../components/GraphSpider.vue";
+  import { UserTeam } from '../model/user-team'
+  import api from '../services/api'
 
 export default Vue.extend({
     name: "Dashboard",
@@ -186,59 +187,57 @@ export default Vue.extend({
         CardToastSprint,
         GraphSpider,
     },
-    data: () => ({
-        cards: false,
-        criterios: [],
-        estudantes: [],
-        allEstudantes: [],
-        Role: true,
-        grupoAtivo: "",
-        grupos: "",
-        projetos: [],
-        teams: "",
-        sprints: "",
-        sprintSelected: "",
-        activeSprint: true,
-        notasFeitas: [],
-        novoCriterio: [],
-        token: "",
-        userLogged: "",
-        Projeto: true,
-        Times: false,
-        Alunos: false,
-        projectGrupos: "",
-        haveSM: false,
-        idteam: "",
-        isAluno: false,
-        showButtonScrum: false,
-        minhaAvaliação:[]
-    }),
-    beforeMount() {
-        console.log(this.$route.query.token);
-        api.get("user").then((response) => {
-            this.allEstudantes = response.data.filter(function(el) {
-                return el.role == "ROLE ALUNO";
-            });
-        });
-        api.get("criteria").then((response) => {
-            this.criterios = response.data;
-        });
-        api.get("project").then((response) => {
-            this.projetos = response.data;
-        });
-        api.get("team").then((response) => {
-            this.teams = response.data;
-        });
-        api.get("sprint").then((response) => {
-            this.sprints = response.data;
-        });
-        api.get("notes-store").then((response) => {
-            this.notasFeitas = response.data;
-            console.log(this.notasFeitas)
-        });
-    },
-    mounted() {
-        this.decodeToken(this.$route.query.token);
+     data: () => ({
+       cards: false,
+       criterios: [],
+       estudantes: [] as UserTeam[],
+       allEstudantes: [],
+       Role: true,
+       grupoAtivo: "",
+       grupos: "",
+       projetos: [],
+       teams: "",
+       sprints: "",
+       sprintSelected: "",
+       activeSprint: true,
+       notasFeitas: [],
+       novoCriterio: [],
+       token: '',
+       userLogged: '',
+       Projeto: true,
+       Times: false,
+       Alunos: false,
+       projectGrupos: '',
+       haveSM: false,
+       idteam: "",
+       isAluno: false,
+       showButtonScrum: false,
+       minhaAvaliação:[]
+     }),
+     beforeMount() {
+        api.get('user').then(response => {
+            this.allEstudantes = response.data.filter(function(el) { 
+              return el.role == "ROLE ALUNO"; 
+            }); 
+        })
+        api.get('criteria').then(response => {
+          this.criterios = response.data
+        })
+        api.get('project').then(response => {
+          this.projetos = response.data
+        })
+        api.get('team').then(response => {
+          this.teams = response.data
+        })
+        api.get('sprint').then(response => {
+          this.sprints = response.data
+        })
+        api.get('notes-store').then(response => {
+          this.notasFeitas = response.data
+        })
+      },
+      mounted() {
+        this.decodeToken(this.$store.state.token);
         this.getUserInformation();
     },
     methods: {
@@ -311,23 +310,24 @@ export default Vue.extend({
                 this.activeSprint = false;
             }
         },
-        decodeToken: function(token) {
-            var base64Url = token.split(".")[1];
-            var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+        decodeToken: function (token: string) {          
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
             var jsonPayload = decodeURIComponent(
                 atob(base64)
-                    .split("")
+                    .split('')
                     .map(function(c) {
                         return (
-                            "%" +
-                            ("00" + c.charCodeAt(0).toString(16)).slice(-2)
+                            '%' + 
+                            ('00' + c.charCodeAt(0).toString(16)).slice(-2)
                         );
-                    })
-                    .join("")
+                })
+                .join('')
             );
 
             let json = JSON.parse(jsonPayload);
-            this.userLogged = json.sub;
+            this.userLogged = json.sub
+            this.$store.dispatch('setUserId', this.userLogged);          
         },
         getUserInformation: function() {
             api.get(`/user/${this.userLogged}`).then((response) => {
