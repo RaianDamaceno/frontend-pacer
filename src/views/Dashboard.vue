@@ -1,17 +1,5 @@
 <template>
     <div class="dashboard">
-        <v-btn
-            color="red darken-5"
-            dark
-            small
-            fab
-            v-if="!Role"
-            v-on:click="Role = true"
-        >
-            <v-icon dark left>
-                mdi-arrow-left
-            </v-icon>
-        </v-btn>
         <div class="dashboard-group">
             <div class="dashboard-group-person" v-if="Projeto">
                 Projeto
@@ -154,16 +142,20 @@
             />
         </div>
 
-        <div class="dashboard-info">
+        <div class="dashboard-info" >
             <div v-for="sprint in sprints" :key="sprint.idSprint">
                 <button
                     :value="sprint.idSprint"
                     v-on:click="checkSprintAtiva(sprint)"
                 >
+                    
                     <p>Sprint</p>
                     <p>Data Inicial: {{ sprint.initialDate }}</p>
                     <p>Data Final: {{ sprint.finalDate }}</p>
+
+                    
                 </button>
+                {{ sprintSelected.idSprint}}
             </div>
         </div>
     </div>
@@ -186,6 +178,7 @@ export default Vue.extend({
         CardCreateEquipe,
         CardToastSprint,
         GraphSpider,
+        CardFloatButton
     },
      data: () => ({
        cards: false,
@@ -304,8 +297,8 @@ export default Vue.extend({
             var c = teste.finalDate.split("/");
 
             if (d1 > d2 && d1 < c) {
-                this.activeSprint = true;
                 this.sprintSelected = teste.idSprint;
+                this.activeSprint = true;
             } else {
                 this.activeSprint = false;
             }
@@ -432,6 +425,9 @@ button {
     border-radius: 100px;
 }
 
+.yellow {
+   background-color: yellow;
+}
 @media (min-width: 320px) and (max-width: 640px) {
     .dashboard {
         min-height: 100%;
