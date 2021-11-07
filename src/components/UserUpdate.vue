@@ -26,84 +26,27 @@
                 three-line
                 subheader
                 >
-                  <v-subheader>Lista de Projetos Cadastrados</v-subheader>
-                 <!--- <v-data-table editable="true" :headers="headers" :items="user">
-
-                    <template v-slot:item.password="password">
-                      <v-edit-dialog
-                        :return-value.sync="password.item.password"
-                        @save="save"
-                        @cancel="cancel"
-                        @open="open"
-                        @close="close"
-                      >
-                        {{ password.item.password }}
-                        <template v-slot:input>
-                          <v-text-field
-                            v-model="password.item.password"
-                            :rules="[max25chars]"
-                            label="Edit"
-                            single-line
-                            counter
-                          ></v-text-field>
-                        </template>
-                      </v-edit-dialog> 
-                    </template>
-
-                    <template v-slot:item.email="email">
-                      <v-edit-dialog
-                        :return-value.sync="email.item.email"
-                        @save="save"
-                        @cancel="cancel"
-                        @open="open"
-                        @close="close"
-                      >
-                        {{ email.item.email }}
-                        <template v-slot:input>
-                          <v-text-field
-                            v-model="email.item.email"
-                            :rules="[max25chars]"
-                            label="Edit"
-                            single-line
-                            counter
-                          ></v-text-field>
-                        </template>
-                      </v-edit-dialog> 
-                    </template>
-
-
-                    <template v-slot:item.actions="{ item }">
-                      <v-icon
-                        small
-                        @click="deleteItem(item)"
-                      >
-                        mdi-delete
-                      </v-icon>
-                    </template>
-                  </v-data-table>--->
-
                    <v-container>
                       <v-form ref="form">
                         <v-row>
                           <v-col cols="12">
                           <v-text-field
                             :value="this.user.name"
-                            @change="console.log(this.user.name)"
                             label="Nome"
-                            outlined
                             readonly
+                            disabled
                           ></v-text-field>
                           <v-text-field
-                            v-model="this.user.document"
+                            :value="this.user.document"
                             label="Documentos"
-                            outlined
                             readonly
+                            disabled
                           ></v-text-field>
                           <v-text-field
-                            v-model="this.user.login"
+                            :value="this.user.login"
                             label="Usuário"
                             readonly
-                            outlined
+                            disabled
                           ></v-text-field>
                            <v-text-field
                             label="Alterar senha"
@@ -142,10 +85,8 @@
 </template>
 
 <script lang="ts">
-  import axios from 'axios'
   import api from '../services/api'
   
-
   export default {
     name: 'UserUpdate',
     props: {
@@ -158,46 +99,28 @@
         dialog: false,
         widgets: false,
         password: '',
-        user: {
-          document: '',
-          email: '',
-          idUser: '',
-          login: '',
-          name: '',
-          password: '',
-          role: '',
-          snAtivo: '',
-          status: '',
-        },
+        user: '',
+        usuarioID: '',
       }
     },
-
-    methods: {
-        async submitForm(){
-          console.log(this.user);
-          const updatePassword = {
-            'password': this.password,
-          }
-          console.log(updatePassword);
-          
-
-           await axios.patch(`http://localhost:3000/user/${this.user.idUser}`, updatePassword).then((response) => {
-              console.log(response.data);
-              alert("Cadastro feito com sucesso");
-            }, (error) => {
-              console.log(error);
-              alert("Erro no cadastro");
-            });
-
-        },
-       
-    },
-
     beforeMount() {
       api.get(`user/${this.userID}`).then(response => {
         this.user = response.data[0]
+        this.usuarioID = response.data[0].idUser
       })
-    }
+    },
+    methods: {
+        submitForm(){
+          const updatePassword = {
+            'password': this.password,
+          }
+          api.patch(`user/${this.userID}`, updatePassword).then(response => {
+            alert("Atualizacao de dados realizado com sucesso");
+          }).catch(error =>{
+            alert("Erro ao atualizar cadastro");
+          })
+        },
+    },
   }
 
 </script>
