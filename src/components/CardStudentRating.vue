@@ -186,7 +186,9 @@ export default {
           } else {
             alert("Ocorreu um erro ao realizar o cadastro das Notas")
           }
-        })
+        }).catch(error => {
+          console.log(error.response);
+        });
       }
     },
     updateRating: function () {
