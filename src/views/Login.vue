@@ -6,8 +6,11 @@
           <img src='../../public/img/fatecsj.png' alt="FatecLogo" width="200" height="100">
         </div>
         <div>
-          <input class="form_field" placeholder="Usuario, E-mail ou CPF" v-model="login.login"/>
-          <input class="form_field" placeholder="Senha" v-model="login.password"/>
+          <v-text-field style="width:330px" placeholder="Usuario, E-mail ou CPF" v-model="login.login"/>
+          <v-text-field               
+              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" 
+              :type="show1 ? 'text' : 'password'"
+              @click:append="show1 = !show1"  placeholder="Senha" v-model="login.password"/>
         </div>
         <div>
           <button @click="createLogin"> LogIn </button>
@@ -62,7 +65,14 @@
             <v-text-field  v-on:change="onChangeRegister" placeholder="Nome" v-model="cadastro.name" :rules="[v => !!v || 'Nome é obrigatorio']" />
             <v-text-field  v-on:change="onChangeRegister" v-mask="'###.###.###-##'" placeholder="CPF" v-model="cadastro.document" :rules="[v => !!v || 'CPF é obrigatorio']"/>
             <v-text-field  v-on:change="onChangeRegister" placeholder="E-mail" v-model="cadastro.email" :rules="emailRules"/>
-            <v-text-field  v-on:change="onChangeRegister" placeholder="Senha" v-model="cadastro.password" :rules="[v => !!v || 'Senha é obrigatorio']"/>
+            <v-text-field  
+              v-on:change="onChangeRegister" 
+              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" 
+              :type="show1 ? 'text' : 'password'"
+              @click:append="show1 = !show1" 
+              placeholder="Senha" 
+              v-model="cadastro.password" 
+              :rules="[v => !!v || 'Senha é obrigatorio']"/>
           </v-form>
         </div>
         <div>
@@ -95,6 +105,8 @@
        admSelected: false,
        alunoSelected: false,
        professorSelected: false,
+       password: 'Password',
+       show1: false,
        valid: true,
        login: {
          login: '',
