@@ -237,7 +237,9 @@ export default Vue.extend({
         })
       },
       mounted() {
-        this.decodeToken(this.$store.state.token);
+        if(!localStorage.getItem("token")) {
+            this.decodeToken(this.$store.getters.getToken);
+        }
         this.getUserInformation();
     },
     methods: {
