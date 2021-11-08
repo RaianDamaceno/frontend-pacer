@@ -10,7 +10,6 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 
-Vue.directive('mask', VueMaskDirective);
 Vue.config.productionTip = false
 axios.defaults.baseURL = 'http://localhost:3000/'
 
