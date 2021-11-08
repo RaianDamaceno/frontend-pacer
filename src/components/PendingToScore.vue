@@ -178,7 +178,7 @@ export default {
     },
   },
   mounted() {
-    this.idEvaluator = this.$store.state.userId;
+    this.idEvaluator = this.$store.getters.getUserId;
   },
 };
 </script>

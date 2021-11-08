@@ -11,9 +11,11 @@ export default new Vuex.Store({
   mutations: {
     setUserId(state, id: string) {
       state.userId = id;
+      localStorage.setItem('userId', id);
     },
     setToken(state, token: string) {      
       state.token = token;
+      localStorage.setItem('token', token);
     },
   },
   actions: {
@@ -23,6 +25,14 @@ export default new Vuex.Store({
     async setToken({commit}, payload) {
       commit('setToken', payload);
     }
+  },
+  getters: {
+    getUserId(state) {
+      return !state.userId ? localStorage.getItem('userId') : state.userId;
+    },
+    getToken(state) {      
+      return !state.token ? localStorage.getItem('token') : state.token;
+    },
   },
   modules: {
   }
