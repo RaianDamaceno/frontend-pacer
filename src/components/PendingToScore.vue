@@ -3,22 +3,31 @@
     <v-dialog v-model="dialog" scrollable max-width="700px">
       <template v-slot:activator="{ on, attrs }">
         <v-btn color="primary" dark v-bind="attrs" v-on="on">
-          Falta Pontuar
+          Avaliações Pendentes
         </v-btn>
       </template>
 
       <v-card>
         <v-card-title>
-          <span class="text-h5" id="texto-a-direita">Falta Pontuar</span>
-          <v-card-actions>
-            <v-btn color="blue darken-1" text @click="dialog = false">
-              Fechar
-            </v-btn>
-          </v-card-actions>
+          <span class="text-h5" id="texto-a-direita">Avaliações Pendentes</span>
         </v-card-title>
+
+        <v-btn v-if="this.sprints.length == 0" @click="this.fetchSprints">
+          Buscar Sprints
+        </v-btn>
 
         <v-card-text>
           <v-container>
+            <v-row v-if="this.sprints.length > 0">
+              <div v-for="(item,i) in this.sprints" :key="i">
+                <v-col>
+                  <v-btn @click="selectSprint(item)">
+                    {{maskData(item.initialDate)}} ~ {{maskData(item.finalDate)}}
+                  </v-btn>
+                </v-col>
+              </div>
+            </v-row>
+            
             <table
               v-if="this.erro"
               border="1px"
@@ -34,7 +43,7 @@
               </tbody>
             </table>
             <table
-              v-if="this.msg"
+              v-if="this.sprintId"
               border="1px"
               width="500"
               style="color:white; background-color:green"
@@ -49,7 +58,6 @@
             </table>
             <table v-if="this.listaResumida.length > 0">
               <thead>
-                <!-- <th width="050">CÃ³d</th> -->
                 <th width="200px">Projeto/Sprint</th>
                 <th width="30px"></th>
                 <th width="390px">Avaliado</th>
@@ -88,51 +96,58 @@ export default {
   data: () => ({
     dialog: false,
     listaResumida: [],
-    idEvaluator: 12, //TODO
+    idEvaluator: '',
+    sprintId: null,
     erro: null,
     msg: null,
+    sprints: [],
   }),
   methods: {
+    async selectSprint(sprint) {
+      this.sprintId = sprint.idSprint;
+      this.getPendencias();
+    },
+    async fetchSprints() {
+      await axios.get(`sprint`)
+        .then( response => {
+          this.sprints = response.data;
+        });
+      // this.sprintId = "782274b5-d979-45ec-a8e5-8db9b9ddacbe";
+    },
     async getPendencias() {
-      this.mostraErro();
-      this.mostraMsg();
-      await axios.get("notes-store/pending/" + this.idEvaluator).then(
+      await axios.get(`notes-store/pending/${this.idEvaluator}/${this.sprintId}`).then(
         (response) => {
+          console.log(`Response pendencias ${response}`);
           this.pendencias = response.data;
-          if (this.pendencias.length > 0) {
-            
-            this.listaResumida = [];
-            
+
+          if (this.pendencias && this.pendencias.length > 0) {                      
             let aluno;
-
             this.pendencias.forEach(element => {
-
-              aluno = {};
-              aluno.name = element.evaluated.name;
-              aluno.initialDate = element.sprint.initialDate;
-              aluno.finalDate = element.sprint.finalDate;
-              aluno.completo = element;
-
+              aluno = {
+                name: element.evaluated.name,
+                initialDate: element.sprint.initialDate,
+                finalDate: element.sprint.finalDate,
+                completo: element
+              };
               if(this.listaResumida.findIndex( array => array.name === aluno.name ) == -1){
                 this.listaResumida.push(aluno);
               }
-
-            });
-            
+            });            
           } else {
             this.mostraMsg("Você não tem pendências neste momento!");
           }
-          //console.log(response.data);
-        },
-        (error) => {
-          //console.log(error);
-          this.mostraErro("Erro!",10);
         }
-      );
+      ).catch(error => {
+        if (error.response.data.statusCode === 404) {
+          this.mostraMsg("Você não possui pendências neste momento.");
+        } else {
+          this.mostraErro(error.response.data.message,10);
+        }
+      });
+
       if (this.pendencias.length == 0) {
         this.mostraMsg("Você não possui pendências neste momento.");
       }
-      console.log(this.pendencias);
     },
     mostraErro(texto, segundos) {
       this.erro = texto;
@@ -146,6 +161,7 @@ export default {
     },
     mostraMsg(texto, segundos) {
       this.msg = texto;
+      console.log(texto);
       if (texto) {
         if (segundos) {
           setTimeout(() => {
@@ -159,11 +175,10 @@ export default {
     },
     btnPontuar(aluno){
       this.mostraMsg("Atalho para pontuação não resolvido para esta Sprint! Nome do Aluno: " + aluno.evaluated.name,3);
-      //alert("Nome do Aluno " + aluno.evaluated.name);
     },
   },
-  beforeMount() {
-    this.getPendencias();
+  mounted() {
+    this.idEvaluator = this.$store.getters.getUserId;
   },
 };
 </script>

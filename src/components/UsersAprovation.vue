@@ -64,7 +64,7 @@
               <v-subheader>Lista de Usuários para aprovação</v-subheader>
               <v-data-table :headers="headers" :items="teste" :items-per-page="10" class="elevation-1">
                
-               <template v-slot:item.status="{ item }">
+               <template v-slot:[`item.status`]="{ item }">
                 <v-switch
                   v-model="item.status"
                 ></v-switch>
@@ -117,14 +117,15 @@
             updateArray.push(updateUser);
             console.log(updateUser);  
           })
-          await axios.post('http://localhost:3000/user/approve', updateArray).then((response) => {
-                console.log(response.data);
-                alert("Cadastro feito com sucesso");
-              }, (error) => {
-                console.log(error);
-                alert("Erro no cadastro");
-              });
-              this.$refs.form.reset();
+          await axios.post('http://localhost:3000/user/approve', updateArray)
+            .then((response) => {
+              console.log(response.data);
+              alert("Cadastro feito com sucesso");
+            }, (error) => {
+              console.log(error);
+              alert("Erro no cadastro");
+            });
+            this.$refs.form.reset();
           }
     },
 
@@ -138,7 +139,6 @@
               this.teste[i].status = false
             }
         }
-        console.log(this.teste)
       })
     }
   }
