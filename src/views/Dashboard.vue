@@ -1,17 +1,98 @@
 <template>
     <div class="dashboard">
-        <v-btn
-            color="red darken-5"
-            dark
-            small
-            fab
-            v-if="!Role"
-            v-on:click="Role = true"
-        >
-            <v-icon dark left>
-                mdi-arrow-left
-            </v-icon>
-        </v-btn>
+            <v-app-bar
+      app
+      color="primary"
+      dark
+    > 
+
+        <div class="d-flex align-center">
+          <v-toolbar-title>Pacer</v-toolbar-title>
+        </div>
+        <v-spacer></v-spacer>
+        <v-tab >
+        <v-menu offset-y >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                color="primary"
+                dark
+                v-bind="attrs"
+                v-on="on"
+                width="100px"
+              >
+                Sprint
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item>
+                <v-list-item-title> <sprintRegistration /></v-list-item-title>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-title> <sprintTable /></v-list-item-title>
+              </v-list-item>
+            </v-list>
+        </v-menu>
+      </v-tab>
+
+      <v-tab >
+        <v-menu offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                color="primary"
+                dark
+                v-bind="attrs"
+                v-on="on"
+                width="100px"
+              >
+                Criterios
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item>
+                <v-list-item-title><AdicionaCriteriosAva /></v-list-item-title>
+              </v-list-item>
+              <v-list-item>
+              <v-list-item-title><CriteriaRegistration /></v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+      </v-tab>
+
+      <v-tab >
+        <v-menu offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              color="primary"
+              dark
+              v-bind="attrs"
+              v-on="on"
+              width="100px"
+            >
+              Projeto
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item>
+              <v-list-item-title><CreateProject /></v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-title><projectTable /></v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-tab>
+
+      <v-tab >
+            <PendingToScore />
+        </v-tab>
+
+        <v-tab>
+            <UsersAprovation />
+        </v-tab>
+        <v-tab>
+            <user-update :userID="this.userLogged" />
+        </v-tab>
+    </v-app-bar>
         <div class="dashboard-group">
             <div class="dashboard-group-person" v-if="Projeto">
                 Projeto
@@ -66,8 +147,7 @@
                                     <span> {{ projectGrupo.teamName }} </span>
                                 </div>
                                 <div class="dashboard-group-person-button">
-                                    <card-float-button
-                                        :team="projectGrupo.idTeam"
+                                    <card-float-button :team="projectGrupo.idTeam"
                                     />
                                 </div>
                             </div>
@@ -154,16 +234,20 @@
             />
         </div>
 
-        <div class="dashboard-info">
+        <div class="dashboard-info" >
             <div v-for="sprint in sprints" :key="sprint.idSprint">
                 <button
                     :value="sprint.idSprint"
                     v-on:click="checkSprintAtiva(sprint)"
                 >
+                    
                     <p>Sprint</p>
                     <p>Data Inicial: {{ sprint.initialDate }}</p>
                     <p>Data Final: {{ sprint.finalDate }}</p>
+
+                    
                 </button>
+                {{ sprintSelected.idSprint}}
             </div>
         </div>
     </div>
@@ -177,6 +261,15 @@
   import CardToastSprint from '../components/CardToastSprint.vue'
   import GraphSpider from "../components/GraphSpider.vue";
   import { UserTeam } from '../model/user-team'
+  import CriteriaRegistration from '../components/criteria-registration.vue'
+  import AdicionaCriteriosAva from '../components/AdicionaCriteriosAva.vue'
+  import PendingToScore from '../components/PendingToScore.vue'
+  import UsersAprovation      from '../components/UsersAprovation.vue'
+  import SprintRegistration from '../components/SprintRegistration.vue'
+  import CreateProject from '../components/CreateProject.vue'
+  import projectTable from '../components/projectTable.vue'
+  import sprintTable from '../components/SprintTable.vue'
+  import UserUpdate from '../components/UserUpdate.vue'
   import api from '../services/api'
 
 export default Vue.extend({
@@ -186,6 +279,16 @@ export default Vue.extend({
         CardCreateEquipe,
         CardToastSprint,
         GraphSpider,
+        CardFloatButton,
+        AdicionaCriteriosAva,
+        CriteriaRegistration,
+        PendingToScore,
+        UsersAprovation,
+        SprintRegistration,
+        CreateProject,
+        projectTable,
+        sprintTable,
+        UserUpdate
     },
      data: () => ({
        cards: false,
@@ -230,7 +333,10 @@ export default Vue.extend({
           this.teams = response.data
         })
         api.get('sprint').then(response => {
-          this.sprints = response.data
+            this.sprints = response.data
+            for(var i = 0; i < this.sprints.length; i++) {
+                this.checkSprintAtiva(this.sprints[i])
+            }
         })
         api.get('notes-store').then(response => {
           this.notasFeitas = response.data
@@ -306,8 +412,8 @@ export default Vue.extend({
             var c = teste.finalDate.split("/");
 
             if (d1 > d2 && d1 < c) {
-                this.activeSprint = true;
                 this.sprintSelected = teste.idSprint;
+                this.activeSprint = true;
             } else {
                 this.activeSprint = false;
             }
@@ -350,6 +456,7 @@ span {
     justify-content: space-around;
     height: 100%;
     width: 100%;
+    background-image: url('../../public/img/bg_login.jpg');
 }
 
 .ma-4 {
@@ -434,6 +541,9 @@ button {
     border-radius: 100px;
 }
 
+.yellow {
+   background-color: yellow;
+}
 @media (min-width: 320px) and (max-width: 640px) {
     .dashboard {
         min-height: 100%;

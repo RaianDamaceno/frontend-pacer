@@ -116,7 +116,7 @@
       sprint_values: null,
       strint_started: false,
       dialog: false,
-      is_SM: ''
+      is_SM: false
     }),
     watch: {
       top (val) {
@@ -180,17 +180,17 @@
               if(this.user_team[i].idUser == this.id_user){
                 this.user_exist = true;
               }
-              
-              if(!this.user_team[i].isScrumMaster){
+              if(this.user_team[i].isScrumMaster == false){
                 this.scrumMaster = false;
+                console.log(this.scrumMaster)
               }
             }
           }
-        
-        if(this.scrumMaster == true && this.is_SM == true){
-          alert("Esta equipe ja possui Scrum Master");
-        }else{
-          if(!this.strint_started){
+
+          if(this.scrumMaster == true && this.is_SM == true){
+            alert("Esta equipe ja possui Scrum Master");
+          }else{
+           if(!this.strint_started){
             if(!this.user_exist){
                 UserTeamPayload = {
                 "idUser": this.id_user,
@@ -203,9 +203,9 @@
             }else{
               alert("Você já faz parte desta equipe!");
             }
-          }else{
-            alert("Você não pode se juntar a este time, sprint ja iniciada")
-          }
+            }else{
+              alert("Você não pode se juntar a este time, sprint ja iniciada")
+           }
         }
       }
     }
