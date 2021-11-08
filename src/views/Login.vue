@@ -26,7 +26,7 @@
               size="100"
             >
             <img
-              @click="cadastro.role='ROLE ADM', selectedRole('ADMIN')"
+              @click="cadastro.role='ADM', selectedRole('ADM')"
               src='../../public/img/administracao.png'
               alt="John"
             >
@@ -39,7 +39,7 @@
             <img
               src='../../public/img/professores.png'
               alt="John"
-              @click="cadastro.role='ROLE PROFESSOR', selectedRole('PROF')"
+              @click="cadastro.role='P', selectedRole('P')"
             >
             </v-avatar>
             </div>
@@ -49,7 +49,7 @@
             >
             <img
               src='../../public/img/aluna.png'
-              @click="cadastro.role='ROLE ALUNO', selectedRole('ALUNO')"
+              @click="cadastro.role='USER', selectedRole('USER')"
               alt="John"
             >
             </v-avatar>
@@ -144,6 +144,7 @@
           } else {
             api.post('/user', this.cadastro).then(response =>{
                 this.telaCadastro = false;
+                alert("Usuário cadastrado com sucesso!")
                 
             }).catch(function () { 
               alert("Erro ao realizar cadastro")
@@ -163,11 +164,11 @@
           this.$refs.form.validate()
         },
         selectedRole(role) {
-          if(role == 'ADMIN') {
+          if(role == 'ADM') {
             this.admSelected = true;
             this.alunoSelected = false;
             this.professorSelected = false;
-          } else if(role == 'ALUNO') {
+          } else if(role == 'USER') {
             this.admSelected = false;
             this.alunoSelected = true;
             this.professorSelected = false;
