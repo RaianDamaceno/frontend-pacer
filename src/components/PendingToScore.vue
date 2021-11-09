@@ -112,7 +112,6 @@ export default {
         .then( response => {
           this.sprints = response.data;
         });
-      // this.sprintId = "782274b5-d979-45ec-a8e5-8db9b9ddacbe";
     },
     async getPendencias() {
       await axios.get(`notes-store/pending/${this.idEvaluator}/${this.sprintId}`).then(
