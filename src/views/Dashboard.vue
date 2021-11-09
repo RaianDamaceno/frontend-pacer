@@ -7,7 +7,7 @@
     > 
 
         <div class="d-flex align-center">
-          <v-toolbar-title>Pacer</v-toolbar-title>
+          <img src='../../public/img/logo_v2.png' alt="PacerLogo" width="150" height="50">
         </div>
         <v-spacer></v-spacer>
         <v-tab >
@@ -343,9 +343,7 @@ export default Vue.extend({
         })
       },
       mounted() {
-        if(!localStorage.getItem("token")) {
-            this.decodeToken(this.$store.getters.getToken);
-        }
+        this.decodeToken(this.$store.getters.getToken);
         this.getUserInformation();
     },
     methods: {

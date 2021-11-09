@@ -2,7 +2,8 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" scrollable max-width="700px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn color="primary" dark v-bind="attrs" v-on="on">
+        <v-btn 
+          class="black--text" color="white" dark v-bind="attrs" v-on="on">
           Cadastro de Projeto
         </v-btn>
       </template>

@@ -19,7 +19,7 @@
 
         <v-card>
             <v-card-title>
-            <span class="text-h5">Projetos Cadastrados</span>
+            <span class="text-h5">Atualização de Usuário</span>
             </v-card-title>
             <v-card-text>
                 <v-list
@@ -84,14 +84,10 @@
     
 </template>
 
-<script lang="ts">
+<script>
   import api from '../services/api'
   
   export default {
-    name: 'UserUpdate',
-    props: {
-     userID: String,
-    },
   data () {
       return {
         dialogEdit:false,
@@ -99,20 +95,24 @@
         widgets: false,
         password: '',
         user: '',
+        userID: ''
       }
     },
     mounted() {
-      api.get(`user/${this.userID}`).then(response => {       
+      console.log(this.password)
+      let userId = this.$store.getters.getUserId
+      api.get(`user/${userId}`).then(response => {       
         this.user = response.data
         console.log(this.user)
       })
     },
     methods: {
-        submitForm(){
+        submitForm: function(){
+          let userId = this.$store.getters.getUserId
           const updatePassword = {
             'password': this.password,
           }
-          api.patch(`user/${this.userID}}`, updatePassword).then(response => {
+          api.patch(`user/${userId}`, updatePassword).then(response => {
             alert("Atualizacao de dados realizado com sucesso");
           }).catch(error =>{
             alert("Erro ao atualizar cadastro");
