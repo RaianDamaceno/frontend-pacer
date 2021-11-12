@@ -39,7 +39,7 @@
             <img
               src='../../public/img/professores.png'
               alt="John"
-              @click="cadastro.role='P', selectedRole('P')"
+              @click="cadastro.role='TCH', selectedRole('TCH')"
             >
             </v-avatar>
             </div>
@@ -49,7 +49,7 @@
             >
             <img
               src='../../public/img/aluna.png'
-              @click="cadastro.role='USER', selectedRole('USER')"
+              @click="cadastro.role='USR', selectedRole('USR')"
               alt="John"
             >
             </v-avatar>
@@ -168,7 +168,7 @@
             this.admSelected = true;
             this.alunoSelected = false;
             this.professorSelected = false;
-          } else if(role == 'USER') {
+          } else if(role == 'USR') {
             this.admSelected = false;
             this.alunoSelected = true;
             this.professorSelected = false;

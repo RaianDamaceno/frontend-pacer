@@ -4,7 +4,7 @@
       app
       color="primary"
       dark
-    > 
+    >
 
         <div class="d-flex align-center">
           <img src='../../public/img/logo_v2.png' alt="PacerLogo" width="150" height="50">
@@ -227,7 +227,7 @@
                 </div>
             </div>
             <graph-spider
-                v-if="sprintSelected"
+                v-if="notasFeitas.length !== 0"
                 :notas="notasFeitas"
                 :sprintSelected="sprintSelected"
                 :user="userLogged"
@@ -240,12 +240,12 @@
                     :value="sprint.idSprint"
                     v-on:click="checkSprintAtiva(sprint)"
                 >
-                    
+
                     <p>Sprint</p>
                     <p>Data Inicial: {{ sprint.initialDate }}</p>
                     <p>Data Final: {{ sprint.finalDate }}</p>
 
-                    
+
                 </button>
                 {{ sprintSelected.idSprint}}
             </div>
@@ -319,9 +319,12 @@ export default Vue.extend({
      }),
      beforeMount() {
         api.get('user').then(response => {
-            this.allEstudantes = response.data.filter(function(el) { 
-              return el.role == "ROLE ALUNO"; 
-            }); 
+            console.log("teste", response.data )
+            this.allEstudantes = response.data.filter(function(el) {
+              return el.role == "USR";
+            });
+            console.log("After", this.allEstudantes )
+
         })
         api.get('criteria').then(response => {
           this.criterios = response.data
@@ -416,7 +419,7 @@ export default Vue.extend({
                 this.activeSprint = false;
             }
         },
-        decodeToken: function (token: string) {          
+        decodeToken: function (token: string) {
             var base64Url = token.split('.')[1];
             var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
             var jsonPayload = decodeURIComponent(
@@ -424,7 +427,7 @@ export default Vue.extend({
                     .split('')
                     .map(function(c) {
                         return (
-                            '%' + 
+                            '%' +
                             ('00' + c.charCodeAt(0).toString(16)).slice(-2)
                         );
                 })
@@ -433,11 +436,11 @@ export default Vue.extend({
 
             let json = JSON.parse(jsonPayload);
             this.userLogged = json.sub
-            this.$store.dispatch('setUserId', this.userLogged);          
+            this.$store.dispatch('setUserId', this.userLogged);
         },
         getUserInformation: function() {
             api.get(`/user/${this.userLogged}`).then((response) => {
-                if (response.data.role === "ROLE ALUNO") this.isAluno = true;
+                if (response.data.role === "USR") this.isAluno = true;
             });
         },
     },
