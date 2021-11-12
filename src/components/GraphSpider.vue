@@ -23,7 +23,6 @@ export default Vue.extend({
     },
     created() {
         setTimeout(() => {
-            console.log(this.notas);
             this.notas
                 .filter(
                     (data) =>
