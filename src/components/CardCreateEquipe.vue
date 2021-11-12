@@ -126,6 +126,7 @@
           }
         },
         createTeam: function() {
+          console.log("OI", this.estudantes)
             let payload = { 
                 idProject: this.selectProjeto.idProject, 
                 teamName: this.teamName, 

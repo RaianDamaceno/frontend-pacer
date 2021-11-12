@@ -319,9 +319,12 @@ export default Vue.extend({
      }),
      beforeMount() {
         api.get('user').then(response => {
+            console.log("teste", response.data )
             this.allEstudantes = response.data.filter(function(el) {
-              return el.role == "USER";
+              return el.role == "USR";
             });
+            console.log("After", this.allEstudantes )
+
         })
         api.get('criteria').then(response => {
           this.criterios = response.data
@@ -437,7 +440,7 @@ export default Vue.extend({
         },
         getUserInformation: function() {
             api.get(`/user/${this.userLogged}`).then((response) => {
-                if (response.data.role === "ROLE ALUNO") this.isAluno = true;
+                if (response.data.role === "USR") this.isAluno = true;
             });
         },
     },
