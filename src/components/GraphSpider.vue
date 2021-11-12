@@ -21,21 +21,25 @@ export default Vue.extend({
         sprintSelected: String,
         user: String,
     },
-    beforeMount() {
-        this.notas
-            .filter(
-                (data) =>
-                    data.evaluated.idUser === this.user && data.idSprint === this.sprintSelected
-            )
-            .map((nt) => {
-                this.criterios.push(nt.criterio.descCriteria);
-                this.total.push(nt.note === null ? 0 : nt.note);
-                if (this.sprint.length === 0) {
-                    this.sprint.push(
-                        nt.sprint.initialDate + " | " + nt.sprint.finalDate
-                    );
-                }
-            });
+    created() {
+        setTimeout(() => {
+            console.log(this.notas);
+            this.notas
+                .filter(
+                    (data) =>
+                        data.evaluated.idUser === this.user &&
+                        data.idSprint === this.sprintSelected
+                )
+                .map((nt) => {
+                    this.criterios.push(nt.criterio.descCriteria);
+                    this.total.push(nt.note === null ? 0 : nt.note);
+                    if (this.sprint.length === 0) {
+                        this.sprint.push(
+                            nt.sprint.initialDate + " | " + nt.sprint.finalDate
+                        );
+                    }
+                });
+        }, 1000);
     },
     data() {
         return {
@@ -62,8 +66,8 @@ export default Vue.extend({
                 yAxis: {
                     gridLineInterpolation: "polygon",
                     min: 0,
-                    max: 10,
-                    tickInterval: 2,
+                    max: 100,
+                    tickInterval: 10,
                 },
 
                 legend: {
