@@ -261,7 +261,7 @@
   import CardToastSprint from '../components/CardToastSprint.vue'
   import GraphSpider from "../components/GraphSpider.vue";
   import { UserTeam } from '../model/user-team'
-  import CriteriaRegistration from '../components/criteria-registration.vue'
+  import CriteriaRegistration from '../components/CriteriaRegistration.vue'
   import AdicionaCriteriosAva from '../components/AdicionaCriteriosAva.vue'
   import PendingToScore from '../components/PendingToScore.vue'
   import UsersAprovation      from '../components/UsersAprovation.vue'
