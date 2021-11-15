@@ -2,7 +2,6 @@
   <v-app>
     <v-main>
       <v-snackbar v-model="snackbar.show" :timeout="snackbar.timeout" 
-      bottom
       :color="snackbar.color">
         {{ snackbar.text }}
         <v-btn flat color="white" text @click="snackbar.show = false">fechar</v-btn>
