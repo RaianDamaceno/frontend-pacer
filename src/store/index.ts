@@ -32,7 +32,7 @@ export default new Vuex.Store({
     messageSuccess({ commit }, msg) {
       commit("setSnackbar", {
         text: msg,
-        timeout: "6000",
+        timeout: "3000",
         color: 'success',
         show: true,
       });
