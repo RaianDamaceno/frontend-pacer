@@ -5,7 +5,7 @@
     class="py-16"
   >
     <h2 class="text-h4 text-md-h3 text-center font-weight-black mb-8 my-8">
-      Customer Reviews
+      Equipe de Desenvolvimento
     </h2>
     <v-carousel
       cycle
@@ -36,35 +36,14 @@
             </h3>
             <div class="mb-10 font-weight-light grey--text text-uppercase">
               {{ item.post }}
+              <br>
+              <v-btn icon :href="`${item.github}`">
+                <v-icon color="blue">mdi-github</v-icon>
+              </v-btn>
+              <v-btn icon :href="`${item.linkedin}`">
+                <v-icon color="blue">mdi-linkedin</v-icon>
+              </v-btn>
             </div>
-            <v-row>
-              <v-col cols="1"
-                ><v-icon x-large class="grey--text text--lighten-1"
-                  >mdi-format-quote-open</v-icon
-                ></v-col
-              >
-              <v-col cols="10">
-                <div
-                  :class="
-                    $vuetify.theme.dark
-                      ? 'black'
-                      : 'white grey--text text--darken-2'
-                  "
-                  class="mb-5 font-italic"
-                >
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Quisquam aspernatur, sint recusandae cum temporibus quos saepe
-                  repellendus consectetur et reprehenderit. Ratione ipsam
-                  consequuntur quo eligendi mollitia veniam facere possimus
-                  inventore.
-                </div>
-              </v-col>
-              <v-col cols="1"
-                ><v-icon x-large class="grey--text text--lighten-1"
-                  >mdi-format-quote-close</v-icon
-                ></v-col
-              >
-            </v-row>
           </div>
         </v-container>
       </v-carousel-item>
@@ -78,30 +57,61 @@ export default {
     return {
       testimonials: [
         {
-          avtar: 'person-6.jpg',
-          name: 'Mario Speedwagon',
-          post: 'Creative Editor of ABC LTD',
+          avtar: 'guilherme.jpg',
+          name: 'Guilherme Anderson',
+          post: 'SM - Desenvolvedor Full Stack',
+          github: 'https://github.com/guianderson',
+          linkedin: 'https://www.linkedin.com/in/raian-damaceno/'
         },
         {
-          avtar: 'person-8.jpg',
-          name: 'Petey Cruiser',
-          post: 'CEO of Json LLC',
+          avtar: 'marcos.jpg',
+          name: 'Marcos Vinicio',
+          post: 'PO - Desenvolvedor Back end',
+          github: 'https://github.com/MarcosVP-Fatec',
+          linkedin: 'https://www.linkedin.com/in/marcos-vinicio-pereira-395415148/'
         },
         {
-          avtar: 'person-7.jpg',
-          name: 'Anna Sthesia',
-          post: 'Director of Cleaner LTD',
+          avtar: 'jonathas.jpg',
+          name: 'Jonathas Henrique',
+          post: 'Desenvolvedor Full Stack',
+          github: 'https://github.com/JonyHM',
+          linkedin: 'https://www.linkedin.com/in/jonathas-moraes/'
         },
         {
-          avtar: 'person-10.jpg',
-          name: 'Paul Molive',
-          post: 'Manager of Torson LTD',
+          avtar: 'raian.jpg',
+          name: 'Raian Damaceno',
+          post: 'Desenvolvedor Front end',
+          github: 'https://github.com/RaianDamaceno',
+          linkedin: 'https://www.linkedin.com/in/raian-damaceno/'
         },
         {
-          avtar: 'person-9.jpg',
-          name: 'Gail Forcewind',
-          post: 'Human Resource Manager of Humibed LLC',
+          avtar: 'joshua.jpg',
+          name: 'Gustavo Joshua',
+          post: 'Desenvolvedor Back end',
+          github: 'https://github.com/JoshuaSene',
+          linkedin: 'https://www.linkedin.com/in/gustavo-joshua-sene-539927b5/'
         },
+        {
+          avtar: 'paulo_cesar.jpg',
+          name: 'Paulo Cesar',
+          post: 'Desenvolvedor Front end',
+          github: 'https://github.com/paullo97',
+          linkedin: 'https://www.linkedin.com/in/paulo-cesar-537396139/'
+        },
+        {
+          avtar: 'lucas_magno.jpg',
+          name: 'Lucas Magno',
+          post: 'Desenvolvedor Front end',
+          github: 'https://github.com/lucasmag26',
+          linkedin: 'https://www.linkedin.com/in/lucas-magno-6a5765137/'
+        },
+        {
+          avtar: 'joao.jpg',
+          name: 'João Pedro Filipini',
+          post: 'Desenvolvedor Back end',
+          github: 'https://github.com/jpfilipini',
+          linkedin: 'https://www.linkedin.com/in/joao-pedro-filipini/'
+        }, 
       ],
     }
   },

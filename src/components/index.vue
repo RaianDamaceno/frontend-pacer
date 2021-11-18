@@ -18,8 +18,8 @@ import SectionsHero from './sections/Hero'
 import SectionsIntro from './sections/Intro'
 import SectionsBrands from './sections/Brands'
 import SectionsFeatures from './sections/Features'
-import SectionsCalloutBlock from './sections/CalloutBlock'
 import SectionsTestimonials from './sections/Testimonials'
+import SectionsCalloutBlock from './sections/CalloutBlock'
 
 export default {
     components: {
@@ -31,10 +31,6 @@ export default {
         SectionsFeatures,
         SectionsBrands,
         SectionsTestimonials
-    },
-    data() {
-        return {
-        }        
-    },
+    }
 }
 </script>
