@@ -31,7 +31,9 @@
         </v-col>
       </v-row>
       <v-row no-gutters>
-        <v-btn x-large rounded color="white primary--text mx-auto mt-10 px-16">
+        <v-btn
+         href="/login"
+         x-large rounded color="white primary--text mx-auto mt-10 px-16">
           <v-icon dark left> mdi-check-bold </v-icon>Acessar plataforma agora!
         </v-btn>
       </v-row>
