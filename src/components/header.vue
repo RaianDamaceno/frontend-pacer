@@ -120,11 +120,6 @@ export default {
           title: 'Acessar plataforma',
           to: '/login',
         },
-        {
-          icon: 'mdi-contacts',
-          title: 'Contato',
-          to: '#contact',
-        },
       ],
     }
   },

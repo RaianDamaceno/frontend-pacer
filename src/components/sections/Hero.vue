@@ -37,27 +37,27 @@ export default {
       carouselsData: [
         {
           src: 'img/static/avaliacao2.png',
-          heading: ' LOREM IPSUM DOLOR SIT AMET CONSEETU',
+          heading: ' Ambiente colaborativo ',
           subHeading:
-            'Litora a interdum primis. Lectus facilisi sit cum arcu aliquam velit imperdiet sapien suspendisse at vel facilisis. Facilisis metus, curae; nibh mi orci et. Fringilla sociis magna rutrum bibendum arcu.',
+            '',
         },
         {
           src: 'img/static/Empresas-Vetor2.jpg',
-          heading: ' Build your website with this Theme ',
+          heading: ' Melhoria no desempenho ',
           subHeading:
-            'Tellus cum turpis natoque id justo interdum tincidunt faucibus aptent congue pellentesque. Proin luctus orci netus! Scelerisque parturient cursus donec parturient et, luctus aptent habitant aliquet felis. Sapien placerat ultricies.',
+            '',
         },
         {
           src: 'img/static/avaliacao.jpg',
-          heading: ' PROMOTE YOUR BUSINESS WITH US ',
+          heading: ' Avaliação de desempenho ',
           subHeading:
-            'Infographic hypotheses influencer user experience Long madel ture gen-z paradigm shift client partner network product seilans solve management influencer analytics leverage virality. incubator seed round massmarket. buyer agile development growth hacking business-to-consumer ecosystem ',
+            '',
         },
         {
           src: 'img/static/11-1-1024x600.jpg',
-          heading: ' URNA TINCIDUNT MATTIS TORTOR ',
+          heading: ' Foco em resultado ',
           subHeading:
-            'Dapibus cras, ligula suspendisse potenti himenaeos mus volutpat pulvinar est facilisi. Vehicula malesuada parturient euismod litora mollis penatibus. Penatibus cum nullam facilisi enim nisi ac suspendisse. Ullamcorper ad amet netus.',
+            '',
         },
       ],
     }

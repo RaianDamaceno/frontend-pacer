@@ -3,13 +3,8 @@
     <v-container>
       <v-row>
         <v-col class="text-center">
-          <h2 class="text-h4 text-md-h3 text-center font-weight-black">
-            Build your website with this Theme
-          </h2>
-          <div
-            class="text-h5 text-md-h4 text-center font-weight-black py-3 mb-10"
-          >
-            Purchase now. Only $49!
+          <div class="text-h5 text-md-h4 text-center font-weight-black py-3 mb-10">
+            Vantagens na utilização do Pacer
           </div>
         </v-col>
       </v-row>
@@ -37,7 +32,7 @@
       </v-row>
       <v-row no-gutters>
         <v-btn x-large rounded color="white primary--text mx-auto mt-10 px-16">
-          <v-icon dark left> mdi-check-bold </v-icon>Buy It Now
+          <v-icon dark left> mdi-check-bold </v-icon>Acessar plataforma agora!
         </v-btn>
       </v-row>
     </v-container>
@@ -50,24 +45,21 @@ export default {
     return {
       cards: [
         {
-          title: 'Material Design',
-          subtitle: 'Best Productivity',
+          title: 'Identificar habilidades que precisam ser desenvolvidas',
           text:
-            'Similique sunt in culpa qui officia deserunt mollitia animi, id est laborut dolorum fuga.harum quidem rerum facilis estexpedita distinctio.',
+            'Possíbilita de forma muito eficaz enxergar as possíveis habilidades dos colaboradores que precisam ser desenvolvidas para melhorarem sua performance em suas atividades. Com isso, ela pode ser aliada a uma gestão de conhecimento da organização para esse desenvolvimento de competências e habilidades.',
           callout: '01',
         },
         {
-          title: 'Affordable Prices',
-          subtitle: 'Special Offers',
+          title: 'Padronização das avaliações',
           text:
-            'Similique sunt in culpa qui officia deserunt mollitia animi, id est laborut dolorum fuga.harum quidem rerum facilis estexpedita distinctio.',
+            'A objetividade do processo possibilita uma maior percepção do cumprimento dos objetivos traçados e se as metas colocadas foram viáveis.',
           callout: '02',
         },
         {
-          title: 'Fast Loading',
-          subtitle: 'Income Flow',
+          title: 'Dar mais foco aos resultados',
           text:
-            'Similique sunt in culpa qui officia deserunt mollitia animi, id est laborut dolorum fuga.harum quidem rerum facilis estexpedita distinctio.',
+            'Os colaboradores têm mais foco nos resultados que lhe são expostos de forma clara e objetiva. ',
           callout: '03',
         },
       ],
