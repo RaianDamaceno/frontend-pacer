@@ -29,7 +29,7 @@
                 subheader
                 >
                   <v-subheader>Lista de Sprints Cadastradas</v-subheader>
-                  <v-data-table editable="true" :headers="headers" :items="teste" :items-per-page="10" class="elevation-1">
+                  <v-data-table editable="true" :headers="headers" :items="sprint" :items-per-page="10" class="elevation-1">
                     
                     
 
@@ -119,7 +119,7 @@
         dialogEdit:false,
         dialog: false,
         widgets: false,
-        teste: null,
+        sprint: null,
         initialDateNew: '',
         finalDateNew: '',
         projectName: null,
@@ -138,7 +138,7 @@
     methods: {
         async submitForm(){
           var errorObj = null;
-          this.teste.forEach(async item => {
+          this.sprint.forEach(async item => {
             this.initialDateNew = item.initialDate.replaceAll("-","/");
             this.finalDateNew = item.finalDate.replaceAll("-","/");
             const updateSprint = { 
@@ -146,9 +146,7 @@
               'initialDate':  this.initialDateNew.split("/").reverse().join("/"),
               'finalDate':     this.finalDateNew.split("/").reverse().join("/"),
             }
-            console.log(updateSprint);
-            console.log(item.idSprint);
-            await axios.put(`http://localhost:3000/sprint/${item.idSprint}`, updateSprint).then((response) => {
+              api.put(`sprint/${item.idSprint}`, updateSprint).then((response) => {
                 console.log(response);
               }, (error) => {
                 console.log(error);
@@ -166,7 +164,7 @@
               'id': item.idSprint
             }
             console.log(deleteSprint);
-          await axios.delete(`http://localhost:3000/sprint/${item.idSprint}`, deleteSprint).then((response) => {
+              api.delete(`sprint/${item.idSprint}`, deleteSprint).then((response) => {
                 alert("Sprint deletada com sucesso");
               }, (error) => {
                 console.log(error);
@@ -178,13 +176,12 @@
     },
     beforeMount() {
       api.get('sprint').then(response => {
-        this.teste = response.data
-        for(let i = 0; i< this.teste.length; i++){
-            api.get(`project/${this.teste[i].idProject}`).then(response => {
-                this.teste[i].description = response.data.description
+        this.sprint = response.data
+        for(let i = 0; i< this.sprint.length; i++){
+            api.get(`project/${this.sprint[i].idProject}`).then(response => {
+                this.sprint[i].description = response.data.description
             })
         }
-        console.log(this.teste);
       })
     }
   }

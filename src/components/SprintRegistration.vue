@@ -49,12 +49,12 @@
                     cols="12"
                     sm="6"
                     >
-                    <v-text-field
-                        v-model="dateRangeText"
-                        label="Date range"
-                        prepend-icon="mdi-calendar"
-                        readonly
-                    ></v-text-field>
+                      <v-text-field
+                          v-model="dateRangeText"
+                          label="Date range"
+                          prepend-icon="mdi-calendar"
+                          readonly
+                      ></v-text-field>
                     </v-col>
                 </v-row>
             </v-form>
@@ -85,13 +85,17 @@
 
 <script>
 
+var today = new Date();
+
+var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
   import axios from 'axios'
   import api from '../services/api'
 
   export default {
     data: () => ({
       dialog: false,
-      formDates: [''],
+      formDates: [date],
       initialDate: '',
       finalDate: '',
       initialDateNew: '',
@@ -123,9 +127,7 @@
             'finalDate':    this.finalDateNew.split("/").reverse().join("/"),
             'idProject':    this.selectProject.idProject
           }
-          console.log(this.initialDateNew);
-          console.log(this.CreateSprint);
-           await axios.post('http://localhost:3000/sprint', CreateSprint).then((response) => {
+           api.post('sprint', CreateSprint).then((response) => {
               console.log(response.data);
               alert("Cadastro feito com sucesso");
             }, (error) => {

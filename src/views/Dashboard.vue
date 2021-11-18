@@ -235,8 +235,18 @@
         </div>
 
         <div class="dashboard-info" >
-            <div v-for="sprint in sprints" :key="sprint.idSprint">
-                <button
+            <div v-for="(sprint, index) in sprints" :key="sprint.idSprint">
+                <p> Sprint {{index + 1}}</p>
+                <v-select
+                      v-model="selectSprint"
+                      :items="items"
+                      label="items"
+                      persistent-hint
+                      return-object
+                      single-line
+                ></v-select>
+               
+                <!-- <button
                     :value="sprint.idSprint"
                     v-on:click="checkSprintAtiva(sprint)"
                 >
@@ -246,7 +256,7 @@
                     <p>Data Final: {{ sprint.finalDate }}</p>
 
 
-                </button>
+                </button> -->
                 {{ sprintSelected.idSprint}}
             </div>
         </div>
@@ -291,6 +301,7 @@ export default Vue.extend({
         UserUpdate
     },
      data: () => ({
+       items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
        cards: false,
        criterios: [],
        estudantes: [] as UserTeam[],
