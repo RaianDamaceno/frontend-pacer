@@ -21,16 +21,7 @@
             </div>
             <p class="mb-5">{{ carousel.subHeading }}</p>
             <v-btn :x-large="$vuetify.breakpoint.smAndUp" class="my-3 primary"
-              >Get Started</v-btn
-            >
-            <span class="mx-2 my-4"></span>
-            <v-btn
-              :x-large="$vuetify.breakpoint.smAndUp"
-              text
-              class="my-3"
-              outlined
-              ><v-icon left large color="primary">mdi-play</v-icon>Learn
-              More</v-btn
+              >Acessar Plataforma</v-btn
             >
           </div>
         </v-container>
@@ -45,25 +36,25 @@ export default {
     return {
       carouselsData: [
         {
-          src: 'img/static/pexels-andrea-piacquadio-3884440.jpg',
-          heading: ' PROMOTE YOUR BUSINESS WITH US ',
-          subHeading:
-            'Infographic hypotheses influencer user experience Long madel ture gen-z paradigm shift client partner network product seilans solve management influencer analytics leverage virality. incubator seed round massmarket. buyer agile development growth hacking business-to-consumer ecosystem ',
-        },
-        {
-          src: 'img/static/pexels-peter-olexa-4012966.jpg',
+          src: 'img/static/avaliacao2.png',
           heading: ' LOREM IPSUM DOLOR SIT AMET CONSEETU',
           subHeading:
             'Litora a interdum primis. Lectus facilisi sit cum arcu aliquam velit imperdiet sapien suspendisse at vel facilisis. Facilisis metus, curae; nibh mi orci et. Fringilla sociis magna rutrum bibendum arcu.',
         },
         {
-          src: 'img/static/pexels-thirdman-5961072.jpg',
+          src: 'img/static/Empresas-Vetor2.jpg',
           heading: ' Build your website with this Theme ',
           subHeading:
             'Tellus cum turpis natoque id justo interdum tincidunt faucibus aptent congue pellentesque. Proin luctus orci netus! Scelerisque parturient cursus donec parturient et, luctus aptent habitant aliquet felis. Sapien placerat ultricies.',
         },
         {
-          src: 'img/static/pexels-andrea-piacquadio-3830745.jpg',
+          src: 'img/static/avaliacao.jpg',
+          heading: ' PROMOTE YOUR BUSINESS WITH US ',
+          subHeading:
+            'Infographic hypotheses influencer user experience Long madel ture gen-z paradigm shift client partner network product seilans solve management influencer analytics leverage virality. incubator seed round massmarket. buyer agile development growth hacking business-to-consumer ecosystem ',
+        },
+        {
+          src: 'img/static/11-1-1024x600.jpg',
           heading: ' URNA TINCIDUNT MATTIS TORTOR ',
           subHeading:
             'Dapibus cras, ligula suspendisse potenti himenaeos mus volutpat pulvinar est facilisi. Vehicula malesuada parturient euismod litora mollis penatibus. Penatibus cum nullam facilisi enim nisi ac suspendisse. Ullamcorper ad amet netus.',

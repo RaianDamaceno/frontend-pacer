@@ -3,7 +3,6 @@
         <SysHeader />
         <SectionsHero />
         <SectionsIntro />
-        <SectionsCalloutBlock />
         <SectionsFeatures />
         <SectionsBrands />
         <SectionsTestimonials />
@@ -19,7 +18,7 @@ import SectionsIntro from './sections/Intro'
 import SectionsBrands from './sections/Brands'
 import SectionsFeatures from './sections/Features'
 import SectionsTestimonials from './sections/Testimonials'
-import SectionsCalloutBlock from './sections/CalloutBlock'
+//import SectionsCalloutBlock from './sections/CalloutBlock'
 
 export default {
     components: {
@@ -27,7 +26,7 @@ export default {
         SysFooter,
         SectionsHero,
         SectionsIntro,
-        SectionsCalloutBlock,
+        //SectionsCalloutBlock,
         SectionsFeatures,
         SectionsBrands,
         SectionsTestimonials

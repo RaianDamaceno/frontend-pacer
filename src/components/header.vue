@@ -35,7 +35,7 @@
     <v-app-bar fixed app hide-on-scroll height="80" elevate-on-scroll>
       <v-app-bar-nav-icon class="hidden-md-and-up" @click="drawer = true" />
       <nuxt-link to="/" class="d-flex">
-        <img src='../../public/img/logo_v2.png' alt="PacerLogo" width="150" height="50">
+        <img src='../../public/img/logo_v2.png' alt="PacerLogo" width="170" height="70">
       </nuxt-link>
       <v-spacer />
 
@@ -103,17 +103,17 @@ export default {
         {
           icon: 'mdi-folder-home-outline',
           title: 'Inicio',
-          to: '/',
+          to: '#hero',
         },
         {
           icon: 'mdi-account',
           title: 'Sobre',
-          to: '/about',
+          to: '#intro',
         },
         {
           icon: 'mdi-cash-usd',
           title: 'Equipe',
-          to: '/team',
+          to: '#testimonials1',
         },
         {
           icon: 'mdi-blogger',
@@ -123,7 +123,7 @@ export default {
         {
           icon: 'mdi-contacts',
           title: 'Contato',
-          to: '/contact',
+          to: '#contact',
         },
       ],
     }
@@ -138,6 +138,6 @@ export default {
   cursor: default;
 }
 .theme--light.v-app-bar.v-toolbar.v-sheet {
-  background-color: #b3d5f0;
+  background-color: #eeeeee;
 }
 </style>

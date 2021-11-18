@@ -10,7 +10,7 @@
             :class="$vuetify.theme.dark ? 'grey--text' : null"
             class="text-h4 text-center font-weight-light mb-xs-4"
           >
-            OUR SPONSORS
+            Técnologias utilizadas
           </h3>
         </v-col>
         <v-col cols="12" sm="8">
@@ -24,7 +24,7 @@
                   width="140"
                   flat
                 >
-                  <v-img height="90" contain :src="`/brands/${l}`"></v-img>
+                  <v-img height="90" contain :src="`/img/static/brands/${l}`"></v-img>
                 </v-card>
               </v-slide-item>
               <v-responsive
@@ -48,17 +48,12 @@ export default {
   data() {
     return {
       brandsLogo: [
-        'logo-12.svg',
-        'logo-17.svg',
-        'logo-25.svg',
-        'logo-26.svg',
-        'logo-20.svg',
-        'logo-11.svg',
-        'logo-1.svg',
-        'logo-22.svg',
-        'logo-23.svg',
-        'logo-16.svg',
-        'logo-8.svg',
+        'vuejs.png',
+        'MariaDB.png',
+        'vuetify.png',
+        'node.png',
+        'nest.png',
+        'typeorm.png'
       ],
     }
   },

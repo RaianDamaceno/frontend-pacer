@@ -6,42 +6,19 @@
           <v-icon x-large dark>mdi-web</v-icon>
         </v-avatar>
         <h2 class="text-h4 text-md-h3 text-center font-weight-black mb-7">
-          The Perfect Theme for Beginners or Professionals
+          PACER
         </h2>
         <p class="title font-weight-light">
-          ModeVue — is a carefully crafted multi-purpose, responsive, and
-          gorgeous theme. Built with
-          <strong>Vue.js</strong>
-          and
-          <strong>Nuxt.js</strong>, it comes with the features you need to
-          quickly start developing your application.
+          Este projeto foi desenvolvido no 6° Semestre do curso de Banco de Dados da FATEC
+          de São José dos Campos, nas matérias de Topicos Avancados em Banco de Dados e Gestao
+          de Processos de Desenvolvimento de Software.
+        </p>
+        <p class="title font-weight-light">
+          O objetivo principal deste projeto é possibilitar a avaliação entre
+          os integrantes de cada equipe cadastrada no sistema. Além disso possibilitar
+          que os professores possam avaliar os alunos de cada equipe também.
         </p>
       </v-responsive>
-
-      <v-row class="pt-12">
-        <v-col v-for="card in cards" :key="card.title" cols="12" md="4">
-          <v-row no-gutters>
-            <v-col :cols="card.callout ? 9 : 12">
-              <div class="pr-2">
-                <div class="text--disabled" v-text="card.subtitle"></div>
-                <h4
-                  class="text-uppercase mt-1 mb-4"
-                  style="letter-spacing: 0.15em"
-                  v-text="card.title"
-                ></h4>
-                <p v-text="card.text"></p>
-              </div>
-            </v-col>
-            <v-col v-if="card.callout" cols="2">
-              <span
-                class="text-h3 grey--text font-weight-bold pr-8"
-                style="opacity: 0.1"
-                >{{ card.callout }}</span
-              >
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
     </v-container>
   </section>
 </template>
@@ -77,3 +54,8 @@ export default {
   },
 }
 </script>
+<style scoped>
+.py-16{
+  background-color: #f5f5f5;
+}
+</style>
