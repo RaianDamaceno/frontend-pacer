@@ -235,12 +235,11 @@
         </div>
 
         <div class="dashboard-info" >
-            <div v-for="(sprint, index) in sprints" :key="sprint.idSprint">
-                <p> Sprint {{index + 1}}</p>
                 <v-select
                       v-model="selectSprint"
-                      :items="items"
+                      :items="this.sprints"
                       label="items"
+                      item-text="nome"
                       persistent-hint
                       return-object
                       single-line
@@ -260,7 +259,6 @@
                 {{ sprintSelected.idSprint}}
             </div>
         </div>
-    </div>
 </template>
 
 <script lang="ts">
@@ -311,7 +309,7 @@ export default Vue.extend({
        grupos: "",
        projetos: [],
        teams: "",
-       sprints: "",
+       sprints: [{}],
        sprintSelected: "",
        activeSprint: true,
        notasFeitas: [],
@@ -350,6 +348,7 @@ export default Vue.extend({
             this.sprints = response.data
             for(var i = 0; i < this.sprints.length; i++) {
                 this.checkSprintAtiva(this.sprints[i])
+                this.sprints[i]["nome"] = `Sprint ${i + 1}`
             }
         })
         api.get('notes-store').then(response => {
