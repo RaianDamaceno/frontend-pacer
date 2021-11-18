@@ -123,8 +123,6 @@ export default {
       ],
     }
   },
-  methods: {
-  },
 }
 </script>
 

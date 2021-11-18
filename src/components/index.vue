@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import SysFooter from './footer'
-import SysHeader from './header'
+import SysFooter from './Footer'
+import SysHeader from './Header'
 import SectionsHero from './sections/Hero'
 import SectionsIntro from './sections/Intro'
 import SectionsBrands from './sections/Brands'

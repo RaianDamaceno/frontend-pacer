@@ -20,7 +20,9 @@
               {{ carousel.heading.toUpperCase() }}
             </div>
             <p class="mb-5">{{ carousel.subHeading }}</p>
-            <v-btn :x-large="$vuetify.breakpoint.smAndUp" class="my-3 primary"
+            <v-btn 
+            a href="/login"
+            :x-large="$vuetify.breakpoint.smAndUp" class="my-3 primary"
               >Acessar Plataforma</v-btn
             >
           </div>
