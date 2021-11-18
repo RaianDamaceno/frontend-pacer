@@ -238,25 +238,13 @@
                 <v-select
                       v-model="selectSprint"
                       :items="this.sprints"
-                      label="items"
+                      label="Escolha uma Sprint"
                       item-text="nome"
                       persistent-hint
                       return-object
                       single-line
+                      v-on:change="checkSprintAtiva(selectSprint)"
                 ></v-select>
-               
-                <!-- <button
-                    :value="sprint.idSprint"
-                    v-on:click="checkSprintAtiva(sprint)"
-                >
-
-                    <p>Sprint</p>
-                    <p>Data Inicial: {{ sprint.initialDate }}</p>
-                    <p>Data Final: {{ sprint.finalDate }}</p>
-
-
-                </button> -->
-                {{ sprintSelected.idSprint}}
             </div>
         </div>
 </template>
@@ -347,8 +335,8 @@ export default Vue.extend({
         api.get('sprint').then(response => {
             this.sprints = response.data
             for(var i = 0; i < this.sprints.length; i++) {
-                this.checkSprintAtiva(this.sprints[i])
                 this.sprints[i]["nome"] = `Sprint ${i + 1}`
+                this.checkSprintAtiva(this.sprints[i])
             }
         })
         api.get('notes-store').then(response => {
