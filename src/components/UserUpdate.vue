@@ -60,8 +60,11 @@
                     </v-container>
                      <small>*Campos obrigatorios</small>
                 </v-list>
+                
             </v-card-text>
+            
             <v-card-actions>
+              <remove-user-data />
               <v-spacer></v-spacer>
               <v-btn
               color="blue darken-1"
@@ -86,8 +89,10 @@
 
 <script>
   import api from '../services/api'
+  import RemoveUserData from './RemoveUserData.vue'
   
   export default {
+  components: { RemoveUserData },
   data () {
       return {
         dialogEdit:false,
