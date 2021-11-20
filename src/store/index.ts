@@ -29,10 +29,10 @@ export default new Vuex.Store({
     async setToken({ commit }, payload) {
       commit("setToken", payload);
     },
-    messageSuccess({ commit }, msg) {
+    messageSuccess({ commit }, msg: string) {
       commit("setSnackbar", {
         text: msg,
-        timeout: "3000",
+        timeout: "2000",
         color: 'success',
         show: true,
       });
