@@ -231,6 +231,7 @@
                 :notas="notasFeitas"
                 :sprintSelected="sprintSelected"
                 :user="userLogged"
+                :criterios="criterios"
             />
         </div>
 
