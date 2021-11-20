@@ -49,7 +49,7 @@
             </template>
             <v-list>
               <v-list-item>
-                <v-list-item-title><AdicionaCriteriosAva /></v-list-item-title>
+                <v-list-item-title><ProjectCriteriaAdd /></v-list-item-title>
               </v-list-item>
               <v-list-item>
               <v-list-item-title><CriteriaRegistration /></v-list-item-title>
@@ -263,7 +263,7 @@
   import GraphSpider from "../components/GraphSpider.vue";
   import { UserTeam } from '../model/user-team'
   import CriteriaRegistration from '../components/CriteriaRegistration.vue'
-  import AdicionaCriteriosAva from '../components/AdicionaCriteriosAva.vue'
+  import ProjectCriteriaAdd from '../components/ProjectCriteriaAdd.vue'
   import PendingToScore from '../components/PendingToScore.vue'
   import UsersAprovation      from '../components/UsersAprovation.vue'
   import SprintRegistration from '../components/SprintRegistration.vue'
@@ -281,7 +281,7 @@ export default Vue.extend({
         CardToastSprint,
         GraphSpider,
         CardFloatButton,
-        AdicionaCriteriosAva,
+        ProjectCriteriaAdd,
         CriteriaRegistration,
         PendingToScore,
         UsersAprovation,
