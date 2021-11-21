@@ -7,13 +7,14 @@
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-          class="black--text"
-          color="white"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          Cadastro de Sprint
+            v-bind="attrs"
+            v-on="on"
+            width="100%"
+            class="light-blue darken-2"
+            elevation="0"
+            x-large
+            >
+            Sprint
         </v-btn>
       </template>
 
