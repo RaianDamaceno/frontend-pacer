@@ -1,7 +1,7 @@
 <template>
     <div class="dashboard">
         <div class="dashboard-nav"> 
-            <nav-drawer/>
+            <nav-drawer :userLogged="userLogged"/>
         </div>   
         <div class="dashboard-content">
                     <div class="dashboard-group">
@@ -174,16 +174,7 @@
   import CardToastSprint from '../components/CardToastSprint.vue'
   import GraphSpider from "../components/GraphSpider.vue";
   import { UserTeam } from '../model/user-team'
-  import NavDrawer from "../components/NavDrawer.vue";
-//   import CriteriaRegistration from '../components/CriteriaRegistration.vue'
-//   import AdicionaCriteriosAva from '../components/AdicionaCriteriosAva.vue'
-//   import PendingToScore from '../components/PendingToScore.vue'
-//   import UsersAprovation      from '../components/UsersAprovation.vue'
-//   import SprintRegistration from '../components/SprintRegistration.vue'
-//   import CreateProject from '../components/CreateProject.vue'
-//   import projectTable from '../components/projectTable.vue'
-//   import sprintTable from '../components/SprintTable.vue'
-//   import UserUpdate from '../components/UserUpdate.vue'
+  import NavDrawer from "../components/nav/NavDrawer.vue";
   import api from '../services/api'
 
 export default Vue.extend({
@@ -195,15 +186,6 @@ export default Vue.extend({
         GraphSpider,
         NavDrawer,
         CardFloatButton,
-        // AdicionaCriteriosAva,
-        // CriteriaRegistration,
-        // PendingToScore,
-        // UsersAprovation,
-        // SprintRegistration,
-        // CreateProject,
-        // projectTable,
-        // sprintTable,
-        // UserUpdate
     },
      data: () => ({
        cards: false,

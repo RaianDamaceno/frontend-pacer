@@ -10,11 +10,11 @@
             v-bind="attrs"
             v-on="on"
             width="100%"
-            class="light-blue darken-2"
+            class="light-blue darken-3"
             elevation="0"
             x-large
             >
-            Sprint
+            Cadastro de Sprints
         </v-btn>
       </template>
 
@@ -87,7 +87,7 @@
 <script>
 
   import axios from 'axios'
-  import api from '../services/api'
+  import api from '../../services/api'
 
   export default {
     data: () => ({

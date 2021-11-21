@@ -7,13 +7,14 @@
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-          class="black--text"
-          color="white"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          Critérios Avaliação
+            v-bind="attrs"
+            v-on="on"
+            width="100%"
+            class="light-blue darken-3"
+            elevation="0"
+            x-large
+            >
+            Critérios Avaliação
         </v-btn>
       </template>
 

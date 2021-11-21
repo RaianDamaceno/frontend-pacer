@@ -92,8 +92,8 @@
 </template>
 
 <script>
-  import api from '../services/api'
-  import RemoveUserData from './RemoveUserData.vue'
+  import api from '../../services/api'
+  import RemoveUserData from '../RemoveUserData.vue'
   
   export default {
   components: { RemoveUserData },

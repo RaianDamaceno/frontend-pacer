@@ -1,9 +1,16 @@
 <template>
-  <v-dialog v-model="dialog" scrollable max-width="400px" justify="center">
+  <v-dialog v-model="dialog" width="100%">
     <template v-slot:activator="{ on, attrs }">
-      <v-btn class="black--text" color="white" dark v-bind="attrs" v-on="on"
-        >Lista de Critérios
-      </v-btn>
+        <v-btn
+            v-bind="attrs"
+            v-on="on"
+            width="100%"
+            class="light-blue darken-3"
+            elevation="0"
+            x-large
+            >
+            Criterios
+        </v-btn>
     </template>
     <v-card>
       <v-card-title v-if="this.id === ''">Cadastrar Novo Critério de Avaliação</v-card-title>
