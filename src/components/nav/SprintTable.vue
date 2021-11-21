@@ -8,13 +8,14 @@
      
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-          class="black--text"
-          color="white"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          Sprints Cadastradas
+            v-bind="attrs"
+            v-on="on"
+            width="100%"
+            class="light-blue darken-3"
+            elevation="0"
+            x-large
+            >
+            Sprints Cadastradas
         </v-btn>
       </template>
       
@@ -111,7 +112,7 @@
 
 <script>
   import axios from 'axios'
-  import api from '../services/api'
+  import api from '../../services/api'
  
   export default {
     data () {

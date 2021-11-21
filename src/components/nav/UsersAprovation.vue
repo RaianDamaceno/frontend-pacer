@@ -1,16 +1,20 @@
 <template>
-  <div v-if="role === 'P'">
     <v-row
       justify="center"
     >
-      <v-btn
-        color="primary"
-        class="ma-2"
-        dark
-        @click="dialog = true"
-      >
-        Usuários para aprovação
-      </v-btn>
+        <v-btn
+            v-bind="attrs"
+            v-on="on"
+            width="100%"
+            class="light-blue darken-2"
+            elevation="0"
+            x-large
+            center
+            @click="dialog = true"
+            >
+            <v-icon>>mdi-view-dashboard</v-icon>
+            Aprovacao de usuarios
+        </v-btn>
       <v-menu
         bottom
         offset-y
@@ -77,12 +81,11 @@
         </v-card>
       </v-dialog>
     </v-row>
-  </div>
 </template>
 
 <script>
   import axios from 'axios'
-  import api from '../services/api'
+  import api from '../../services/api'
 
   export default {
     data () {

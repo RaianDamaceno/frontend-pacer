@@ -2,8 +2,16 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" scrollable max-width="700px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn color="primary" dark v-bind="attrs" v-on="on">
-          Avaliações Pendentes
+        <v-btn
+            v-bind="attrs"
+            v-on="on"
+            width="100%"
+            class="light-blue darken-2"
+            elevation="0"
+            x-large
+            >
+            <v-icon>>mdi-view-dashboard</v-icon>
+            Pendencias de Avaliação
         </v-btn>
       </template>
 
