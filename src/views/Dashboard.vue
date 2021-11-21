@@ -142,6 +142,7 @@
                 :notas="notasFeitas"
                 :sprintSelected="sprintSelected"
                 :user="userLogged"
+                :criterios="criterios"
             />
         </div>
         <div class="dashboard-info" >

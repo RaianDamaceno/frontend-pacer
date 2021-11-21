@@ -12,14 +12,16 @@
 <script>
 import Vue from "vue";
 Vue.prototype.total = [];
-Vue.prototype.criterios = [];
 Vue.prototype.sprint = [];
+Vue.prototype.maxNote = 0;
+Vue.prototype.aux = [];
 export default Vue.extend({
     name: "GraphSpider",
     props: {
         notas: Array,
         sprintSelected: String,
         user: String,
+        criterios: Array,
     },
     created() {
         setTimeout(() => {
@@ -30,14 +32,44 @@ export default Vue.extend({
                         data.idSprint === this.sprintSelected
                 )
                 .map((nt) => {
-                    this.criterios.push(nt.criterio.descCriteria);
-                    this.total.push(nt.note === null ? 0 : nt.note);
                     if (this.sprint.length === 0) {
                         this.sprint.push(
                             nt.sprint.initialDate + " | " + nt.sprint.finalDate
                         );
                     }
                 });
+
+            this.criterios.map((cri) => {
+                this.aux.push(
+                    this.notas
+                        .filter(
+                            (data) =>
+                                data.criterio.descCriteria === cri.descCriteria
+                        )
+                        .filter(
+                            (data) =>
+                                data.evaluated.idUser === this.user &&
+                                data.idSprint === this.sprintSelected
+                        )
+                );
+            });
+
+            this.aux.map((data) => {
+                this.total.push(
+                    data
+                        .map((dat) => {
+                            return dat.note;
+                        })
+                        .reduce((accum, curr) => accum + curr) /
+                        data.map((dat) => {
+                            return dat;
+                        }).length
+                );
+            });
+
+            this.maxNote = this.total.reduce(function (a, b) {
+                return Math.max(a, b);
+            });
         }, 1000);
     },
     data() {
@@ -57,7 +89,10 @@ export default Vue.extend({
                 },
 
                 xAxis: {
-                    categories: this.criterios || [],
+                    categories:
+                        this.criterios.map((cri) => {
+                            return cri.descCriteria;
+                        }) || [],
                     tickmarkPlacement: "on",
                     lineWidth: 0,
                 },
@@ -65,7 +100,7 @@ export default Vue.extend({
                 yAxis: {
                     gridLineInterpolation: "polygon",
                     min: 0,
-                    max: 100,
+                    max: this.maxNote || 100,
                     tickInterval: 10,
                 },
 
