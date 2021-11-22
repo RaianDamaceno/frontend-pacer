@@ -10,9 +10,8 @@
           permanent>
             <v-list flat>
                 <v-list-item-group>
-                    <v-btn v-bind="attrs" 
+                    <v-btn 
                      @click="goDashboard"
-                      v-on="on" 
                       width="100%" 
                       class="light-blue darken-2" 
                       elevation="0" 
@@ -30,8 +29,6 @@
                 <v-list-group>
                     <template v-slot:activator>
                         <v-btn 
-                          v-bind="attrs" 
-                          v-on="on" 
                           width="100%" 
                           class="light-blue darken-2" 
                           elevation="0" 
@@ -57,8 +54,6 @@
                 <v-list-group>
                     <template v-slot:activator>
                         <v-btn 
-                          v-bind="attrs" 
-                          v-on="on" 
                           width="100%" 
                           class="light-blue darken-2" 
                           elevation="0" 
@@ -85,8 +80,6 @@
                 <v-list-group>
                     <template v-slot:activator>
                         <v-btn 
-                          v-bind="attrs" 
-                          v-on="on" 
                           width="100%" 
                           class="light-blue darken-2" 
                           elevation="0" 

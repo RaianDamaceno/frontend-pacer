@@ -3,8 +3,6 @@
       justify="center"
     >
         <v-btn
-            v-bind="attrs"
-            v-on="on"
             width="100%"
             class="light-blue darken-2"
             elevation="0"

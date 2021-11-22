@@ -4,147 +4,27 @@
             <nav-drawer :userLogged="userLogged"/>
         </div>   
         <div class="dashboard-content">
-                    <div class="dashboard-group">
-            <div class="dashboard-group-person" v-if="Projeto">
-                Projeto
-                <v-slide-group class="pa-4" center-active show-arrows>
-                    <v-slide-item
-                        v-for="projeto in projetos"
-                        :key="projeto.idProject"
-                    >
-                        <v-card class="ma-4" height="200" width="180">
-                            <div class="dashboard-group-person-minify">
-                                <div
-                                    class="dashboard-group-person-name"
-                                    v-on:click="
-                                        getGruposFromProject(projeto.idProject)
-                                    "
-                                >
-                                    <span> {{ projeto.description }} </span>
-                                </div>
-                                <div class="dashboard-group-person-button">
-                                    <!-- <card-float-button :team="projeto.idProjeto"/> -->
-                                </div>
-                            </div>
-                            <v-row
-                                class="fill-height"
-                                align="center"
-                                justify="center"
-                            >
-                            </v-row>
-                        </v-card>
-                    </v-slide-item>
-                </v-slide-group>
-                <card-create-equipe
-                    :projetos="projetos"
-                    :estudantes="allEstudantes"
+        <div class="dashboard-content-graficos">
+            <div>
+                <graph-spider
+                    v-if="notasFeitas.length !== 0"
+                    :notas="notasFeitas"
+                    :sprintSelected="sprintSelected"
+                    :user="userLogged"
+                    :criterios="criterios"
                 />
             </div>
-            <div class="dashboard-group-person" v-if="Times">
-                Times
-                <v-slide-group class="pa-4" center-active show-arrows>
-                    <v-slide-item
-                        v-for="projectGrupo in projectGrupos"
-                        :key="projectGrupo.idTeam"
-                    >
-                        <v-card class="ma-4" height="200" width="180">
-                            <div class="dashboard-group-person-minify">
-                                <div
-                                    class="dashboard-group-person-name"
-                                    v-on:click="
-                                        getUserFromTeam(projectGrupo.idTeam)
-                                    "
-                                >
-                                    <span> {{ projectGrupo.teamName }} </span>
-                                </div>
-                                <div class="dashboard-group-person-button">
-                                    <card-float-button :team="projectGrupo.idTeam"
-                                    />
-                                </div>
-                            </div>
-                            <v-row
-                                class="fill-height"
-                                align="center"
-                                justify="center"
-                            >
-                            </v-row>
-                        </v-card>
-                    </v-slide-item>
-                </v-slide-group>
-                <card-create-equipe
-                    :projetos="projetos"
-                    :estudantes="allEstudantes"
-                />
-            </div>
-            <div class="dashboard-group-person" v-if="Alunos">
-                <div v-if="showButtonScrum">
-                    <v-row align="center" justify="space-around">
-                        <v-btn color="primary" v-on:click="update2SM">
-                            Tornar-se Scrum Master
-                            <v-icon dark right>
-                                mdi-crown
-                            </v-icon>
-                        </v-btn>
-                    </v-row>
-                </div>
-                <div>
-                    <v-slide-group class="pa-4" center-active show-arrows>
-                        <v-slide-item
-                            v-for="estudante in estudantes"
-                            :key="estudante.idUser"
-                        >
-                            <v-card class="ma-4" height="200" width="190">
-                                <div class="dashboard-group-person-minify">
-                                    <div
-                                        class="dashboard-group-person-minify-pictures"
-                                    >
-                                        <div></div>
-                                    </div>
-                                    <div class="dashboard-group-person-name">
-                                        <span> {{ estudante.user.name }} </span>
-                                    </div>
-                                    <div
-                                        class="dashboard-group-person-button"
-                                        v-if="activeSprint"
-                                    >
-                                        <card-student-rating
-                                            :criterios="criterios"
-                                            :nome="estudante.user.name"
-                                            :estudanteID="estudante.idUser"
-                                            :sprintID="sprintSelected"
-                                            :notasFeitas="notasFeitas"
-                                            :idEvaluator="userLogged"
-                                            :idGroup="grupoAtivo"
-                                        />
-                                    </div>
-                                    <div
-                                        class="dashboard-group-person-button"
-                                        v-else
-                                    >
-                                        <card-toast-sprint
-                                            text="Sprint finalizada"
-                                        />
-                                    </div>
-                                </div>
-                                <v-row
-                                    class="fill-height"
-                                    align="center"
-                                    justify="center"
-                                >
-                                </v-row>
-                            </v-card>
-                        </v-slide-item>
-                    </v-slide-group>
-                </div>
-            </div>
-            <graph-spider
-                v-if="notasFeitas.length !== 0"
-                :notas="notasFeitas"
-                :sprintSelected="sprintSelected"
-                :user="userLogged"
-                :criterios="criterios"
+        </div>
+        <div class="dashboard-content-projeto">
+            <projetos 
+                :Projetos="this.projetos" 
+                :Teams="this.teams"
+                :Estudantes="allEstudantes"
+                
+                :userLogged="userLogged"
             />
         </div>
+
         <div class="dashboard-info" >
             <div v-for="sprint in sprints" :key="sprint.idSprint">
                 <button
@@ -155,37 +35,28 @@
                     <p>Sprint</p>
                     <p>Data Inicial: {{ sprint.initialDate }}</p>
                     <p>Data Final: {{ sprint.finalDate }}</p>
-
-
                 </button>
                 {{ sprintSelected.idSprint}}
             </div>
         </div>
         </div>
-
     </div>
 </template>
 
 <script lang="ts">
   import Vue from 'vue'
-  import CardStudentRating from '../components/CardStudentRating.vue'
-  import CardCreateEquipe from '../components/CardCreateEquipe.vue'
-  import CardFloatButton from '../components/CardFloatButton.vue'
-  import CardToastSprint from '../components/CardToastSprint.vue'
   import GraphSpider from "../components/GraphSpider.vue";
   import { UserTeam } from '../model/user-team'
   import NavDrawer from "../components/nav/NavDrawer.vue";
   import api from '../services/api'
+  import Projetos from "../components/Projetos.vue";
 
 export default Vue.extend({
     name: "Dashboard",
     components: {
-        CardStudentRating,
-        CardCreateEquipe,
-        CardToastSprint,
         GraphSpider,
         NavDrawer,
-        CardFloatButton,
+        Projetos
     },
      data: () => ({
        cards: false,
@@ -196,7 +67,7 @@ export default Vue.extend({
        grupoAtivo: "",
        grupos: "",
        projetos: [],
-       teams: "",
+       teams: [],
        sprints: "",
        sprintSelected: "",
        activeSprint: true,
@@ -334,6 +205,7 @@ export default Vue.extend({
             let json = JSON.parse(jsonPayload);
             this.userLogged = json.sub
             this.$store.dispatch('setUserId', this.userLogged);
+            console.log(this.userLogged)
         },
         getUserInformation: function() {
             api.get(`/user/${this.userLogged}`).then((response) => {
@@ -345,135 +217,59 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-span {
-    color: #fff;
-}
-
-.dashboard {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    height: 100%;
-    width: 100%;
-    background-image: url('../../public/img/bg_login.jpg');
-}
-
-.dashboard-nav {
-    display: flex;
-    height: 100%;
-    width: 20%;
-}
-
-.dashboard-content {
-    display: flex;
-    height: 100%;
-    width: 80%;
-    flex-direction: column;
-    justify-content: space-around;
-}
-.ma-4 {
-    background: rgb(2, 0, 36);
-    background: linear-gradient(
-        47deg,
-        rgba(2, 0, 36, 1) 0%,
-        rgba(13, 44, 82, 1) 31%,
-        rgba(90, 26, 159, 1) 97%
-    );
-    border-radius: 5px;
-    text-align: center;
-}
-
-.dashboard-info {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    height: 30%;
-}
-
-.dashboard-group {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    height: 45%;
-}
-
-.dashboard-group-person {
-    width: 60.5%;
-    border: solid 1px black;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    background-color: white;
-    flex-direction: column;
-}
-
-.dashboard-group-myrating {
-    width: 30%;
-    border: solid 1px;
-    border-radius: 10px;
-    background-color: white;
-}
-
-.dashboard-group-person-minify {
-    height: 200px;
-    text-align: center;
-}
-
-.dashboard-group-person-minify div {
-    display: flex;
-    height: 40%;
-}
-
-.dashboard-group-person-minify-pictures,
-.dashboard-group-person-name {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.dashboard-group-person-minify-pictures div {
-    border: solid 1px;
-    border-radius: 50%;
-    height: 70px;
-    width: 70px;
-    background-color: #fff;
-}
-
-.dashboard-group-person-button {
-    display: flex;
-    justify-content: end;
-    align-items: end;
-}
-
-button {
-    background: rgba(86, 116, 186, 1);
-    width: 300px;
-    color: #fff;
-    border-radius: 100px;
-}
-
-.yellow {
-   background-color: yellow;
-}
-@media (min-width: 320px) and (max-width: 640px) {
     .dashboard {
-        min-height: 100%;
-    }
-    .dashboard-info,
-    .dashboard-group {
-        flex-direction: column;
-        height: 800px;
+        display: flex;
+        flex-direction: row;
         justify-content: space-around;
-        padding: 20px;
+        height: 100%;
+        width: 100%;
+        background-image: url('../../public/img/bg_login.jpg');
     }
 
-    .dashboard-group-myrating,
-    .dashboard-info div,
-    .dashboard-group-person {
-        width: 100%;
-        height: inherit;
-        margin-top: 3%;
+    .dashboard-nav {
+        display: flex;
+        height: 100%;
+        width: 18%;
     }
-}
+
+    .dashboard-content {
+        display: flex;
+        height: 100%;
+        width: 82%;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+
+    .dashboard-content-graficos {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        height: 35%;
+        width: 100%; 
+    }
+
+    .dashboard-content-graficos div {
+        height: 100%;
+        width: 48%;
+        padding: 5px;
+    }
+
+
+    .dashboard-info {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        height: 30%;
+    }
+
+    button {
+        background: rgba(86, 116, 186, 1);
+        width: 300px;
+        color: #fff;
+        border-radius: 100px;
+    }
+
+    .yellow {
+        background-color: yellow;
+    }
 </style>
