@@ -2,9 +2,15 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" scrollable max-width="700px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn 
-          class="black--text" color="white" dark v-bind="attrs" v-on="on">
-          Cadastro de Projeto
+        <v-btn
+            v-bind="attrs"
+            v-on="on"
+            width="100%"
+            class="light-blue darken-3"
+            elevation="0"
+            x-large
+            >
+           Cadastro Projeto
         </v-btn>
       </template>
 
@@ -65,7 +71,7 @@
 </template>
 
 <script>
-import api from "../services/api";
+import api from "../../services/api";
 
 export default {
   data: () => ({

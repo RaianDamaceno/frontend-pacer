@@ -1,99 +1,10 @@
 <template>
     <div class="dashboard">
-            <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-
-        <div class="d-flex align-center">
-          <img src='../../public/img/logo_v2.png' alt="PacerLogo" width="150" height="50">
-        </div>
-        <v-spacer></v-spacer>
-        <v-tab >
-        <v-menu offset-y >
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="primary"
-                dark
-                v-bind="attrs"
-                v-on="on"
-                width="100px"
-              >
-                Sprint
-              </v-btn>
-            </template>
-            <v-list>
-              <v-list-item>
-                <v-list-item-title> <sprintRegistration /></v-list-item-title>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-title> <sprintTable /></v-list-item-title>
-              </v-list-item>
-            </v-list>
-        </v-menu>
-      </v-tab>
-
-      <v-tab >
-        <v-menu offset-y>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="primary"
-                dark
-                v-bind="attrs"
-                v-on="on"
-                width="100px"
-              >
-                Criterios
-              </v-btn>
-            </template>
-            <v-list>
-              <v-list-item>
-                <v-list-item-title><ProjectCriteriaAdd /></v-list-item-title>
-              </v-list-item>
-              <v-list-item>
-              <v-list-item-title><CriteriaRegistration /></v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-      </v-tab>
-
-      <v-tab >
-        <v-menu offset-y>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              color="primary"
-              dark
-              v-bind="attrs"
-              v-on="on"
-              width="100px"
-            >
-              Projeto
-            </v-btn>
-          </template>
-          <v-list>
-            <v-list-item>
-              <v-list-item-title><CreateProject /></v-list-item-title>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-title><projectTable /></v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </v-tab>
-
-      <v-tab >
-            <PendingToScore />
-        </v-tab>
-
-        <v-tab>
-            <UsersAprovation />
-        </v-tab>
-        <v-tab>
-            <user-update :userID="this.userLogged" />
-        </v-tab>
-    </v-app-bar>
-        <div class="dashboard-group">
+        <div class="dashboard-nav"> 
+            <nav-drawer :userLogged="userLogged"/>
+        </div>   
+        <div class="dashboard-content">
+                    <div class="dashboard-group">
             <div class="dashboard-group-person" v-if="Projeto">
                 Projeto
                 <v-slide-group class="pa-4" center-active show-arrows>
@@ -234,7 +145,6 @@
                 :criterios="criterios"
             />
         </div>
-
         <div class="dashboard-info" >
             <div v-for="sprint in sprints" :key="sprint.idSprint">
                 <button
@@ -251,6 +161,8 @@
                 {{ sprintSelected.idSprint}}
             </div>
         </div>
+        </div>
+
     </div>
 </template>
 
@@ -262,15 +174,7 @@
   import CardToastSprint from '../components/CardToastSprint.vue'
   import GraphSpider from "../components/GraphSpider.vue";
   import { UserTeam } from '../model/user-team'
-  import CriteriaRegistration from '../components/CriteriaRegistration.vue'
-  import ProjectCriteriaAdd from '../components/ProjectCriteriaAdd.vue'
-  import PendingToScore from '../components/PendingToScore.vue'
-  import UsersAprovation      from '../components/UsersAprovation.vue'
-  import SprintRegistration from '../components/SprintRegistration.vue'
-  import CreateProject from '../components/CreateProject.vue'
-  import projectTable from '../components/projectTable.vue'
-  import sprintTable from '../components/SprintTable.vue'
-  import UserUpdate from '../components/UserUpdate.vue'
+  import NavDrawer from "../components/nav/NavDrawer.vue";
   import api from '../services/api'
 
 export default Vue.extend({
@@ -280,16 +184,8 @@ export default Vue.extend({
         CardCreateEquipe,
         CardToastSprint,
         GraphSpider,
+        NavDrawer,
         CardFloatButton,
-        ProjectCriteriaAdd,
-        CriteriaRegistration,
-        PendingToScore,
-        UsersAprovation,
-        SprintRegistration,
-        CreateProject,
-        projectTable,
-        sprintTable,
-        UserUpdate
     },
      data: () => ({
        cards: false,
@@ -452,15 +348,29 @@ export default Vue.extend({
 span {
     color: #fff;
 }
+
 .dashboard {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: space-around;
     height: 100%;
     width: 100%;
     background-image: url('../../public/img/bg_login.jpg');
 }
 
+.dashboard-nav {
+    display: flex;
+    height: 100%;
+    width: 20%;
+}
+
+.dashboard-content {
+    display: flex;
+    height: 100%;
+    width: 80%;
+    flex-direction: column;
+    justify-content: space-around;
+}
 .ma-4 {
     background: rgb(2, 0, 36);
     background: linear-gradient(

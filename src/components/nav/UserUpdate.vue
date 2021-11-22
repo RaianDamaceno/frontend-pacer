@@ -7,13 +7,17 @@
     >
      
       <template v-slot:activator="{ on, attrs }">
-          <v-avatar color="indigo"
-          v-bind="attrs"
-          v-on="on">
-            <v-icon dark>
-              mdi-account-circle
-            </v-icon>
-          </v-avatar>
+        <v-btn
+            v-bind="attrs"
+            v-on="on"
+            width="100%"
+            class="light-blue darken-2"
+            elevation="0"
+            x-large
+            >
+            <v-icon>>mdi-view-dashboard</v-icon>
+            Minha Conta
+        </v-btn>
       </template>
       
 
@@ -88,8 +92,8 @@
 </template>
 
 <script>
-  import api from '../services/api'
-  import RemoveUserData from './RemoveUserData.vue'
+  import api from '../../services/api'
+  import RemoveUserData from '../RemoveUserData.vue'
   
   export default {
   components: { RemoveUserData },
