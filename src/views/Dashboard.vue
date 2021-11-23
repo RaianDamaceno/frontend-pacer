@@ -1,7 +1,10 @@
 <template>
     <div class="dashboard">
         <div class="dashboard-nav"> 
-            <nav-drawer :userLogged="userLogged"/>
+            <nav-drawer :userLogged="userLogged" 
+            :estudantes="allEstudantes" 
+            :projetos="this.projetos"
+            />
         </div>   
         <div class="dashboard-content">
         <div class="dashboard-content-graficos">
@@ -18,9 +21,8 @@
         <div class="dashboard-content-projeto">
             <projetos 
                 :Projetos="this.projetos" 
-                :Teams="this.teams"
+                :Teams="this.userTeam"
                 :Estudantes="allEstudantes"
-                
                 :userLogged="userLogged"
             />
         </div>
@@ -59,11 +61,9 @@ export default Vue.extend({
         Projetos
     },
      data: () => ({
-       cards: false,
        criterios: [],
        estudantes: [] as UserTeam[],
        allEstudantes: [],
-       Role: true,
        grupoAtivo: "",
        grupos: "",
        projetos: [],
@@ -72,26 +72,23 @@ export default Vue.extend({
        sprintSelected: "",
        activeSprint: true,
        notasFeitas: [],
-       novoCriterio: [],
        token: '',
        userLogged: '',
-       Projeto: true,
-       Times: false,
-       Alunos: false,
        projectGrupos: '',
        haveSM: false,
        idteam: "",
        isAluno: false,
        showButtonScrum: false,
-       minhaAvaliação:[]
+       minhaAvaliação:[],
+       UserLoggedTeam: '',
+       userTeam: '',
+       userProjeto:[]
      }),
      beforeMount() {
         api.get('user').then(response => {
-            console.log("teste", response.data )
             this.allEstudantes = response.data.filter(function(el) {
               return el.role == "USR";
             });
-            console.log("After", this.allEstudantes )
 
         })
         api.get('criteria').then(response => {
@@ -116,54 +113,23 @@ export default Vue.extend({
       mounted() {
         this.decodeToken(this.$store.getters.getToken);
         this.getUserInformation();
+        this.getUserTeam(this.userLogged)
     },
     methods: {
-        showCard: function() {
-            this.cards = true;
-        },
         getGruposFromProject(projectID) {
             api.get(`project/${projectID}`).then((response) => {
                 this.projectGrupos = response.data.teams;
-                this.Projeto = false;
-                this.Times = true;
-                this.Alunos = false;
-            });
-        },
-        getUserFromTeam(teamID) {
-            this.grupoAtivo = teamID;
-            api.get(`user-team?idTeam=${teamID}`).then((response) => {
-                this.idteam = teamID;
-                this.estudantes = response.data;
-                this.Projeto = false;
-                this.Times = false;
-                this.Alunos = true;
-                for (let i = 0; i < this.estudantes.length; i++) {
-                    if (this.estudantes[i].isScrumMaster) {
-                        this.haveSM = true;
-                        break;
-                    } else {
-                        this.haveSM = false;
-                    }
-                }
-                if (this.isAluno && !this.haveSM) {
-                    this.showButtonScrum = true;
-                }
             });
         },
         update2SM: async function() {
             let payload = {
                 isScrumMaster: true,
             };
-            await api
-                .patch(
-                    `user-team?idUser=${this.userLogged}&idTeam=${this.idteam}`,
+            await api.patch(`user-team?idUser=${this.userLogged}&idTeam=${this.idteam}`,
                     payload
-                )
-                .then((response) => {
-                    if (response.status == 200) {
-                        this.showButtonScrum = false;
-                        alert("Parabéns, agora você é Scrum Master!");
-                    }
+                ).then(() => {
+                    this.showButtonScrum = false;
+                    alert("Parabéns, agora você é Scrum Master!");
                 })
                 .catch((error) => {
                     console.log(error);
@@ -205,7 +171,13 @@ export default Vue.extend({
             let json = JSON.parse(jsonPayload);
             this.userLogged = json.sub
             this.$store.dispatch('setUserId', this.userLogged);
-            console.log(this.userLogged)
+        },
+        getUserTeam(user) {
+            api.get('user-team').then(response => {
+                 this.userTeam = response.data.filter(function(el) {
+                     return el.idUser == user;
+                });
+            })
         },
         getUserInformation: function() {
             api.get(`/user/${this.userLogged}`).then((response) => {
@@ -254,7 +226,6 @@ export default Vue.extend({
         padding: 5px;
     }
 
-
     .dashboard-info {
         display: flex;
         flex-direction: row;
@@ -267,9 +238,5 @@ export default Vue.extend({
         width: 300px;
         color: #fff;
         border-radius: 100px;
-    }
-
-    .yellow {
-        background-color: yellow;
     }
 </style>

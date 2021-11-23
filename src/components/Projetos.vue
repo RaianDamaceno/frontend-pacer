@@ -15,16 +15,16 @@
                 <v-expansion-panel
                     v-for="Team in Teams"
                     :key="Team.idTeam"
-                >
-                                 
+                    @click="getUserFromTeam(Team.idTeam)"
+                >           
                 <v-expansion-panel-header> 
-                      <h3>  Grupo: {{ Team.teamName }} </h3> 
+                      <h3>  Grupo: {{ Team.team.teamName }} </h3> 
                     </v-expansion-panel-header>
                 <v-expansion-panel-content>
                     <div>
                         <v-slide-group class="pa-4" center-active show-arrows>
                         <v-slide-item
-                            v-for="estudante in Estudantes"
+                            v-for="estudante in estudantes"
                             :key="estudante.idUser"
                         >
                             <v-card class="ma-4" height="200" width="190">
@@ -35,7 +35,7 @@
                                         <div></div>
                                     </div>
                                     <div class="dashboard-group-person-name">
-                                        <span> {{ estudante.name }} </span>
+                                        <span> {{ estudante.user.name }} </span>
                                     </div>
                                     <div
                                         class="dashboard-group-person-button"
@@ -79,9 +79,10 @@
     </div>
 </template>
 
-<script lang="ts">
+<script>
   import Vue from 'vue'
   import api from '../services/api'
+  import CardStudentRating from '../components/CardStudentRating.vue'
 
   export default Vue.extend({
     name: 'Projetos',
@@ -92,20 +93,35 @@
         notasFeitas: Array,
         userLogged: String
     },
+    components: {
+        CardStudentRating
+    },
     data: () => ({
         myTeams: [],
-        activeSprint: ''
+        estudantes: '',
+        idteam: '',
+        activeSprint: true
     }),
     methods: {
-        checkUserTeam: function() {
-            // api.get('user-team').then(response => {
-            //     this.myTeams = response.data.filter(function(el) {
-            //         return el.idUser == this.userLogged;
-            //     });
-            // })
-
-            console.log(this.myTeams)
-        }
+        getUserFromTeam(teamID) {
+            this.grupoAtivo = teamID;
+            api.get(`user-team?idTeam=${teamID}`).then((response) => {
+                this.idteam = teamID;
+                this.estudantes = response.data;
+                console.log('teste')
+                for (let i = 0; i < this.estudantes.length; i++) {
+                    if (this.estudantes[i].isScrumMaster) {
+                        this.haveSM = true;
+                        break;
+                    } else {
+                        this.haveSM = false;
+                    }
+                }
+                if (this.isAluno && !this.haveSM) {
+                    this.showButtonScrum = true;
+                }
+            });
+        },
     }
   })
 </script>

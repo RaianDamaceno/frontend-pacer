@@ -112,6 +112,15 @@
                         <user-aprovation />
                     </v-list-item>
                 </v-list-item-group>
+
+                <v-list-item-group>
+                    <v-list-item>
+                        <card-create-equipe             
+                            :projetos="projetos"
+                            :estudantes="estudantes" 
+                        />
+                    </v-list-item>
+                </v-list-item-group>
             </v-list>
 
             <template v-slot:append>
@@ -136,9 +145,12 @@
   import SprintTable from './SprintTable.vue'
   import UserAprovation from './UsersAprovation.vue'
   import CriteriosAva from './AdicionaCriteriosAva.vue'
+  import CardCreateEquipe from './CardCreateEquipe.vue'
   export default {
     props: {
          userLogged: String,
+         estudante: Array,
+         projetos: Array
     },
     components: { 
       UserUpdate,
@@ -149,7 +161,8 @@
       PendingToScore,
       SprintTable,
       UserAprovation,
-      CriteriosAva
+      CriteriosAva,
+      CardCreateEquipe
     },
     data: () => ({
       dashboard: true,
