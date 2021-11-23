@@ -63,7 +63,7 @@
             >
             <v-text-field  v-on:change="onChangeRegister" style="width:330px" placeholder="Usuario" v-model="cadastro.login" :rules="[v => !!v || 'Usuario é obrigatorio']"/>
             <v-text-field  v-on:change="onChangeRegister" placeholder="Nome" v-model="cadastro.name" :rules="[v => !!v || 'Nome é obrigatorio']" />
-            <v-text-field  v-on:change="onChangeRegister" v-mask="'###.###.###-##'" placeholder="CPF" v-model="cadastro.document" :rules="[v => !!v || 'CPF é obrigatorio']"/>
+            <v-text-field  v-on:change="onChangeRegister" placeholder="R.A" v-model="cadastro.document" :rules="[v => !!v || 'R.A é obrigatorio']"/>
             <v-text-field  v-on:change="onChangeRegister" placeholder="E-mail" v-model="cadastro.email" :rules="emailRules"/>
             <v-text-field  
               v-on:change="onChangeRegister" 
