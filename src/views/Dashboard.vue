@@ -179,7 +179,6 @@ import CardCreateEquipe from "../components/CardCreateEquipe.vue";
 import CardFloatButton from "../components/CardFloatButton.vue";
 import CardToastSprint from "../components/CardToastSprint.vue";
 import GraphSpider from "../components/GraphSpider.vue";
-import GraphSpider2 from "../components/GraphSpider2.vue";
 import { UserTeam } from "../model/user-team";
 import NavDrawer from "../components/nav/NavDrawer.vue";
 import api from "../services/api";
