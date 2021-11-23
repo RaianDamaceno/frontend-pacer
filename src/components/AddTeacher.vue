@@ -1,19 +1,25 @@
 <template>
-  <v-row justify="center">
+  <v-row style="padding-top: 16%; padding-left: 90%;">
     <v-dialog
       v-model="dialog"
       persistent
-      max-width="600px"
+      max-width="500px"
     >
+        
       <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          color="primary"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          Open Dialog
-        </v-btn>
+        
+        <div class="text-xs-center">
+          <v-btn fab dark small            
+            color="primary"
+            v-bind="attrs"
+            v-on="on"
+            @click="showProject(projetoId)"
+          >
+          <v-icon>
+            mdi-cog-outline
+          </v-icon>
+          </v-btn>
+        </div>
       </template>
       <v-card>
         <v-card-title>
@@ -34,8 +40,8 @@
                 sm="12"
               >
                 <v-autocomplete
-                  :items="items"
-                  label="Interests"
+                  :items="this.tch"
+                  label="Professores"
                   multiple
                 ></v-autocomplete>
               </v-col>
@@ -65,10 +71,26 @@
 </template>
 
 <script>
+  import api from '../services/api';
   export default {
+    props: {
+      projetoId: String,
+      teachers: Array
+    },
     data: () => ({
       dialog: false,
-      items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
+      tch: [],
+
     }),
+    methods: {
+      showProject(id) {
+        console.log(id);
+      },
+    },
+    mounted(){
+      for(let i = 0; i < this.teachers.length; i++) {
+        this.tch.push(this.teachers[i].name);
+      }
+    }
   }
 </script>

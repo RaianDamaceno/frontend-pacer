@@ -7,7 +7,9 @@
                     <div class="dashboard-group">
             <div class="dashboard-group-person" v-if="Projeto">
                 Projeto
+                  
                 <v-slide-group class="pa-4" center-active show-arrows>
+                      
                     <v-slide-item
                         v-for="projeto in projetos"
                         :key="projeto.idProject"
@@ -22,7 +24,9 @@
                                 >
                                     <span> {{ projeto.description }} </span>
                                 </div>
-                               <add-teacher />
+                                <add-teacher 
+                                :projetoId="projeto.idProject"
+                                :teachers="allTeachers"/>
                             </div>
                             <v-row
                                 class="fill-height"
@@ -30,9 +34,11 @@
                                 justify="center"
                             >
                             </v-row>
+                            
                         </v-card>
                     </v-slide-item>
-                </v-slide-group>
+                </v-slide-group>        
+                    
                 <card-create-equipe
                     :projetos="projetos"
                     :estudantes="allEstudantes"
@@ -193,6 +199,7 @@ export default Vue.extend({
        criterios: [],
        estudantes: [] as UserTeam[],
        allEstudantes: [],
+       allTeachers: [],
        Role: true,
        grupoAtivo: "",
        grupos: "",
@@ -223,6 +230,11 @@ export default Vue.extend({
             });
             console.log("After", this.allEstudantes )
 
+        })
+        api.get('user').then(response => {
+            this.allTeachers = response.data.filter(function(el) {
+              return el.role == "TCH";
+            });
         })
         api.get('criteria').then(response => {
           this.criterios = response.data
