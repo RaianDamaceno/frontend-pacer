@@ -1,9 +1,10 @@
 <template>
     <div class="dashboard">
         <div class="dashboard-nav"> 
-            <nav-drawer :userLogged="userLogged" 
-            :estudantes="allEstudantes" 
-            :projetos="this.projetos"
+            <nav-drawer 
+                :userLogged="userLogged" 
+                :estudantes="allEstudantes" 
+                :isAluno="isAluno"
             />
         </div>   
         <div class="dashboard-content">
@@ -24,16 +25,17 @@
                 :Teams="this.userTeam"
                 :Estudantes="allEstudantes"
                 :userLogged="userLogged"
+                :criterios="criterios"
+                :sprintSelected="sprintSelected"
+                :isAluno="isAluno"
             />
         </div>
-
         <div class="dashboard-info" >
             <div v-for="sprint in sprints" :key="sprint.idSprint">
                 <button
                     :value="sprint.idSprint"
                     v-on:click="checkSprintAtiva(sprint)"
                 >
-
                     <p>Sprint</p>
                     <p>Data Inicial: {{ sprint.initialDate }}</p>
                     <p>Data Final: {{ sprint.finalDate }}</p>
@@ -64,7 +66,6 @@ export default Vue.extend({
        criterios: [],
        estudantes: [] as UserTeam[],
        allEstudantes: [],
-       grupoAtivo: "",
        grupos: "",
        projetos: [],
        teams: [],
@@ -89,7 +90,6 @@ export default Vue.extend({
             this.allEstudantes = response.data.filter(function(el) {
               return el.role == "USR";
             });
-
         })
         api.get('criteria').then(response => {
           this.criterios = response.data
@@ -98,7 +98,7 @@ export default Vue.extend({
           this.projetos = response.data
         })
         api.get('team').then(response => {
-          this.teams = response.data
+          this.userTeam = response.data
         })
         api.get('sprint').then(response => {
             this.sprints = response.data
@@ -113,7 +113,9 @@ export default Vue.extend({
       mounted() {
         this.decodeToken(this.$store.getters.getToken);
         this.getUserInformation();
-        this.getUserTeam(this.userLogged)
+        if(this.isAluno){
+            this.getUserTeam(this.userLogged)
+        }
     },
     methods: {
         getGruposFromProject(projectID) {
@@ -152,6 +154,7 @@ export default Vue.extend({
             } else {
                 this.activeSprint = false;
             }
+            console.log(this.sprintSelected)
         },
         decodeToken: function (token: string) {
             var base64Url = token.split('.')[1];

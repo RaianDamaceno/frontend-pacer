@@ -10,7 +10,7 @@
             v-bind="attrs"
             v-on="on"
             width="100%"
-            class="light-blue darken-3"
+            class="light-blue darken-2"
             elevation="0"
             x-large
             >
@@ -50,7 +50,7 @@
               >
               <v-select
                   v-model="selectUsuario"
-                  :items="estudantes"
+                  :items="allEstudantes"
                   label="Alunos"
                   item-text="name"
                   persistent-hint
@@ -128,9 +128,20 @@
       teamResponse: "",
       isScrum: false,
       scrumButton: true,
-      scrumID: ''
+      scrumID: '',
+      allEstudantes: []
     }),
+    mounted() {
+      this.getAlunos();
+    },
     methods: {
+      getAlunos: function() {
+          api.get('user').then(response => {
+            this.allEstudantes = response.data.filter(function(el) {
+              return el.role == "USR";
+            });
+        })
+      },
       checkScrumMaster: function() {
         if (this.selectUsuario.length > 1) {
           this.scrumButton = false

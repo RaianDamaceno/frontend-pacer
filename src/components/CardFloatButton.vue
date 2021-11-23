@@ -9,7 +9,7 @@
             :direction="direction"
             :open-on-hover="hover"
             :transition="transition"
-            background
+            background="transparent"
         >
         <template v-slot:activator>
             <v-btn
@@ -106,7 +106,7 @@
       top: false,
       right: false,
       bottom: false,
-      left: true,
+      left: false,
       scrumMaster: true,
       user_exist: false,
       id_user: '9288a850-588d-4a18-86ff-77b6d21a8464',
@@ -213,10 +213,6 @@
 </script>
 
 <style>
-  .theme--light.v-sheet #create {
-    background: rgb(2,0,36);
-    background: linear-gradient(47deg, rgba(13,44,82,1) 31%, rgba(90,26,159,1));
-  }
   #create .v-speed-dial {
     position: relative;
   }

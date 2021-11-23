@@ -7,7 +7,8 @@
                 v-for="Projeto in Projetos"
                 :key="Projeto.idProject"
             >
-            <v-expansion-panel-header> <h3>{{ Projeto.description}} </h3></v-expansion-panel-header>
+            <v-expansion-panel-header> <h3>{{ Projeto.description}} </h3>
+            </v-expansion-panel-header>
             <v-expansion-panel-content>
 
             <v-expansion-panels focusable>
@@ -17,8 +18,19 @@
                     :key="Team.idTeam"
                     @click="getUserFromTeam(Team.idTeam)"
                 >           
-                <v-expansion-panel-header> 
-                      <h3>  Grupo: {{ Team.team.teamName }} </h3> 
+                <v-expansion-panel-header v-if="isAluno"> 
+                      <h3>  Time: {{ Team.team.teamName }} </h3> 
+                    </v-expansion-panel-header>
+                    <v-expansion-panel-header v-else> 
+                        <div class="team-title"> 
+                            <div> 
+                                <h3>Time: {{ Team.teamName }} </h3>
+                            </div>
+                            <div> 
+                                <card-float-button :team="Team.idTeam"/>
+                            </div>
+                        </div>
+                      
                     </v-expansion-panel-header>
                 <v-expansion-panel-content>
                     <div>
@@ -83,6 +95,7 @@
   import Vue from 'vue'
   import api from '../services/api'
   import CardStudentRating from '../components/CardStudentRating.vue'
+  import CardFloatButton from '../components/CardFloatButton.vue'
 
   export default Vue.extend({
     name: 'Projetos',
@@ -91,24 +104,39 @@
         Teams: Array,
         Estudantes: Array,
         notasFeitas: Array,
-        userLogged: String
+        userLogged: String,
+        criterios: Array,
+        sprintSelected: String,
+        isAluno: Boolean,
+        
     },
     components: {
-        CardStudentRating
+        CardStudentRating,
+        CardFloatButton
     },
     data: () => ({
         myTeams: [],
         estudantes: '',
         idteam: '',
-        activeSprint: true
+        activeSprint: true,
+        grupoAtivo: '',
+        loading: false,
+        loader: null,
     }),
+     watch: {
+      loader () {
+        const l = this.loader
+        this[l] = !this[l]
+
+        setTimeout(() => (this[l] = false), 3000)
+      },
+    },
     methods: {
         getUserFromTeam(teamID) {
             this.grupoAtivo = teamID;
             api.get(`user-team?idTeam=${teamID}`).then((response) => {
                 this.idteam = teamID;
                 this.estudantes = response.data;
-                console.log('teste')
                 for (let i = 0; i < this.estudantes.length; i++) {
                     if (this.estudantes[i].isScrumMaster) {
                         this.haveSM = true;
@@ -126,8 +154,12 @@
   })
 </script>
 
-<style scoped lang="scss">
-
+<style>
+    .team-title {
+        display: flex;
+        flex-direction: row;
+        justify-content:space-between;
+    }
     .ma-4 {
         background: rgb(2, 0, 36);
         background: linear-gradient(

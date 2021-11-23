@@ -26,7 +26,7 @@
                     </v-list-item>
                 </v-list-item-group>
 
-                <v-list-group>
+                <v-list-group v-if="!isAluno">
                     <template v-slot:activator>
                         <v-btn 
                           width="100%" 
@@ -51,7 +51,7 @@
                 </v-list-group>
 
                 <v-list-item-group>
-                <v-list-group>
+                <v-list-group v-if="!isAluno">
                     <template v-slot:activator>
                         <v-btn 
                           width="100%" 
@@ -77,7 +77,7 @@
                 </v-list-item-group>
                 <!-- ------------------------ -->
 
-                <v-list-group>
+                <v-list-group v-if="!isAluno">
                     <template v-slot:activator>
                         <v-btn 
                           width="100%" 
@@ -107,13 +107,13 @@
                     </v-list-item>
                 </v-list-item-group>
 
-                  <v-list-item-group>
+                  <v-list-item-group v-if="!isAluno">
                     <v-list-item>
                         <user-aprovation />
                     </v-list-item>
                 </v-list-item-group>
 
-                <v-list-item-group>
+                <v-list-item-group v-if="!isAluno">
                     <v-list-item>
                         <card-create-equipe             
                             :projetos="projetos"
@@ -150,7 +150,7 @@
     props: {
          userLogged: String,
          estudante: Array,
-         projetos: Array
+         isAluno: Boolean
     },
     components: { 
       UserUpdate,
