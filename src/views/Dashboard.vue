@@ -312,7 +312,8 @@ export default Vue.extend({
        idteam: "",
        isAluno: false,
        showButtonScrum: false,
-       minhaAvaliação:[]
+       minhaAvaliação:[],
+       selectSprint: ''
      }),
      beforeMount() {
         api.get('user').then(response => {
