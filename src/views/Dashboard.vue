@@ -152,16 +152,6 @@
                 </div>
                 <graph-spider
                     v-if="showGraph"
-                    :notas="notasFeitas"
-                    :sprintSelected="sprintSelected"
-                    :user="userLogged"
-                    :criterios="criterios"
-                />
-                <graph-spider-2
-                    v-if="showGraph"
-                    :notas="notasFeitas"
-                    :sprintSelected="sprintSelected"
-                    :user="userLogged"
                     :criterios="criterios"
                 />
             </div>
@@ -201,7 +191,6 @@ export default Vue.extend({
         CardCreateEquipe,
         CardToastSprint,
         GraphSpider,
-        GraphSpider2,
         NavDrawer,
         CardFloatButton,
     },
