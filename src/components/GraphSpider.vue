@@ -6,6 +6,7 @@
 <style>
 .hc {
     height: 100%;
+    width: 50%;
 }
 </style>
 
@@ -85,7 +86,7 @@ export default Vue.extend({
                 },
 
                 title: {
-                    text: "Grafico para acompanhamento",
+                    text: "Media de Notas",
                 },
 
                 xAxis: {
