@@ -22,9 +22,7 @@
                                 >
                                     <span> {{ projeto.description }} </span>
                                 </div>
-                                <div class="dashboard-group-person-button">
-                                    <!-- <card-float-button :team="projeto.idProjeto"/> -->
-                                </div>
+                               <add-teacher />
                             </div>
                             <v-row
                                 class="fill-height"
@@ -172,10 +170,12 @@
   import CardCreateEquipe from '../components/CardCreateEquipe.vue'
   import CardFloatButton from '../components/CardFloatButton.vue'
   import CardToastSprint from '../components/CardToastSprint.vue'
+  import AddTeacher from '../components/AddTeacher.vue'
   import GraphSpider from "../components/GraphSpider.vue";
   import { UserTeam } from '../model/user-team'
   import NavDrawer from "../components/nav/NavDrawer.vue";
-  import api from '../services/api'
+  import api from '../services/api';
+  
 
 export default Vue.extend({
     name: "Dashboard",
@@ -186,6 +186,7 @@ export default Vue.extend({
         GraphSpider,
         NavDrawer,
         CardFloatButton,
+        AddTeacher,
     },
      data: () => ({
        cards: false,
