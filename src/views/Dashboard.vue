@@ -8,12 +8,12 @@
                 <div class="dashboard-group-person" v-if="Projeto">
                     Projeto
                     <v-slide-group class="pa-4" center-active show-arrows>
-                        
+
                         <v-slide-item
                             v-for="projeto in projetos"
                             :key="projeto.idProject"
                         >
-                        
+
                             <v-card class="ma-4" height="200" width="180">
                                 <div class="dashboard-group-person-minify">
                                     <div
@@ -26,7 +26,7 @@
                                     >
                                         <span> {{ projeto.description }} </span>
                                     </div>
-                                    <add-teacher 
+                                    <add-teacher
                                         :projetoId="projeto.idProject"
                                         :teachers="allTeachers"
                                     />
@@ -131,7 +131,7 @@
                                                 :sprintID="sprintSelected"
                                                 :notasFeitas="notasFeitas"
                                                 :idEvaluator="userLogged"
-                                                :idGroup="grupoAtivo"
+                                                :idGroup="ccccccc"
                                             />
                                         </div>
                                         <div
@@ -157,8 +157,12 @@
                     </div>
                 </div>
                 <graph-spider
-                    v-if="showGraph"
+                    v-if="grupoAtivo"
                     :criterios="criterios"
+                    :notas="notasFeitas"
+                    :sprintSelected="sprintSelected"
+                    :user="userLogged"
+                    :grupoAtivo="grupoAtivo"
                 />
             </div>
             <div class="dashboard-info">
@@ -227,8 +231,7 @@ export default Vue.extend({
         idteam: "",
         isAluno: false,
         showButtonScrum: false,
-        minhaAvaliação: [],
-        showGraph: false,
+        minhaAvaliação: []
     }),
     beforeMount() {
         api.get("user").then((response) => {
@@ -260,15 +263,6 @@ export default Vue.extend({
         });
         api.get("notes-store").then((response) => {
             this.notasFeitas = response.data;
-
-            this.showGraph =
-                this.notasFeitas.filter(
-                    (data: any) =>
-                        data.evaluated.idUser === this.userLogged &&
-                        data.idSprint === this.sprintSelected
-                ).length === 0
-                    ? false
-                    : true;
         });
     },
     mounted() {
