@@ -8,10 +8,12 @@
                 <div class="dashboard-group-person" v-if="Projeto">
                     Projeto
                     <v-slide-group class="pa-4" center-active show-arrows>
+                        
                         <v-slide-item
                             v-for="projeto in projetos"
                             :key="projeto.idProject"
                         >
+                        
                             <v-card class="ma-4" height="200" width="180">
                                 <div class="dashboard-group-person-minify">
                                     <div
@@ -24,6 +26,10 @@
                                     >
                                         <span> {{ projeto.description }} </span>
                                     </div>
+                                    <add-teacher 
+                                        :projetoId="projeto.idProject"
+                                        :teachers="allTeachers"
+                                    />
                                     <div class="dashboard-group-person-button">
                                         <!-- <card-float-button :team="projeto.idProjeto"/> -->
                                     </div>
@@ -152,16 +158,6 @@
                 </div>
                 <graph-spider
                     v-if="showGraph"
-                    :notas="notasFeitas"
-                    :sprintSelected="sprintSelected"
-                    :user="userLogged"
-                    :criterios="criterios"
-                />
-                <graph-spider-2
-                    v-if="showGraph"
-                    :notas="notasFeitas"
-                    :sprintSelected="sprintSelected"
-                    :user="userLogged"
                     :criterios="criterios"
                 />
             </div>
@@ -189,10 +185,10 @@ import CardCreateEquipe from "../components/CardCreateEquipe.vue";
 import CardFloatButton from "../components/CardFloatButton.vue";
 import CardToastSprint from "../components/CardToastSprint.vue";
 import GraphSpider from "../components/GraphSpider.vue";
-import GraphSpider2 from "../components/GraphSpider2.vue";
 import { UserTeam } from "../model/user-team";
 import NavDrawer from "../components/nav/NavDrawer.vue";
 import api from "../services/api";
+import AddTeacher from "../components/AddTeacher.vue";
 
 export default Vue.extend({
     name: "Dashboard",
@@ -201,15 +197,16 @@ export default Vue.extend({
         CardCreateEquipe,
         CardToastSprint,
         GraphSpider,
-        GraphSpider2,
         NavDrawer,
         CardFloatButton,
+        AddTeacher,
     },
     data: () => ({
         cards: false,
         criterios: [],
         estudantes: [] as UserTeam[],
         allEstudantes: [],
+        allTeachers: [],
         Role: true,
         grupoAtivo: "",
         grupos: "",
@@ -240,6 +237,11 @@ export default Vue.extend({
                 return el.role == "USR";
             });
             console.log("After", this.allEstudantes);
+        });
+        api.get('user').then(response => {
+            this.allTeachers = response.data.filter(function(el) {
+              return el.role == "TCH";
+            });
         });
         api.get("criteria").then((response) => {
             this.criterios = response.data;

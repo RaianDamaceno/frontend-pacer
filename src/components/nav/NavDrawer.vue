@@ -142,7 +142,7 @@
   import PendingToScore from './PendingToScore.vue'
   import SprintTable from './SprintTable.vue'
   import UserAprovation from './UsersAprovation.vue'
-  import CriteriosAva from './AdicionaCriteriosAva.vue'
+  //import CriteriosAva from './AdicionaCriteriosAva.vue'
   export default {
     props: {
          userLogged: String,
@@ -156,7 +156,7 @@
       PendingToScore,
       SprintTable,
       UserAprovation,
-      CriteriosAva
+      //CriteriosAva
     },
     data: () => ({
       dashboard: true,
