@@ -178,10 +178,8 @@ export default {
                 }
             }
             this.update.push(this.rating);
-            console.log(this.update);
         },
         ratingEstudant: function () {
-            console.log(this.idGroup);
             for (let i = 0; i < this.teste.length; i++) {
                 let payload = {
                     idEvaluator: this.idEvaluator,
