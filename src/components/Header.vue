@@ -83,10 +83,10 @@
           >{{ name.title }}</v-btn
         > </template
       ><v-spacer />
-      <v-btn icon href="https://github.com/RaianDamaceno/frontend-pacer">
+      <v-btn icon href="https://github.com/RaianDamaceno/frontend-pacer" target="_blank">
         <v-icon color="red">mdi-github</v-icon>
       </v-btn>
-      <v-btn icon href="https://github.com/JoshuaSene/pacer-backend">
+      <v-btn icon href="https://github.com/JoshuaSene/pacer-backend" target="_blank">
         <v-icon color="blue">mdi-github</v-icon>
       </v-btn>
     </v-app-bar>
