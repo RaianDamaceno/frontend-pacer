@@ -158,16 +158,6 @@
                 </div>
                 <graph-spider
                     v-if="showGraph"
-                    :notas="notasFeitas"
-                    :sprintSelected="sprintSelected"
-                    :user="userLogged"
-                    :criterios="criterios"
-                />
-                <graph-spider-2
-                    v-if="showGraph"
-                    :notas="notasFeitas"
-                    :sprintSelected="sprintSelected"
-                    :user="userLogged"
                     :criterios="criterios"
                 />
             </div>
@@ -195,11 +185,10 @@ import CardCreateEquipe from "../components/CardCreateEquipe.vue";
 import CardFloatButton from "../components/CardFloatButton.vue";
 import CardToastSprint from "../components/CardToastSprint.vue";
 import GraphSpider from "../components/GraphSpider.vue";
-import AddTeacher from '../components/AddTeacher.vue'
-import GraphSpider2 from "../components/GraphSpider2.vue";
 import { UserTeam } from "../model/user-team";
 import NavDrawer from "../components/nav/NavDrawer.vue";
 import api from "../services/api";
+import AddTeacher from "../components/AddTeacher.vue";
 
 export default Vue.extend({
     name: "Dashboard",
@@ -208,7 +197,6 @@ export default Vue.extend({
         CardCreateEquipe,
         CardToastSprint,
         GraphSpider,
-        GraphSpider2,
         NavDrawer,
         CardFloatButton,
         AddTeacher,
