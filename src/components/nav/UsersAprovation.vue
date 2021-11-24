@@ -19,7 +19,7 @@
         bottom
         offset-y
       >
-        AdicionaCriteriosAva
+        ProjectCriteriaAdd
       </v-menu>
       <v-dialog
         v-model="dialog"
