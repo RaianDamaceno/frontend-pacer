@@ -46,7 +46,7 @@
                     return-object
                     hint="Selecione o Professor"
                     :menu-props="{ maxHeight: '400' }"
-                    label="Select"                  
+                    label="Professores"                   
                     persistent-hint
                   ></v-select>
                 </v-col>
@@ -101,7 +101,9 @@
           this.$store.dispatch(
               "messageSuccess",
               "Professor adicionado com sucesso!"
-            )}).catch(
+            )
+            window.location.reload(true);
+            }).catch(
             error => { 
               this.$store.dispatch(
               "messageError",
