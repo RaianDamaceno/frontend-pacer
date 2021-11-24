@@ -126,7 +126,6 @@
           }
         },
         createTeam: function() {
-          console.log("OI", this.estudantes)
             let payload = { 
                 idProject: this.selectProjeto.idProject, 
                 teamName: this.teamName, 
@@ -139,6 +138,7 @@
                   this.addAlunos(this.teamResponse)
                 }
                 alert("Time Cadastrado Com sucesso")
+                window.location.reload(true);
               } else {
                 alert("Ocorreu um erro ao realizar o cadastro do Time")
               }

@@ -124,6 +124,7 @@
             .then((response) => {
               console.log(response.data);
               alert("Cadastro feito com sucesso");
+              window.location.reload(true);
             }, (error) => {
               console.log(error);
               alert("Erro no cadastro");

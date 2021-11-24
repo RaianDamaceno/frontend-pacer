@@ -18,6 +18,7 @@
         async DeleteUserData(){
             await api.post(`user/wipe-data/${this.idUser}`).then(response => {
             alert("Informações removidas com sucesso");
+            window.location.reload(true);
             }).catch(error =>{
                 alert("Erro ao remover informações");
             })
