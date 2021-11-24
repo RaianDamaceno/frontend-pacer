@@ -19,7 +19,21 @@ Vue.prototype.aux = [];
 export default Vue.extend({
     name: "GraphSpider",
     props: {
+        notas: Array,
+        sprintSelected: String,
+        user: String,
         criterios: Array,
+        grupoAtivo: String
+    },
+    created() {
+        setTimeout(() => {
+            this.notas.filter(
+                (data) =>
+                    data.evaluated.idUser === this.user &&
+                    data.idSprint === this.sprintSelected &&
+                    data.idGroup === this.grupoAtivo
+            )
+        }, 1000);
     },
     data() {
         return {
@@ -64,18 +78,17 @@ export default Vue.extend({
                     valueSuffix: " Pontos",
                 },
 
-
                 //Data Mock. Wait call to backend with data;
                 series: [
                     {
                         name: "Media da Sala",
-                        data: [87, 95, 45, 7, 50 ],
-                        color: 'blue'
+                        data: [87, 95, 45, 7, 50],
+                        color: "blue",
                     },
                     {
                         name: "Notas dos Colegas",
-                        data: [94, 30, 82, 6, 20 ],
-                        color: 'green'
+                        data: [94, 30, 82, 6, 20],
+                        color: "green",
                     },
                 ],
             },
