@@ -232,5 +232,6 @@
 
     span {
         color: #000;
+        font-weight: bold;
     }
 </style>
