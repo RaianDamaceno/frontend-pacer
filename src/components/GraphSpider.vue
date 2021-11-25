@@ -23,7 +23,7 @@ export default Vue.extend({
         sprintSelected: String,
         user: String,
         criterios: Array,
-        grupoAtivo: String
+        grupoAtivo: String,
     },
     created() {
         setTimeout(() => {
@@ -37,16 +37,18 @@ export default Vue.extend({
             //Data Mock. Wait call to backend with data;
             var values = {
                 medias: [87, 95, 45, 7, 50],
-                notes: [94, 30, 82, 6, 20]
+                notes: [94, 30, 82, 6, 20],
             };
-            this.total.push({
-                name: "Media da Sala",
-                data: values.medias
-            });
-            this.total.push({
-                name: "Notas dos Colegas",
-                data: values.notes
-            });
+            this.total.push(
+                {
+                    name: "Media da Sala",
+                    data: values.medias,
+                },
+                {
+                    name: "Notas dos Colegas",
+                    data: values.notes,
+                }
+            );
         }, 1000);
     },
     data() {
