@@ -130,8 +130,7 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import api from '../../services/api'
+ import api from '../../services/api'
  
   export default {
     data () {
@@ -163,7 +162,7 @@
               
             }
             console.log(updateProject);
-            await axios.patch(`http://localhost:3000/project/${item.idProject}`, updateProject).then((response) => {
+            await api.patch(`project/${item.idProject}`, updateProject).then((response) => {
                 console.log(response);
               }, (error) => {
                 console.log(error);
@@ -181,7 +180,7 @@
               'id': item.idProject
             }
             console.log(updateUser);
-          await axios.delete(`http://localhost:3000/project/${item.idProject}`, updateUser).then((response) => {
+          await api.delete(`project/${item.idProject}`, updateUser).then((response) => {
                 alert("delete feito com sucesso");
               }, (error) => {
                 console.log(error);
