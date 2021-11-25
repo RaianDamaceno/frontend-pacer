@@ -142,7 +142,7 @@ export default Vue.extend({
                     payload
                 ).then(() => {
                     this.showButtonScrum = false;
-                    alert("Parabéns, agora você é Scrum Master!");
+                    this.$store.dispatch("messageSuccess", "Parabéns, agora você é Scrum Master!")
                 })
                 .catch((error) => {
                     console.log(error);
@@ -165,7 +165,6 @@ export default Vue.extend({
             } else {
                 this.activeSprint = false;
             }
-            console.log(this.sprintSelected)
         },
         decodeToken: function (token: string) {
             var base64Url = token.split(".")[1];

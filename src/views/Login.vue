@@ -144,10 +144,9 @@
           } else {
             api.post('/user', this.cadastro).then(response =>{
                 this.telaCadastro = false;
-                alert("Usuário cadastrado com sucesso!")
-                
+                this.$store.dispatch("messageSuccess", "Usuário cadastrado com sucesso!")               
             }).catch(function () { 
-              alert("Erro ao realizar cadastro")
+               this.$store.dispatch("messageError", "Erro ao realizar cadastro")
             })
           }
         },
@@ -157,7 +156,7 @@
             this.$store.dispatch('setToken', token);
             this.$router.push({ path: '/dashboard'})
           }).catch(function (error) {
-            alert('Senha e/ou Email invalidos')
+            this.$store.dispatch("messageError", "Senha e/ou Email invalidos")
           })
         },
         onChangeRegister(){

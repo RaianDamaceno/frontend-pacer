@@ -119,10 +119,10 @@
           })
           await api.post('user/approve', updateArray)
             .then((response) => {
-              alert("Cadastro feito com sucesso");
+              this.$store.dispatch("messageSuccess", "Cadastro feito com sucesso");
               window.location.reload(true);
             }, (error) => {
-              alert("Erro no cadastro");
+              this.$store.dispatch("messageError", "Erro no cadastro");
             });
             this.$refs.form.reset();
           }

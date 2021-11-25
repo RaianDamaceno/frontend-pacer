@@ -8,10 +8,17 @@
                 :key="Projeto.idProject"
                 @click="getGruposFromProject(Projeto.idProject)"
             >
-            <v-expansion-panel-header> <h3>{{ Projeto.description}} </h3>
+            <v-expansion-panel-header>
+                <div class="team-title"> 
+                    <div> 
+                         <h3>{{ Projeto.description}}</h3>
+                    </div>
+                    <div style="margin-right: 30px" v-if="!isAluno" > 
+                        <add-teacher :projetoId="Projeto.idProject" />
+                    </div>
+                </div>              
             </v-expansion-panel-header>
             <v-expansion-panel-content>
-
             <v-expansion-panels focusable>
                 <br>  
                 <v-expansion-panel
@@ -19,20 +26,17 @@
                     :key="Team.idTeam"
                     @click="getUserFromTeam(Team.idTeam)"
                 >           
-                <v-expansion-panel-header v-if="isAluno"> 
-                    <div class="team-title">
-                        <div> 
-                            <h3> Time: {{ Team.teamName }} </h3> 
-                        </div>
-                    </div>
-                    </v-expansion-panel-header>
-                    <v-expansion-panel-header v-else> 
+                    <v-expansion-panel-header> 
                         <div class="team-title"> 
                             <div> 
                                 <h3>Time: {{ Team.teamName }} </h3>
                             </div>
                             <div> 
-                                <card-float-button :team="Team.idTeam"/>
+                                <card-float-button 
+                                    :team="Team.idTeam" 
+                                    :isAluno="isAluno"
+                                    :isGrupoDoUsuario="isGrupoDoUsuario"
+                                />
                             </div>
                         </div>
                       
@@ -115,6 +119,7 @@
   import api from '../services/api'
   import CardStudentRating from '../components/CardStudentRating.vue'
   import CardFloatButton from '../components/CardFloatButton.vue'
+  import AddTeacher from '../components/AddTeacher.vue'
 
   export default Vue.extend({
     name: 'Projetos',
@@ -131,7 +136,8 @@
     },
     components: {
         CardStudentRating,
-        CardFloatButton
+        CardFloatButton,
+        AddTeacher
     },
     data: () => ({
         myTeams: [],
@@ -157,10 +163,8 @@
         getGruposFromProject(projectID) {
             api.get(`project/${projectID}`).then((response) => {
                 this.projectGrupos = response.data.teams;
-                
             });
         },
-
         getUserFromTeam(teamID) {
             this.grupoAtivo = teamID;
             api.get(`user-team?idTeam=${teamID}`).then((response) => {
@@ -178,7 +182,6 @@
                         this.haveSM = false;
                     }
                 }
-                console.log(this.isGrupoDoUsuario)
                 if (this.isAluno && !this.haveSM) {
                     this.showButtonScrum = true;
                 }
@@ -228,6 +231,6 @@
     }
 
     span {
-        color: #fff;
+        color: #000;
     }
 </style>

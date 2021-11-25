@@ -161,10 +161,10 @@
             if (this.selectUsuario.length > 0) {
               this.addAlunos(this.teamResponse)
             }
-            alert("Time Cadastrado Com sucesso")
-          } else {
-            alert("Ocorreu um erro ao realizar o cadastro do Time")
+            this.$store.dispatch("messageSuccess", "Time Cadastrado Com sucesso");
           }
+        }).catch( error => {
+          this.$store.dispatch("messageError", "Time Cadastrado Com sucesso");
         })
       },
       addAlunos: function(teamResponse) {

@@ -8,11 +8,12 @@
      
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-          class="black--text"
-          color="white"
-          dark
-          v-bind="attrs"
-          v-on="on"
+            v-bind="attrs"
+            v-on="on"
+            width="100%"
+            class="light-blue darken-3"
+            elevation="0"
+            x-large
         >
           Sprints Cadastradas
         </v-btn>
@@ -45,7 +46,6 @@
                         <template v-slot:input>
                           <v-text-field
                             v-model="initialDate.item.initialDate"
-                            :rules="[max25chars]"
                             label="Edit"
                             single-line
                             counter
@@ -66,7 +66,6 @@
                         <template v-slot:input>
                           <v-text-field
                             v-model="finalDate.item.finalDate"
-                            :rules="[max25chars]"
                             label="Edit"
                             single-line
                             counter
@@ -153,9 +152,9 @@
               });
           })
           if(!errorObj){
-            alert("Alteração feita com sucesso!");
+            this.$store.dispatch("messageSuccess", "Alteração feita com sucesso!")
           }else{
-            alert("Erro na atualização!");
+            this.$store.dispatch("messageError", "Erro na atualização!")
           }
           },
        async deleteItem(item){
@@ -164,10 +163,9 @@
             }
             console.log(deleteSprint);
               api.delete(`sprint/${item.idSprint}`, deleteSprint).then((response) => {
-                alert("Sprint deletada com sucesso");
+                this.$store.dispatch("messageSuccess", "Alteração feita com sucesso!")
               }, (error) => {
-                console.log(error);
-                alert("Erro no delete");
+                this.$store.dispatch("messageSuccess", "Erro ao deletar a sprint")
               });
     
       }
@@ -185,3 +183,9 @@
     }
   }
 </script>
+
+<style scoped lang="scss">
+  span {
+    color: black;
+  }
+</style>

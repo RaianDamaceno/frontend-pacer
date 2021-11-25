@@ -17,10 +17,10 @@
     methods: {
         async DeleteUserData(){
             await api.post(`user/wipe-data/${this.idUser}`).then(response => {
-            alert("Informações removidas com sucesso");
+            this.$store.dispatch("messageSuccess", "Informações removidas com sucesso");
             window.location.reload(true);
             }).catch(error =>{
-                alert("Erro ao remover informações");
+              this.$store.dispatch("messageError", "Erro ao remover informações");
             })
         }
     },

@@ -119,8 +119,7 @@
               console.log(response.data);
             }, (error) => {
               console.log(error);
-            });
-            console.log (this.projects)
+            }); 
         },
         async getCriterias() {
             await api.get('criteria').then((response) => {
@@ -129,7 +128,6 @@
             }, (error) => {
               console.log(error);
             });
-            console.log (this.criterias)
         },
         async submitForm(){
           this.dialog=false
@@ -142,11 +140,9 @@
             'snActivated': "s"
           }
            await api.post('criteria-project', associateCriteria).then((response) => {
-              console.log(response.data);
-              alert("Cadastro feito com sucesso");
+              this.$store.dispatch("messageSuccess", "Cadastro feito com sucesso");
             }, (error) => {
-              console.log(error);
-              alert("Erro no cadastro");
+              this.$store.dispatch("messageError", "Erro no cadastro");
             });
             this.$refs.form.reset();
         }

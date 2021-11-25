@@ -7,11 +7,12 @@
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-          class="black--text"
-          color="white"
-          dark
-          v-bind="attrs"
-          v-on="on"
+            v-bind="attrs"
+            v-on="on"
+            width="100%"
+            class="light-blue darken-3"
+            elevation="0"
+            x-large
         >
           Cadastro de Sprint
         </v-btn>
@@ -120,11 +121,9 @@
             'idProject':    this.selectProject.idProject
           }
            api.post('sprint', CreateSprint).then((response) => {
-              console.log(response.data);
-              alert("Cadastro feito com sucesso");
+              this.$store.dispatch("messageSuccess", "Cadastro de sprint realizado com sucesso");
             }, (error) => {
-              console.log(error);
-              alert("Erro no cadastro");
+              this.$store.dispatch("messageError", "Cadastro de sprint realizado com sucesso");
             });
             this.$refs.form.reset();
         },

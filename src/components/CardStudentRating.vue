@@ -183,13 +183,9 @@ export default {
           "obs": "Teste"
         }
         api.post("notes-store", payload).then(response => {
-          if (response.status === 201) {
-            alert("Nota Cadastrada Com sucesso")
-          } else {
-            alert("Ocorreu um erro ao realizar o cadastro das Notas")
-          }
+            this.$store.dispatch("messageSuccess", "Nota Cadastrada Com sucesso");
         }).catch(error => {
-          console.log(error.response);
+          this.$store.dispatch("messageError", "Ocorreu um erro ao realizar o cadastro das Notas");
         });
       }
     },
@@ -200,11 +196,11 @@ export default {
         }
         api.put(`notes-store/${this.update[i].id}`, payload).then(response => {
           if (response.status === 200) {
-            alert("Nota Atualiza Com sucesso")
-          } else {
-            alert("Ocorreu um erro ao realizar a atualização das Notas")
+            this.$store.dispatch("messageSuccess", "Nota Atualizada Com sucesso");
           }
-        })
+        }).catch(error => {
+          this.$store.dispatch("messageError", "Ocorreu um erro ao realizar a atualização das Notas");
+        });
       }
     }
   }

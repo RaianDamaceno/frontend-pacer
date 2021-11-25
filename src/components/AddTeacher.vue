@@ -1,5 +1,5 @@
 <template>
-  <div v-if="this.role !== 'USR'">
+  <div>
     <v-row style="padding-top: 16%; padding-left: 90%;">
       <v-dialog
         v-model="dialog"
@@ -40,8 +40,8 @@
                   sm="12"
                 >
                   <v-select
-                    v-model="e6"
-                    :items="this.tch"
+                    v-model="professorSelecionado"
+                    :items="teachers"
                     item-text="name"
                     return-object
                     hint="Selecione o Professor"
@@ -81,19 +81,20 @@
   export default {
     props: {
       projetoId: String,
-      teachers: Array
     },
     data: () => ({
       dialog: false,
       tch: [],
       e6: [],
-      role: ''
+      role: '',
+      teachers: [], 
+      professorSelecionado:[]
     }),
     methods: {
       async showTeacherName(){
         let payload = {
           "idProject": this.projetoId,
-          "idUser": this.e6.id,
+          "idUser": this.professorSelecionado.idUser,
           "optional": "1",
           "snActivated": "S"
         }
@@ -113,18 +114,12 @@
         );
       }
     },
-    mounted(){
-      let userId = this.$store.getters.getUserId
-      api.get(`user/${userId}`).then(response => {       
-        this.role = response.data.role;
-      });
-
-      for(let i = 0; i < this.teachers.length; i++) {
-        this.tch.push({
-          "id": this.teachers[i].idUser,
-          "name": this.teachers[i].name
-        });
-      }
-    }
+    beforeMount(){
+      api.get('user').then(response => {
+          this.teachers = response.data.filter(function(el) {
+            return el.role == "TCH";
+          });
+      })
+    },
   }
 </script>
