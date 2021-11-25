@@ -27,12 +27,26 @@ export default Vue.extend({
     },
     created() {
         setTimeout(() => {
-            this.notas.filter(
-                (data) =>
-                    data.evaluated.idUser === this.user &&
-                    data.idSprint === this.sprintSelected &&
-                    data.idGroup === this.grupoAtivo
-            )
+            // this.notas.filter(
+            //     (data) =>
+            //         data.evaluated.idUser === this.user &&
+            //         data.idSprint === this.sprintSelected &&
+            //         data.idGroup === this.grupoAtivo
+            // )
+
+            //Data Mock. Wait call to backend with data;
+            var values = {
+                medias: [87, 95, 45, 7, 50],
+                notes: [94, 30, 82, 6, 20]
+            };
+            this.total.push({
+                name: "Media da Sala",
+                data: values.medias
+            });
+            this.total.push({
+                name: "Notas dos Colegas",
+                data: values.notes
+            });
         }, 1000);
     },
     data() {
@@ -78,19 +92,7 @@ export default Vue.extend({
                     valueSuffix: " Pontos",
                 },
 
-                //Data Mock. Wait call to backend with data;
-                series: [
-                    {
-                        name: "Media da Sala",
-                        data: [87, 95, 45, 7, 50],
-                        color: "blue",
-                    },
-                    {
-                        name: "Notas dos Colegas",
-                        data: [94, 30, 82, 6, 20],
-                        color: "green",
-                    },
-                ],
+                series: this.total || [],
             },
         };
     },
