@@ -63,7 +63,7 @@
             >
             <v-text-field  v-on:change="onChangeRegister" style="width:330px" placeholder="Usuario" v-model="cadastro.login" :rules="[v => !!v || 'Usuario é obrigatorio']"/>
             <v-text-field  v-on:change="onChangeRegister" placeholder="Nome" v-model="cadastro.name" :rules="[v => !!v || 'Nome é obrigatorio']" />
-            <v-text-field  v-on:change="onChangeRegister" placeholder="R.A" v-model="cadastro.document" :rules="[v => !!v || 'R.A é obrigatorio']"/>
+            <v-text-field  v-if="this.cadastro.role=='USR'" v-on:change="onChangeRegister" placeholder="R.A" v-model="cadastro.document" :rules="[v => !!v || 'R.A é obrigatorio']"/>
             <v-text-field  v-on:change="onChangeRegister" placeholder="E-mail" v-model="cadastro.email" :rules="emailRules"/>
             <v-text-field  
               v-on:change="onChangeRegister" 
@@ -144,10 +144,9 @@
           } else {
             api.post('/user', this.cadastro).then(response =>{
                 this.telaCadastro = false;
-                alert("Usuário cadastrado com sucesso!")
-                
+                this.$store.dispatch("messageSuccess", "Usuário cadastrado com sucesso!")               
             }).catch(function () { 
-              alert("Erro ao realizar cadastro")
+               this.$store.dispatch("messageError", "Erro ao realizar cadastro")
             })
           }
         },
@@ -157,7 +156,7 @@
             this.$store.dispatch('setToken', token);
             this.$router.push({ path: '/dashboard'})
           }).catch(function (error) {
-            alert('Senha e/ou Email invalidos')
+            this.$store.dispatch("messageError", "Senha e/ou Email invalidos")
           })
         },
         onChangeRegister(){

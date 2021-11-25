@@ -108,11 +108,9 @@
       }
     },
     mounted() {
-      console.log(this.password)
       let userId = this.$store.getters.getUserId
       api.get(`user/${userId}`).then(response => {       
         this.user = response.data
-        console.log(this.user)
       })
     },
     methods: {
@@ -122,9 +120,9 @@
             'password': this.password,
           }
           api.patch(`user/${userId}`, updatePassword).then(response => {
-            alert("Atualizacao de dados realizado com sucesso");
+            this.$store.dispatch("messageSuccess", "Nota Atualizada Com sucesso");
           }).catch(error =>{
-            alert("Erro ao atualizar cadastro");
+            this.$store.dispatch("messageError", "Erro ao atualizar cadastro");
           })
         },
     },

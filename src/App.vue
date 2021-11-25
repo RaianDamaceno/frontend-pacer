@@ -15,7 +15,7 @@
       <v-snackbar v-model="snackbar.show" :timeout="snackbar.timeout" 
       :color="snackbar.color">
         {{ snackbar.text }}
-        <v-btn flat color="white" text @click="snackbar.show = false">fechar</v-btn>
+        <v-btn color="white" text @click="snackbar.show = false">fechar</v-btn>
       </v-snackbar>
       <router-view/>
     </v-main>

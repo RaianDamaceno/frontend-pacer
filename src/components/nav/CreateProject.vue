@@ -110,17 +110,12 @@ export default {
         description: this.Description,
         evaluationFormat: this.evaluationFormat.charAt(0,1), //Será T ou U.
       };
-      console.log(this.initialDateNew);
-      console.log(this.CreateProject);
-      await api.post("project", CreateProject).then(
-        (response) => {
-          console.log(response.data);
-          alert("Cadastro feito com sucesso");
+      await api.post("project", CreateProject).then((response) => {
+          this.$store.dispatch("messageSuccess", "Cadastro feito com sucesso!")
           window.location.reload(true);
         },
         (error) => {
-          console.log(error);
-          alert("Erro no cadastro");
+          this.$store.dispatch("messageError", "Erro no cadastro de projeto")
         }
       );
       this.$refs.form.reset();
