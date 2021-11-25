@@ -149,7 +149,8 @@
   export default {
     props: {
          userLogged: String,
-         estudante: Array,
+         estudantes: Array,
+         projetos: Array,
          isAluno: Boolean
     },
     components: { 

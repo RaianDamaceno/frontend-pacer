@@ -4,10 +4,28 @@
             <nav-drawer 
                 :userLogged="userLogged" 
                 :estudantes="allEstudantes" 
+                :projetos="projetos"
                 :isAluno="isAluno"
             />
         </div>   
         <div class="dashboard-content">
+        <div class="dashboard-info" >
+            <div> 
+                <h3> Sprints </h3>
+            </div>
+            <div>
+                <v-select
+                    v-model="selectSprint"
+                    :items="this.sprints"
+                    label="Escolha uma Sprint"
+                    item-text="nome"
+                    persistent-hint
+                    return-object
+                    single-line
+                    v-on:change="checkSprintAtiva(selectSprint)"
+                ></v-select>
+            </div>
+        </div>
         <div class="dashboard-content-graficos">
             <div>
                 <graph-spider
@@ -28,20 +46,8 @@
                 :criterios="criterios"
                 :sprintSelected="sprintSelected"
                 :isAluno="isAluno"
+                :isSprintAtiva="activeSprint"
             />
-        </div>
-        <div class="dashboard-info" >
-            <div v-for="sprint in sprints" :key="sprint.idSprint">
-                <button
-                    :value="sprint.idSprint"
-                    v-on:click="checkSprintAtiva(sprint)"
-                >
-                    <p>Sprint</p>
-                    <p>Data Inicial: {{ sprint.initialDate }}</p>
-                    <p>Data Final: {{ sprint.finalDate }}</p>
-                </button>
-                {{ sprintSelected.idSprint}}
-            </div>
         </div>
         </div>
     </div>
@@ -69,7 +75,7 @@ export default Vue.extend({
        grupos: "",
        projetos: [],
        teams: [],
-       sprints: "",
+       sprints: [{}],
        sprintSelected: "",
        activeSprint: true,
        notasFeitas: [],
@@ -83,7 +89,8 @@ export default Vue.extend({
        minhaAvaliação:[],
        UserLoggedTeam: '',
        userTeam: '',
-       userProjeto:[]
+       userProjeto:[],
+       selectSprint: ''
      }),
      beforeMount() {
         api.get('user').then(response => {
@@ -103,6 +110,7 @@ export default Vue.extend({
         api.get('sprint').then(response => {
             this.sprints = response.data
             for(var i = 0; i < this.sprints.length; i++) {
+                this.sprints[i]["nome"] = `Sprint ${i + 1}`
                 this.checkSprintAtiva(this.sprints[i])
             }
         })
@@ -118,11 +126,6 @@ export default Vue.extend({
         }
     },
     methods: {
-        getGruposFromProject(projectID) {
-            api.get(`project/${projectID}`).then((response) => {
-                this.projectGrupos = response.data.teams;
-            });
-        },
         update2SM: async function() {
             let payload = {
                 isScrumMaster: true,
@@ -212,7 +215,9 @@ export default Vue.extend({
         height: 100%;
         width: 82%;
         flex-direction: column;
-        justify-content: space-around;
+        justify-content: flex-start;
+        align-items: center;
+        width: 98%;
     }
 
     .dashboard-content-graficos {
@@ -223,6 +228,9 @@ export default Vue.extend({
         width: 100%; 
     }
 
+    .dashboard-content-projeto {
+        width: 98%;
+    }
     .dashboard-content-graficos div {
         height: 100%;
         width: 48%;
@@ -231,9 +239,11 @@ export default Vue.extend({
 
     .dashboard-info {
         display: flex;
-        flex-direction: row;
+        margin-top: 20px;
+        flex-direction: column;
         justify-content: space-around;
-        height: 30%;
+        height: 10%;
+        width: 98%;
     }
 
     button {

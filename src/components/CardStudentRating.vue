@@ -30,7 +30,8 @@
             <div>
                <div>
                   <div class="card-person">
-                     <div class="card-person-image"></div>
+                     <div class="card-person-image">
+                     </div>
                   </div>
                   <div class="card-rating" v-if="!flagRating" >
                      <div
@@ -45,8 +46,9 @@
                               max="100"
                               thumb-label="always"
                               :label="criterio.descCriteria"
-                              color="green darken-1"
+                              color="deep-orange accent-3"
                               v-on:change="vChange(criterio.idCriteria, criterio.rating)"
+                              dense
                               />
                     </div>
                   </div>
@@ -63,7 +65,7 @@
                               max="100"
                               thumb-label="always"
                               :label="nota.criterio.descCriteria"
-                              color="green darken-1"
+                              color="deep-orange accent-3"
                               v-on:change="vChangeUpdate(nota.idEvaluation, nota.criterio.idCriteria, nota.note)"
                               />
                     </div>
@@ -206,9 +208,10 @@ export default {
       }
     }
   }
-} </script>
+} 
+</script>
 
-<style scoped lang="scss">
+<style>
    span {
       color: #fff;
    }
@@ -216,10 +219,8 @@ export default {
       background-color: #fff !important;
    }
    .card {
-      background: rgb(226,225,237);
-      background: linear-gradient(38deg, rgba(226,225,237,1) 0%,
-         rgba(86,116,186,1) 17%, rgba(37,68,117,1) 39%, rgba(24,55,98,1) 45%, 
-         rgba(13,44,82,1) 55%, rgba(85,27,154,1) 85%, rgba(90,26,159,1) 97%);
+    background: rgb(52,66,252);
+    background: linear-gradient(38deg, rgba(52,66,252,1) 0%, rgba(99,203,246,1) 100%);
    }
     .card-person {
         height: 200px;
@@ -235,7 +236,7 @@ export default {
         width: 55%;
         border-radius: 50%;
         border: dashed 5px yellow;
-        background-color: #fff;
+        background-image: url('../../public/img/avatar.jpg');
     }
 
     .card-rating {
