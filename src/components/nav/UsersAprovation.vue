@@ -82,7 +82,6 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import api from '../../services/api'
 
   export default {
@@ -118,13 +117,11 @@
             updateArray.push(updateUser);
             console.log(updateUser);  
           })
-          await axios.post('http://localhost:3000/user/approve', updateArray)
+          await api.post('user/approve', updateArray)
             .then((response) => {
-              console.log(response.data);
               alert("Cadastro feito com sucesso");
               window.location.reload(true);
             }, (error) => {
-              console.log(error);
               alert("Erro no cadastro");
             });
             this.$refs.form.reset();
