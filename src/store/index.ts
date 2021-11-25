@@ -7,6 +7,9 @@ export default new Vuex.Store({
   state: {
     userId: "",
     token: "",
+    currentProject: "",
+    currentSprint: "",
+    currentTeam: "",
     snackbar: {},
   },
   mutations: {
@@ -21,6 +24,15 @@ export default new Vuex.Store({
     setSnackbar(state, snackbar) {
       state.snackbar = snackbar;
     },
+    setCurrentProject(state, project: string){
+      state.currentProject = project;
+    },
+    setCurrentSprint(state, sprint: string){
+      state.currentSprint = sprint;
+    },
+    setCurrentTeam(state, team: string){
+      state.currentTeam = team;
+    },
   },
   actions: {
     async setUserId({ commit }, payload) {
@@ -29,10 +41,10 @@ export default new Vuex.Store({
     async setToken({ commit }, payload) {
       commit("setToken", payload);
     },
-    messageSuccess({ commit }, msg) {
+    messageSuccess({ commit }, msg: string) {
       commit("setSnackbar", {
         text: msg,
-        timeout: "3000",
+        timeout: "2000",
         color: 'success',
         show: true,
       });
@@ -61,6 +73,15 @@ export default new Vuex.Store({
     getToken(state) {
       return !state.token ? localStorage.getItem("token") : state.token;
     },
+    getCurrentProject(state) {
+      return state.currentProject;
+    },
+    getCurrentSprint(state) {
+      return state.currentSprint;
+    },
+    getCurrentTeam(state) {
+      return state.currentTeam;
+    }
   },
   modules: {},
 });

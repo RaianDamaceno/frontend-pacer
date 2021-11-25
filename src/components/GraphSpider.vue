@@ -8,6 +8,7 @@
 <style>
 .hc {
     height: 100%;
+    width: 50%;
 }
 </style>
 
@@ -20,59 +21,7 @@ Vue.prototype.aux = [];
 export default Vue.extend({
     name: "GraphSpider",
     props: {
-        notas: Array,
-        sprintSelected: String,
-        user: String,
         criterios: Array,
-    },
-    created() {
-        setTimeout(() => {
-            this.notas
-                .filter(
-                    (data) =>
-                        data.evaluated.idUser === this.user &&
-                        data.idSprint === this.sprintSelected
-                )
-                .map((nt) => {
-                    if (this.sprint.length === 0) {
-                        this.sprint.push(
-                            nt.sprint.initialDate + " | " + nt.sprint.finalDate
-                        );
-                    }
-                });
-
-            this.criterios.map((cri) => {
-                this.aux.push(
-                    this.notas
-                        .filter(
-                            (data) =>
-                                data.criterio.descCriteria === cri.descCriteria
-                        )
-                        .filter(
-                            (data) =>
-                                data.evaluated.idUser === this.user &&
-                                data.idSprint === this.sprintSelected
-                        )
-                );
-            });
-
-            this.aux.map((data) => {
-                this.total.push(
-                    data
-                        .map((dat) => {
-                            return dat.note;
-                        })
-                        .reduce((accum, curr) => accum + curr) /
-                        data.map((dat) => {
-                            return dat;
-                        }).length
-                );
-            });
-
-            this.maxNote = this.total.reduce(function (a, b) {
-                return Math.max(a, b);
-            });
-        }, 1000);
     },
     data() {
         return {
@@ -87,7 +36,7 @@ export default Vue.extend({
                 },
 
                 title: {
-                    text: "Grafico para acompanhamento",
+                    text: "Media de Notas",
                 },
 
                 xAxis: {
@@ -102,7 +51,7 @@ export default Vue.extend({
                 yAxis: {
                     gridLineInterpolation: "polygon",
                     min: 0,
-                    max: this.maxNote || 100,
+                    max: 100,
                     tickInterval: 10,
                 },
 
@@ -117,11 +66,18 @@ export default Vue.extend({
                     valueSuffix: " Pontos",
                 },
 
+
+                //Data Mock. Wait call to backend with data;
                 series: [
                     {
-                        name: this.sprint || "",
-                        data: this.total || [],
-                        pointPlacement: "on",
+                        name: "Media da Sala",
+                        data: [87, 95, 45, 7, 50 ],
+                        color: 'blue'
+                    },
+                    {
+                        name: "Notas dos Colegas",
+                        data: [94, 30, 82, 6, 20 ],
+                        color: 'green'
                     },
                 ],
             },

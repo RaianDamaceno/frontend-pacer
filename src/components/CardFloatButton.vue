@@ -109,7 +109,7 @@
       left: false,
       scrumMaster: true,
       user_exist: false,
-      id_user: '9288a850-588d-4a18-86ff-77b6d21a8464',
+      idUser: '',
       transition: 'slide-y-reverse-transition',
       user_team: null,
       team_values: null,
@@ -131,6 +131,9 @@
       left (val) {
         this.right = !val
       },
+    },
+    mounted() {
+        this.idUser = this.$store.getters.getUserId;
     },
     created() {
       api.get('user-team',  { params: { idTeam: this.team } }).then(response => { 
@@ -177,7 +180,7 @@
               if(this.sprint_values[i].initialDate <= full_day){
                 this.strint_started = true
               }
-              if(this.user_team[i].idUser == this.id_user){
+              if(this.user_team[i].idUser == this.idUser){
                 this.user_exist = true;
               }
               if(this.user_team[i].isScrumMaster == false){
@@ -193,7 +196,7 @@
            if(!this.strint_started){
             if(!this.user_exist){
                 UserTeamPayload = {
-                "idUser": this.id_user,
+                "idUser": this.idUser,
                 "idTeam": this.team,
                 "isScrumMaster": this.is_SM,
                 "snActivated": "S"    

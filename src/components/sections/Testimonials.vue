@@ -38,10 +38,10 @@
               <div class="mb-10 font-weight-light grey--text text-uppercase">
                 {{ item.post }}
                 <br>
-                <v-btn icon :href="`${item.github}`">
+                <v-btn icon :href="`${item.github}`" target="_blank">
                   <v-icon color="blue">mdi-github</v-icon>
                 </v-btn>
-                <v-btn icon :href="`${item.linkedin}`">
+                <v-btn icon :href="`${item.linkedin}`" target="_blank">
                   <v-icon color="blue">mdi-linkedin</v-icon>
                 </v-btn>
               </div>

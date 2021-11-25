@@ -19,10 +19,10 @@
         <v-col cols="12" md="5" class="py-12">
           <v-row no-gutters>
             <v-col cols="12">
-              <v-btn icon href="https://github.com/RaianDamaceno/frontend-pacer">
+              <v-btn icon href="https://github.com/RaianDamaceno/frontend-pacer" target="_blank">
                 <v-icon color="red">mdi-github</v-icon>
               </v-btn> Repositório Frontend do Projeto<br>
-              <v-btn icon href="https://github.com/JoshuaSene/pacer-backend">
+              <v-btn icon href="https://github.com/JoshuaSene/pacer-backend" target="_blank">
                 <v-icon color="blue">mdi-github</v-icon>
               </v-btn> Repositório Backend do Projeto
             </v-col>

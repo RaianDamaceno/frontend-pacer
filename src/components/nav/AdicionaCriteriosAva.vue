@@ -99,9 +99,7 @@
 </template>
 
 <script>
-
   import axios from 'axios'
-
   export default {
     data: () => ({
       dialog: false,
@@ -142,7 +140,6 @@
             'gradeWeight':parseInt(this.formPesoNota, 10),
             'snActivated': "s"
           }
-
            await axios.post('http://localhost:3000/criteria-project', associateCriteria).then((response) => {
               console.log(response.data);
               alert("Cadastro feito com sucesso");
@@ -161,7 +158,6 @@
 </script>
 
 <style scoped lang="scss">
-
     .card {
        width: 100%;
        height: 100%;

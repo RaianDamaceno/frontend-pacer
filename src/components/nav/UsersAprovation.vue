@@ -17,7 +17,7 @@
         bottom
         offset-y
       >
-        AdicionaCriteriosAva
+        ProjectCriteriaAdd
       </v-menu>
       <v-dialog
         v-model="dialog"
@@ -122,6 +122,7 @@
             .then((response) => {
               console.log(response.data);
               alert("Cadastro feito com sucesso");
+              window.location.reload(true);
             }, (error) => {
               console.log(error);
               alert("Erro no cadastro");

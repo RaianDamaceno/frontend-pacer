@@ -26,13 +26,10 @@
                 ></v-select>
             </div>
         </div>
-        <div class="dashboard-content-graficos">
+        <div class="dashboard-content-graficos"  v-if="showGraph">
             <div>
                 <graph-spider
-                    v-if="notasFeitas.length !== 0"
-                    :notas="notasFeitas"
-                    :sprintSelected="sprintSelected"
-                    :user="userLogged"
+                    v-if="showGraph"
                     :criterios="criterios"
                 />
             </div>
@@ -60,13 +57,14 @@
   import NavDrawer from "../components/nav/NavDrawer.vue";
   import api from '../services/api'
   import Projetos from "../components/Projetos.vue";
-
+  import AddTeacher from "../components/AddTeacher.vue";
+  
 export default Vue.extend({
     name: "Dashboard",
     components: {
         GraphSpider,
         NavDrawer,
-        Projetos
+        Projetos,
     },
      data: () => ({
        criterios: [],
@@ -90,7 +88,8 @@ export default Vue.extend({
        UserLoggedTeam: '',
        userTeam: '',
        userProjeto:[],
-       selectSprint: ''
+       selectSprint: '',
+       showGraph: false
      }),
      beforeMount() {
         api.get('user').then(response => {
@@ -113,12 +112,21 @@ export default Vue.extend({
                 this.sprints[i]["nome"] = `Sprint ${i + 1}`
                 this.checkSprintAtiva(this.sprints[i])
             }
-        })
-        api.get('notes-store').then(response => {
-          this.notasFeitas = response.data
-        })
-      },
-      mounted() {
+        });
+        api.get("notes-store").then((response) => {
+            this.notasFeitas = response.data;
+
+            this.showGraph =
+                this.notasFeitas.filter(
+                    (data: any) =>
+                        data.evaluated.idUser === this.userLogged &&
+                        data.idSprint === this.sprintSelected
+                ).length === 0
+                    ? false
+                    : true;
+        });
+    },
+    mounted() {
         this.decodeToken(this.$store.getters.getToken);
         this.getUserInformation();
         if(this.isAluno){
@@ -140,7 +148,7 @@ export default Vue.extend({
                     console.log(error);
                 });
         },
-        checkSprintAtiva: function(teste) {
+        checkSprintAtiva: function (teste) {
             let today = new Date();
             let dd = String(today.getDate()).padStart(2, "0");
             let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
@@ -160,23 +168,23 @@ export default Vue.extend({
             console.log(this.sprintSelected)
         },
         decodeToken: function (token: string) {
-            var base64Url = token.split('.')[1];
-            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            var base64Url = token.split(".")[1];
+            var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
             var jsonPayload = decodeURIComponent(
                 atob(base64)
-                    .split('')
-                    .map(function(c) {
+                    .split("")
+                    .map(function (c) {
                         return (
-                            '%' +
-                            ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+                            "%" +
+                            ("00" + c.charCodeAt(0).toString(16)).slice(-2)
                         );
-                })
-                .join('')
+                    })
+                    .join("")
             );
 
             let json = JSON.parse(jsonPayload);
-            this.userLogged = json.sub
-            this.$store.dispatch('setUserId', this.userLogged);
+            this.userLogged = json.sub;
+            this.$store.dispatch("setUserId", this.userLogged);
         },
         getUserTeam(user) {
             api.get('user-team').then(response => {
@@ -239,7 +247,7 @@ export default Vue.extend({
 
     .dashboard-info {
         display: flex;
-        margin-top: 20px;
+        margin-top: 40px;
         flex-direction: column;
         justify-content: space-around;
         height: 10%;
