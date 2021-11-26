@@ -65,6 +65,14 @@ export default new Vuex.Store({
         show: true,
       });
     },
+    messageWarning({ commit }, msg) {
+      commit("setSnackbar", {
+        text: msg,
+        timeout: "-1",
+        color: 'orange lighten-1',
+        show: true,
+      });
+    },
   },
   getters: {
     getUserId(state) {
