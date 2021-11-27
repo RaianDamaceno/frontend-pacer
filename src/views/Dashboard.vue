@@ -31,7 +31,7 @@
                                         :teachers="allTeachers"
                                     />
                                     <div class="dashboard-group-person-button">
-                                        <!-- <card-float-button :team="projeto.idProjeto"/> -->
+                                        <card-float-button :team="projeto.idProjeto"/>
                                     </div>
                                 </div>
                                 <v-row
@@ -131,7 +131,7 @@
                                                 :sprintID="sprintSelected"
                                                 :notasFeitas="notasFeitas"
                                                 :idEvaluator="userLogged"
-                                                :idGroup="ccccccc"
+                                                :idGroup="grupoAtivo"
                                             />
                                         </div>
                                         <div
@@ -159,10 +159,9 @@
                 <graph-spider
                     v-if="grupoAtivo"
                     :criterios="criterios"
-                    :notas="notasFeitas"
                     :sprintSelected="sprintSelected"
                     :user="userLogged"
-                    :grupoAtivo="grupoAtivo"
+                    :project="projectSelect"
                 />
             </div>
             <div class="dashboard-info">
@@ -231,7 +230,8 @@ export default Vue.extend({
         idteam: "",
         isAluno: false,
         showButtonScrum: false,
-        minhaAvaliação: []
+        minhaAvaliação: [],
+        projectSelect: ""
     }),
     beforeMount() {
         api.get("user").then((response) => {
@@ -274,6 +274,7 @@ export default Vue.extend({
             this.cards = true;
         },
         getGruposFromProject(projectID) {
+            this.projectSelect = projectID;
             api.get(`project/${projectID}`).then((response) => {
                 this.projectGrupos = response.data.teams;
                 this.Projeto = false;

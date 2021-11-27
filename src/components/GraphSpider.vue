@@ -12,44 +12,52 @@
 
 <script>
 import Vue from "vue";
-Vue.prototype.total = [];
-Vue.prototype.sprint = [];
-Vue.prototype.maxNote = 0;
-Vue.prototype.aux = [];
+import api from "../services/api";
+Vue.prototype.$total = [];
+Vue.prototype.notesTeam = [];
+Vue.prototype.notesSelf = [];
 export default Vue.extend({
     name: "GraphSpider",
     props: {
-        notas: Array,
+        criterios: Array,
         sprintSelected: String,
         user: String,
-        criterios: Array,
-        grupoAtivo: String,
+        project: String,
     },
-    created() {
+    beforeCreate() {
         setTimeout(() => {
-            // this.notas.filter(
-            //     (data) =>
-            //         data.evaluated.idUser === this.user &&
-            //         data.idSprint === this.sprintSelected &&
-            //         data.idGroup === this.grupoAtivo
-            // )
+            this.criterios.map((data) => {
+                api.get(
+                    `notes-store/sprint/${this.sprintSelected}/${this.user}/${this.project}/${data.idCriteria}`
+                )
+                    .then((response) => {
+                        this.notesSelf.push(
+                            response.data.selfNotes.selfNoteAvg
+                        );
+                        this.notesTeam.push(
+                            response.data.teamNotes.teamNoteAvg
+                        );
+                    })
+                    .catch((error) => {
+                        alert(
+                            "Ocorreu um erro ao realizar a população do grafico. Por favor tente novamente mais tarde"
+                        );
+                        console.log(error);
+                        return;
+                    });
+            });
 
-            //Data Mock. Wait call to backend with data;
-            var values = {
-                medias: [87, 95, 45, 7, 50],
-                notes: [94, 30, 82, 6, 20],
-            };
-            this.total.push(
+            this.$total.push(
                 {
                     name: "Media da Sala",
-                    data: values.medias,
+                    data: this.notesTeam,
                 },
                 {
                     name: "Notas dos Colegas",
-                    data: values.notes,
+                    data: this.notesSelf,
                 }
             );
-        }, 1000);
+        });
     },
     data() {
         return {
@@ -94,7 +102,7 @@ export default Vue.extend({
                     valueSuffix: " Pontos",
                 },
 
-                series: this.total || [],
+                series: this.$total || [],
             },
         };
     },
