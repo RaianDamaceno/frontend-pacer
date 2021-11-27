@@ -10,9 +10,8 @@
           permanent>
             <v-list flat>
                 <v-list-item-group>
-                    <v-btn v-bind="attrs" 
+                    <v-btn 
                      @click="goDashboard"
-                      v-on="on" 
                       width="100%" 
                       class="light-blue darken-2" 
                       elevation="0" 
@@ -27,11 +26,9 @@
                     </v-list-item>
                 </v-list-item-group>
 
-                <v-list-group>
+                <v-list-group v-if="!isAluno">
                     <template v-slot:activator>
                         <v-btn 
-                          v-bind="attrs" 
-                          v-on="on" 
                           width="100%" 
                           class="light-blue darken-2" 
                           elevation="0" 
@@ -54,11 +51,9 @@
                 </v-list-group>
 
                 <v-list-item-group>
-                <v-list-group>
+                <v-list-group v-if="!isAluno">
                     <template v-slot:activator>
                         <v-btn 
-                          v-bind="attrs" 
-                          v-on="on" 
                           width="100%" 
                           class="light-blue darken-2" 
                           elevation="0" 
@@ -82,11 +77,9 @@
                 </v-list-item-group>
                 <!-- ------------------------ -->
 
-                <v-list-group>
+                <v-list-group v-if="!isAluno">
                     <template v-slot:activator>
                         <v-btn 
-                          v-bind="attrs" 
-                          v-on="on" 
                           width="100%" 
                           class="light-blue darken-2" 
                           elevation="0" 
@@ -114,9 +107,18 @@
                     </v-list-item>
                 </v-list-item-group>
 
-                  <v-list-item-group>
+                  <v-list-item-group v-if="!isAluno">
                     <v-list-item>
                         <user-aprovation />
+                    </v-list-item>
+                </v-list-item-group>
+
+                <v-list-item-group v-if="!isAluno">
+                    <v-list-item>
+                        <card-create-equipe             
+                            :projetos="projetos"
+                            :estudantes="estudantes" 
+                        />
                     </v-list-item>
                 </v-list-item-group>
             </v-list>
@@ -142,10 +144,14 @@
   import PendingToScore from './PendingToScore.vue'
   import SprintTable from './SprintTable.vue'
   import UserAprovation from './UsersAprovation.vue'
-  //import CriteriosAva from './AdicionaCriteriosAva.vue'
+  import CriteriosAva from './AdicionaCriteriosAva.vue'
+  import CardCreateEquipe from './CardCreateEquipe.vue'
   export default {
     props: {
          userLogged: String,
+         estudantes: Array,
+         projetos: Array,
+         isAluno: Boolean
     },
     components: { 
       UserUpdate,
@@ -156,7 +162,8 @@
       PendingToScore,
       SprintTable,
       UserAprovation,
-      //CriteriosAva
+      CriteriosAva,
+      CardCreateEquipe
     },
     data: () => ({
       dashboard: true,

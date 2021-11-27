@@ -14,8 +14,8 @@
             class="light-blue darken-3"
             elevation="0"
             x-large
-            >
-            Sprints Cadastradas
+        >
+          Sprints Cadastradas
         </v-btn>
       </template>
       
@@ -30,7 +30,7 @@
                 subheader
                 >
                   <v-subheader>Lista de Sprints Cadastradas</v-subheader>
-                  <v-data-table editable="true" :headers="headers" :items="teste" :items-per-page="10" class="elevation-1">
+                  <v-data-table editable="true" :headers="headers" :items="sprint" :items-per-page="10" class="elevation-1">
                     
                     
 
@@ -46,7 +46,6 @@
                         <template v-slot:input>
                           <v-text-field
                             v-model="initialDate.item.initialDate"
-                            :rules="[max25chars]"
                             label="Edit"
                             single-line
                             counter
@@ -67,7 +66,6 @@
                         <template v-slot:input>
                           <v-text-field
                             v-model="finalDate.item.finalDate"
-                            :rules="[max25chars]"
                             label="Edit"
                             single-line
                             counter
@@ -111,7 +109,6 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import api from '../../services/api'
  
   export default {
@@ -120,7 +117,7 @@
         dialogEdit:false,
         dialog: false,
         widgets: false,
-        teste: null,
+        sprint: null,
         initialDateNew: '',
         finalDateNew: '',
         projectName: null,
@@ -139,7 +136,7 @@
     methods: {
         async submitForm(){
           var errorObj = null;
-          this.teste.forEach(async item => {
+          this.sprint.forEach(async item => {
             this.initialDateNew = item.initialDate.replaceAll("-","/");
             this.finalDateNew = item.finalDate.replaceAll("-","/");
             const updateSprint = { 
@@ -147,9 +144,7 @@
               'initialDate':  this.initialDateNew.split("/").reverse().join("/"),
               'finalDate':     this.finalDateNew.split("/").reverse().join("/"),
             }
-            console.log(updateSprint);
-            console.log(item.idSprint);
-            await axios.put(`http://localhost:3000/sprint/${item.idSprint}`, updateSprint).then((response) => {
+              api.put(`sprint/${item.idSprint}`, updateSprint).then((response) => {
                 console.log(response);
               }, (error) => {
                 console.log(error);
@@ -157,9 +152,9 @@
               });
           })
           if(!errorObj){
-            alert("Alteração feita com sucesso!");
+            this.$store.dispatch("messageSuccess", "Alteração feita com sucesso!")
           }else{
-            alert("Erro na atualização!");
+            this.$store.dispatch("messageError", "Erro na atualização!")
           }
           },
        async deleteItem(item){
@@ -167,11 +162,10 @@
               'id': item.idSprint
             }
             console.log(deleteSprint);
-          await axios.delete(`http://localhost:3000/sprint/${item.idSprint}`, deleteSprint).then((response) => {
-                alert("Sprint deletada com sucesso");
+              api.delete(`sprint/${item.idSprint}`, deleteSprint).then((response) => {
+                this.$store.dispatch("messageSuccess", "Alteração feita com sucesso!")
               }, (error) => {
-                console.log(error);
-                alert("Erro no delete");
+                this.$store.dispatch("messageSuccess", "Erro ao deletar a sprint")
               });
     
       }
@@ -179,14 +173,19 @@
     },
     beforeMount() {
       api.get('sprint').then(response => {
-        this.teste = response.data
-        for(let i = 0; i< this.teste.length; i++){
-            api.get(`project/${this.teste[i].idProject}`).then(response => {
-                this.teste[i].description = response.data.description
+        this.sprint = response.data
+        for(let i = 0; i< this.sprint.length; i++){
+            api.get(`project/${this.sprint[i].idProject}`).then(response => {
+                this.sprint[i].description = response.data.description
             })
         }
-        console.log(this.teste);
       })
     }
   }
 </script>
+
+<style scoped lang="scss">
+  span {
+    color: black;
+  }
+</style>

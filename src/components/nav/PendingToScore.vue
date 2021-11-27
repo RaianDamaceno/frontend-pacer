@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import api from '../../services/api'
 
 export default {
   data: () => ({
@@ -116,13 +116,13 @@ export default {
       this.getPendencias();
     },
     async fetchSprints() {
-      await axios.get(`sprint`)
+      await api.get(`sprint`)
         .then( response => {
           this.sprints = response.data;
         });
     },
     async getPendencias() {
-      await axios.get(`notes-store/pending/${this.idEvaluator}/${this.sprintId}`).then(
+      await api.get(`notes-store/pending/${this.idEvaluator}/${this.sprintId}`).then(
         (response) => {
           console.log(`Response pendencias ${response}`);
           this.pendencias = response.data;
