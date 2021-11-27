@@ -2,7 +2,6 @@
   <v-row justify="center">
     <v-dialog
       v-model="dialog"
-      persistent
       max-width="600px"
     >
     <template v-slot:activator="{ on, attrs }">
@@ -14,12 +13,12 @@
             elevation="0"
             x-large
             >
-           Cadastro de Time
+           Cadastro de Equipe
         </v-btn>
     </template>
       <v-card>
         <v-card-title>
-          <span class="text-h5">Criar Grupo</span>
+          <span class="text-h5">Cadastro de Equipe</span>
         </v-card-title>
         <v-card-text>
           
@@ -27,7 +26,7 @@
             <v-row>
               <v-col cols="12">
                 <v-text-field
-                  label="Nome Grupo*"
+                  label="Nome da Equipe*"
                   v-model="teamName"
                   required
                 ></v-text-field>
