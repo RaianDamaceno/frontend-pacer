@@ -54,13 +54,13 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import GraphSpider from "../components/GraphSpider.vue";
-import { UserTeam } from "../model/user-team";
-import NavDrawer from "../components/nav/NavDrawer.vue";
-import api from "../services/api";
-import Projetos from "../components/Projetos.vue";
-import AddTeacher from "../components/AddTeacher.vue";
+  import Vue from 'vue'
+  import api from '../services/api';
+  import { UserTeam } from '../model/user-team';
+  import Projetos from "../components/Projetos.vue";
+  import GraphSpider from "../components/GraphSpider.vue";
+  import NavDrawer from "../components/nav/NavDrawer.vue";
+
 export default Vue.extend({
     name: "Dashboard",
     components: {
@@ -158,6 +158,24 @@ export default Vue.extend({
                     console.log(error);
                 });
         },
+        getNotesStore: function() {
+            api.get(`notes-store/by-sprint/${this.sprintSelected}`).then((response) => {
+                console.log('Notes loaded successfully');
+            }).catch(error => {
+                console.log(error.response.data.message);
+                if(error.response.data.statusCode === 404)  {
+                console.log("populando notas");
+                this.populateNotes();
+                }
+            });
+        },
+        populateNotes: function() {
+            api.post(`notes-store/populate-notes`).then(response => {
+                console.log(response);
+            }).catch(error => {
+                console.log(error);
+            });
+        },
         checkSprintAtiva: function (teste) {
             let today = new Date();
             let dd = String(today.getDate()).padStart(2, "0");
@@ -172,6 +190,7 @@ export default Vue.extend({
             if (d1 > d2 && d1 < c) {
                 this.sprintSelected = teste.idSprint;
                 this.activeSprint = true;
+                this.getNotesStore();
             } else {
                 this.activeSprint = false;
             }
@@ -204,7 +223,11 @@ export default Vue.extend({
         },
         getUserInformation: function () {
             api.get(`/user/${this.userLogged}`).then((response) => {
-                if (response.data.role === "USR") this.isAluno = true;
+                if (response.data.role === "USR" ||
+                    (response.data.role !== 'ADM' && response.data.role !== 'TCH')
+                ) {
+                    this.isAluno = true;
+                }
             });
         },
         getProjectSelect: function(ID) {

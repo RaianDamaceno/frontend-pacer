@@ -67,7 +67,6 @@
                                             :nome="estudante.user.name"
                                             :estudanteID="estudante.idUser"
                                             :sprintID="sprintSelected"
-                                            :notasFeitas="notasFeitas"
                                             :idEvaluator="userLogged"
                                             :idGroup="grupoAtivo"
                                         />
@@ -81,7 +80,6 @@
                                             :nome="estudante.user.name"
                                             :estudanteID="estudante.idUser"
                                             :sprintID="sprintSelected"
-                                            :notasFeitas="notasFeitas"
                                             :idEvaluator="userLogged"
                                             :idGroup="grupoAtivo"
                                         />
@@ -126,7 +124,6 @@
         Projetos: Array,
         Teams: Array,
         Estudantes: Array,
-        notasFeitas: Array,
         userLogged: String,
         criterios: Array,
         sprintSelected: String,
@@ -150,7 +147,7 @@
         isGrupoDoUsuario: true,
         showButtonScrum: ''
     }),
-     watch: {
+    watch: {
       loader () {
         const l = this.loader
         this[l] = !this[l]
@@ -162,6 +159,8 @@
         getGruposFromProject(projectID) {
             api.get(`project/${projectID}`).then((response) => {
                 this.projectGrupos = response.data.teams;
+            }).catch(error => {
+                console.log(error);
             });
 
             this.$emit('select-project', projectID);
@@ -186,6 +185,8 @@
                 if (this.isAluno && !this.haveSM) {
                     this.showButtonScrum = true;
                 }
+            }).catch(error => {
+                console.log(error);
             });
         },
     }
