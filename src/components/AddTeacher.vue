@@ -133,8 +133,9 @@
     beforeMount(){
       api.get('user').then(response => {
           this.teachers = response.data.filter(function(el) {
-            return el.role == "TCH";
-          });
+          return el.role == "TCH";});
+        }).catch(error => {
+          console.log(error);
       }),
       api.get('project-user').then(response => {
           this.user_proj.push(response.data);

@@ -101,8 +101,8 @@
     }),
     beforeMount() {
       api.get('project').then(response => {
-            this.projetos = response.data
-        })
+        this.projetos = response.data
+      });
     },
     computed: {
       dateRangeText () {
@@ -123,7 +123,8 @@
            api.post('sprint', CreateSprint).then((response) => {
               this.$store.dispatch("messageSuccess", "Cadastro de sprint realizado com sucesso");
             }, (error) => {
-              this.$store.dispatch("messageError", "Cadastro de sprint realizado com sucesso");
+              console.log(error);
+              this.$store.dispatch("messageError", "Erro no cadastro de Sprint");
             });
             this.$refs.form.reset();
         },
@@ -133,12 +134,13 @@
 
 
 <style scoped lang="scss">
-    .card {
-       width: 100%;
-       height: 100%;
-    }
-    .container{
-        width: 100%;
-       height: 100%;
-    }
+  .card {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .container{
+    width: 100%;
+    height: 100%;
+  }
 </style>
