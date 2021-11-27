@@ -49,10 +49,26 @@ export default new Vuex.Store({
         show: true,
       });
     },
-    messageError({ commit }, msg) {
+    messageSuccessFast({ commit }, msg: string) {
+      commit("setSnackbar", {
+        text: msg,
+        timeout: "1000",
+        color: 'success',
+        show: true,
+      });
+    },
+    messageError({ commit }, msg: string) {
       commit("setSnackbar", {
         text: msg,
         timeout: "4000",
+        color: 'error',
+        show: true,
+      });
+    },
+    messageErrorFast({ commit }, msg: string) {
+      commit("setSnackbar", {
+        text: msg,
+        timeout: "1000",
         color: 'error',
         show: true,
       });
