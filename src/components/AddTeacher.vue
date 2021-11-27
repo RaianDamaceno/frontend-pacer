@@ -94,7 +94,6 @@
     }),
     methods: {
       async showTeacherName(){
-
         for(let i = 0; i < this.user_proj[0].length; i++) {
           if (this.user_proj[0][i].idProject == this.projetoId && this.professorSelecionado.idUser == this.user_proj[0][i].idUser) {
             this.prof_exists = true;
@@ -104,7 +103,7 @@
           let payload = {
             "idProject": this.projetoId,
             "idUser": this.professorSelecionado.idUser,
-            "optional": "1",
+            "optional": true,
             "snActivated": "S"
           }
           await api.post(`project-user`, payload).then(response => {
