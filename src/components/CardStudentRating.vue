@@ -101,8 +101,8 @@ export default {
       notasUsuario: []
     }
   },
-  created() {
-    this.getNotes(this.sprintID)
+  beforeMount() {
+    this.getNotes()
   },
   methods: {
     vChangeUpdate: function (idRating, idCriteira, nota) {
@@ -133,17 +133,23 @@ export default {
         });
       }
     },
-    getNotes: function(id) {
+    getNotes: function() {
       let evaluatorId = this.$store.getters.getUserId;
-      api.get(`notes-store/by-sprint/${id}`).then(notes => {
+
+      if(!this.sprintID || this.sprintID === undefined) {
+        return;
+      }
+      console.log(this.sprintID);
+      api.get(`notes-store/by-sprint/${this.sprintID}`).then(notes => {
         let notasUsuario = notes.data;
+        
         for (let i = 0; i < notasUsuario.length; i++) {
           if (notasUsuario[i].idEvaluator == evaluatorId && notasUsuario[i].idEvaluated == this.estudanteID) {
             this.notasFeitasAvaliador.push(notasUsuario[i])
           }
         }
       }).catch(error => {
-        console.log(error);
+        console.log(error.response.data.message);
       });
     }
   }

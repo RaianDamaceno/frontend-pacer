@@ -148,7 +148,7 @@
         isGrupoDoUsuario: true,
         showButtonScrum: ''
     }),
-     watch: {
+    watch: {
       loader () {
         const l = this.loader
         this[l] = !this[l]

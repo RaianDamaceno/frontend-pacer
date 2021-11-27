@@ -147,6 +147,24 @@ export default Vue.extend({
                     console.log(error);
                 });
         },
+        getNotesStore: function() {
+            api.get(`notes-store/by-sprint/${this.sprintSelected}`).then((response) => {
+                console.log('Notes loaded successfully');
+            }).catch(error => {
+                console.log(error.response.data.message);
+                if(error.response.data.statusCode === 404)  {
+                console.log("populando notas");
+                this.populateNotes();
+                }
+            });
+        },
+        populateNotes: function() {
+            api.post(`notes-store/populate-notes`).then(response => {
+                console.log(response);
+            }).catch(error => {
+                console.log(error);
+            });
+        },
         checkSprintAtiva: function (teste) {
             let today = new Date();
             let dd = String(today.getDate()).padStart(2, "0");
@@ -161,6 +179,7 @@ export default Vue.extend({
             if (d1 > d2 && d1 < c) {
                 this.sprintSelected = teste.idSprint;
                 this.activeSprint = true;
+                this.getNotesStore();
             } else {
                 this.activeSprint = false;
             }
