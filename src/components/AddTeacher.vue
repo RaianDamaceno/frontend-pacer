@@ -107,12 +107,13 @@
             "snActivated": "S"
           }
           await api.post(`project-user`, payload).then(response => {
-            this.$store.dispatch(
+              this.$store.dispatch(
                 "messageSuccess",
                 "Professor adicionado com sucesso!"
               )
               window.location.reload(true);
-              }).catch(
+              }
+              ).catch(
               error => { 
                 this.$store.dispatch(
                 "messageError",
