@@ -52,12 +52,11 @@
 
 <script lang="ts">
   import Vue from 'vue'
-  import GraphSpider from "../components/GraphSpider.vue";
-  import { UserTeam } from '../model/user-team'
-  import NavDrawer from "../components/nav/NavDrawer.vue";
-  import api from '../services/api'
+  import api from '../services/api';
+  import { UserTeam } from '../model/user-team';
   import Projetos from "../components/Projetos.vue";
-  import AddTeacher from "../components/AddTeacher.vue";
+  import GraphSpider from "../components/GraphSpider.vue";
+  import NavDrawer from "../components/nav/NavDrawer.vue";
   
 export default Vue.extend({
     name: "Dashboard",
@@ -194,7 +193,11 @@ export default Vue.extend({
         },
         getUserInformation: function() {
             api.get(`/user/${this.userLogged}`).then((response) => {
-                if (response.data.role === "USR") this.isAluno = true;
+                if (response.data.role === "USR" || 
+                    (response.data.role !== 'ADM' && response.data.role !== 'TCH')
+                ) {
+                    this.isAluno = true;
+                }
             });
         },
     },

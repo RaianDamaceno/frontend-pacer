@@ -95,31 +95,32 @@
         let payload = {
           "idProject": this.projetoId,
           "idUser": this.professorSelecionado.idUser,
-          "optional": "1",
+          "optional": true,
           "snActivated": "S"
-        }
+        } 
         await api.post(`project-user`, payload).then(response => {
           this.$store.dispatch(
-              "messageSuccess",
-              "Professor adicionado com sucesso!"
-            )
-            window.location.reload(true);
-            }).catch(
-            error => { 
-              this.$store.dispatch(
-              "messageError",
-              "Falha ao adicionar Professor"
-              )
-            }
-        );
+            "messageSuccess",
+            "Professor adicionado com sucesso!"
+          );
+          window.location.reload(true);
+        }).catch(error => { 
+          console.log(error);
+          this.$store.dispatch(
+            "messageError",
+            "Falha ao adicionar Professor"
+          );
+        });
       }
     },
     beforeMount(){
       api.get('user').then(response => {
-          this.teachers = response.data.filter(function(el) {
-            return el.role == "TCH";
-          });
-      })
+        this.teachers = response.data.filter(function(el) {
+          return el.role == "TCH";
+        });
+      }).catch(error => {
+        console.log(error);
+      });
     },
   }
 </script>
