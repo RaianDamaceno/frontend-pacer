@@ -94,40 +94,25 @@
     }),
     methods: {
       async showTeacherName(){
-        for(let i = 0; i < this.user_proj[0].length; i++) {
-          if (this.user_proj[0][i].idProject == this.projetoId && this.professorSelecionado.idUser == this.user_proj[0][i].idUser) {
-            this.prof_exists = true;
-          }
-        }
-        if (this.prof_exists == false){
-          let payload = {
-            "idProject": this.projetoId,
-            "idUser": this.professorSelecionado.idUser,
-            "optional": true,
-            "snActivated": "S"
-          }
-          await api.post(`project-user`, payload).then(response => {
-              this.$store.dispatch(
-                "messageSuccess",
-                "Professor adicionado com sucesso!"
-              )
-              window.location.reload(true);
-              }
-              ).catch(
-              error => { 
-                this.$store.dispatch(
-                "messageError",
-                "Falha ao adicionar Professor"
-                )
-              }
-          );
-        }else{
+        let payload = {
+          "idProject": this.projetoId,
+          "idUser": this.professorSelecionado.idUser,
+          "optional": true,
+          "snActivated": "S"
+        } 
+        await api.post(`project-user`, payload).then(response => {
           this.$store.dispatch(
-            "messageWarning",
-            "Professor já pertence a este grupo!"
+            "messageSuccess",
+            "Professor adicionado com sucesso!"
           );
-          this.prof_exists = ''
-        }
+          window.location.reload(true);
+        }).catch(error => { 
+          console.log(error);
+          this.$store.dispatch(
+            "messageError",
+            "Falha ao adicionar Professor"
+          );
+        });
       }
     },
     beforeMount(){
