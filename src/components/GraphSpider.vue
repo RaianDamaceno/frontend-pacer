@@ -7,15 +7,14 @@
 
 <style>
 .hc {
-    height: 100%;
-    width: 50%;
+    width: 60%;
 }
 </style>
 
 <script>
 import Vue from "vue";
 import api from "../services/api";
-Vue.prototype.$total = [];
+Vue.prototype.total = [];
 Vue.prototype.notesTeam = [];
 Vue.prototype.notesSelf = [];
 export default Vue.extend({
@@ -27,6 +26,9 @@ export default Vue.extend({
         project: String,
     },
     beforeCreate() {
+        this.notesSelf = [];
+        this.notesTeam = [];
+        this.total = [];
         setTimeout(() => {
             this.criterios.map((data) => {
                 api.get(
@@ -49,7 +51,7 @@ export default Vue.extend({
                     });
             });
 
-            this.$total.push(
+            this.total.push(
                 {
                     name: "Media da Sala",
                     data: this.notesTeam,
@@ -67,6 +69,7 @@ export default Vue.extend({
                 chart: {
                     type: "line",
                     polar: true,
+                    backgroundColor: 'transparent'
                 },
 
                 credits: {
@@ -83,14 +86,14 @@ export default Vue.extend({
                             return cri.descCriteria;
                         }) || [],
                     tickmarkPlacement: "on",
-                    lineWidth: 0,
+                    lineWidth: 0
                 },
 
                 yAxis: {
                     gridLineInterpolation: "polygon",
                     min: 0,
                     max: 100,
-                    tickInterval: 10,
+                    tickInterval: 10
                 },
 
                 legend: {
@@ -104,7 +107,7 @@ export default Vue.extend({
                     valueSuffix: " Pontos",
                 },
 
-                series: this.$total || [],
+                series: this.total || [],
             },
         };
     },
