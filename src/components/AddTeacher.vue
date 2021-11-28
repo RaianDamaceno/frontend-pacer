@@ -1,5 +1,5 @@
 <template>
-  <div v-if="this.role !== 'USR'">
+  <div>
     <v-row style="padding-top: 16%; padding-left: 90%;">
       <v-dialog
         v-model="dialog"
@@ -40,8 +40,8 @@
                   sm="12"
                 >
                   <v-select
-                    v-model="e6"
-                    :items="this.tch"
+                    v-model="professorSelecionado"
+                    :items="teachers"
                     item-text="name"
                     return-object
                     hint="Selecione o Professor"
@@ -60,14 +60,14 @@
               text
               @click="dialog = false"
             >
-              Close
+              Fechar
             </v-btn>
             <v-btn
               color="blue darken-1"
               text
               @click="showTeacherName"
             >
-              Save
+              Salvar
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -81,50 +81,65 @@
   export default {
     props: {
       projetoId: String,
-      teachers: Array
     },
     data: () => ({
       dialog: false,
       tch: [],
       e6: [],
-      role: ''
+      role: '',
+      teachers: [], 
+      professorSelecionado:[],
+      user_proj: [],
+      prof_exists: ''
     }),
     methods: {
       async showTeacherName(){
-        let payload = {
-          "idProject": this.projetoId,
-          "idUser": this.e6.id,
-          "optional": "1",
-          "snActivated": "S"
+        for(let i = 0; i < this.user_proj[0].length; i++) {
+          if (this.user_proj[0][i].idProject == this.projetoId && this.professorSelecionado.idUser == this.user_proj[0][i].idUser) {
+            this.prof_exists = true;
+          }
         }
-        await api.post(`project-user`, payload).then(response => {
-          this.$store.dispatch(
-              "messageSuccess",
-              "Professor adicionado com sucesso!"
-            )
-            window.location.reload(true);
-            }).catch(
-            error => { 
+        if (this.prof_exists == false){
+          let payload = {
+            "idProject": this.projetoId,
+            "idUser": this.professorSelecionado.idUser,
+            "optional": true,
+            "snActivated": "S"
+          }
+          await api.post(`project-user`, payload).then(response => {
               this.$store.dispatch(
-              "messageError",
-              "Falha ao adicionar Professor"
+                "messageSuccess",
+                "Professor adicionado com sucesso!"
               )
-            }
-        );
+              window.location.reload(true);
+              }
+              ).catch(
+              error => { 
+                this.$store.dispatch(
+                "messageError",
+                "Falha ao adicionar Professor"
+                )
+              }
+          );
+        }else{
+          this.$store.dispatch(
+            "messageWarning",
+            "Professor já pertence a este grupo!"
+          );
+          this.prof_exists = ''
+        }
       }
     },
-    mounted(){
-      let userId = this.$store.getters.getUserId
-      api.get(`user/${userId}`).then(response => {       
-        this.role = response.data.role;
+    beforeMount(){
+      api.get('user').then(response => {
+          this.teachers = response.data.filter(function(el) {
+          return el.role == "TCH";});
+        }).catch(error => {
+          console.log(error);
+      }),
+      api.get('project-user').then(response => {
+          this.user_proj.push(response.data);
       });
-
-      for(let i = 0; i < this.teachers.length; i++) {
-        this.tch.push({
-          "id": this.teachers[i].idUser,
-          "name": this.teachers[i].name
-        });
-      }
-    }
+    },
   }
 </script>

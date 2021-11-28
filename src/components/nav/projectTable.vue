@@ -35,7 +35,6 @@
                     <template v-slot:item.description="description">
                       <v-edit-dialog
                         :return-value.sync="description.item.description"
-                        @save="save"
                         @cancel="cancel"
                         @open="open"
                         @close="close"
@@ -44,7 +43,6 @@
                         <template v-slot:input>
                           <v-text-field
                             v-model="description.item.description"
-                            :rules="[max25chars]"
                             label="Edit"
                             single-line
                             counter
@@ -65,7 +63,6 @@
                         <template v-slot:input>
                           <v-text-field
                             v-model="openingDate.item.openingDate"
-                            :rules="[max25chars]"
                             label="Edit"
                             single-line
                             counter
@@ -86,7 +83,6 @@
                         <template v-slot:input>
                           <v-text-field
                             v-model="closeDate.item.closeDate"
-                            :rules="[max25chars]"
                             label="Edit"
                             single-line
                             counter
@@ -130,8 +126,7 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import api from '../../services/api'
+ import api from '../../services/api'
  
   export default {
     data () {
@@ -163,7 +158,7 @@
               
             }
             console.log(updateProject);
-            await axios.patch(`http://localhost:3000/project/${item.idProject}`, updateProject).then((response) => {
+            await api.patch(`project/${item.idProject}`, updateProject).then((response) => {
                 console.log(response);
               }, (error) => {
                 console.log(error);
@@ -171,9 +166,9 @@
               });
           })
           if(!errorObj){
-            alert("Alteração feita com sucesso!");
+            this.$store.dispatch("messageSuccess", "Alteração realizada com sucesso");
           }else{
-            alert("Erro na atualização!");
+            this.$store.dispatch("messageError", "Erro na Atualização");
           }
           },
        async deleteItem(item){
@@ -181,11 +176,10 @@
               'id': item.idProject
             }
             console.log(updateUser);
-          await axios.delete(`http://localhost:3000/project/${item.idProject}`, updateUser).then((response) => {
-                alert("delete feito com sucesso");
+          await api.delete(`project/${item.idProject}`, updateUser).then((response) => {
+                this.$store.dispatch("messageSuccess", "Delete feito com sucesso");
               }, (error) => {
-                console.log(error);
-                alert("Erro no delete");
+                this.$store.dispatch("messageError", "Erro no delete");
               });
       }
     },
@@ -198,3 +192,9 @@
     }
   }
 </script>
+
+<style scoped lang="scss">
+  span {
+    color: black !important;
+  }
+</style>

@@ -1,6 +1,8 @@
 /* eslint-disable vue/require-prop-type-constructor */
 <template>
-    <highcharts class="hc" :options="chartOptions"></highcharts>
+    <div  style="width:100%">
+        <highcharts class="hc" :options="chartOptions"></highcharts>
+    </div>
 </template>
 
 <style>
