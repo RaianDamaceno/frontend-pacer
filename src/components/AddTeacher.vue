@@ -60,14 +60,14 @@
               text
               @click="dialog = false"
             >
-              Close
+              Fechar
             </v-btn>
             <v-btn
               color="blue darken-1"
               text
               @click="showTeacherName"
             >
-              Save
+              Salvar
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -88,38 +88,57 @@
       e6: [],
       role: '',
       teachers: [], 
-      professorSelecionado:[]
+      professorSelecionado:[],
+      user_proj: [],
+      prof_exists: ''
     }),
     methods: {
       async showTeacherName(){
-        let payload = {
-          "idProject": this.projetoId,
-          "idUser": this.professorSelecionado.idUser,
-          "optional": true,
-          "snActivated": "S"
-        } 
-        await api.post(`project-user`, payload).then(response => {
-          this.$store.dispatch(
-            "messageSuccess",
-            "Professor adicionado com sucesso!"
+        for(let i = 0; i < this.user_proj[0].length; i++) {
+          if (this.user_proj[0][i].idProject == this.projetoId && this.professorSelecionado.idUser == this.user_proj[0][i].idUser) {
+            this.prof_exists = true;
+          }
+        }
+        if (this.prof_exists == false){
+          let payload = {
+            "idProject": this.projetoId,
+            "idUser": this.professorSelecionado.idUser,
+            "optional": true,
+            "snActivated": "S"
+          }
+          await api.post(`project-user`, payload).then(response => {
+              this.$store.dispatch(
+                "messageSuccess",
+                "Professor adicionado com sucesso!"
+              )
+              window.location.reload(true);
+              }
+              ).catch(
+              error => { 
+                this.$store.dispatch(
+                "messageError",
+                "Falha ao adicionar Professor"
+                )
+              }
           );
-          window.location.reload(true);
-        }).catch(error => { 
-          console.log(error);
+        }else{
           this.$store.dispatch(
-            "messageError",
-            "Falha ao adicionar Professor"
+            "messageWarning",
+            "Professor já pertence a este grupo!"
           );
-        });
+          this.prof_exists = ''
+        }
       }
     },
     beforeMount(){
       api.get('user').then(response => {
-        this.teachers = response.data.filter(function(el) {
-          return el.role == "TCH";
-        });
-      }).catch(error => {
-        console.log(error);
+          this.teachers = response.data.filter(function(el) {
+          return el.role == "TCH";});
+        }).catch(error => {
+          console.log(error);
+      }),
+      api.get('project-user').then(response => {
+          this.user_proj.push(response.data);
       });
     },
   }
