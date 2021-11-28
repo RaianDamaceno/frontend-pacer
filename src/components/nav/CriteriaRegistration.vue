@@ -1,6 +1,6 @@
 <template>
-  <v-row justify="left">
-    <v-dialog v-model="dialog" width="100%">
+  <v-row>
+    <v-dialog v-model="dialog" width="50%">
       <template v-slot:activator="{ on, attrs }">
         <v-btn 
           v-bind="attrs"
@@ -8,7 +8,7 @@
             width="100%"
             class="light-blue darken-3"
             elevation="0"
-            x-large> Lista de Critérios
+            x-large> Critérios
         </v-btn>
       </template>
       <v-card>
@@ -136,7 +136,7 @@ export default Vue.extend({
             this.fetchCriterias();
             this.resetValues();
             this.$store.dispatch(
-              "messageSuccess",
+              "messageSuccessFast",
               "Novo critério salvo com sucesso!"
             );
             document.getElementById("descCriteria")?.focus();
@@ -155,7 +155,7 @@ export default Vue.extend({
             this.fetchCriterias();
             this.resetValues();
             this.$store.dispatch(
-              "messageSuccess",
+              "messageSuccessFast",
               "Critério alterado com sucesso!"
             );
             document.getElementById("descCriteria")?.focus();
@@ -173,7 +173,7 @@ export default Vue.extend({
           .then(() => {
             this.fetchCriterias();
             this.$store.dispatch(
-              "messageSuccess",
+              "messageSuccessFast",
               "Critério excluído com sucesso!"
             );
             this.resetValues();
@@ -211,6 +211,7 @@ export default Vue.extend({
     close() {
       this.resetValues();
       this.dialog = false;
+      window.location.reload();
     },
   },
   beforeMount() {
