@@ -53,11 +53,11 @@ export default Vue.extend({
 
             this.total.push(
                 {
-                    name: "Media da Sala",
+                    name: "Media da Equipe",
                     data: this.notesTeam,
                 },
                 {
-                    name: "Notas dos Colegas",
+                    name: "Minha média",
                     data: this.notesSelf,
                 }
             );
