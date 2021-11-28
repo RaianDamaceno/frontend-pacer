@@ -1,17 +1,12 @@
 <template>
-  <v-row justify="left">
+  <v-row>
     <v-dialog v-model="dialog" scrollable max-width="600px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          v-bind="attrs"
-          v-on="on"
-          width="100%"
-          class="light-blue darken-3"
-          elevation="0"
-          x-large
-        >
-          Vínculo de Critérios nos Projetos
-        </v-btn>
+        <div class="text-xs-center">
+          <v-btn fab dark small color="primary" v-bind="attrs" v-on="on">
+            <v-icon> mdi-human-child </v-icon>
+          </v-btn>
+        </div>
       </template>
 
       <v-card>
@@ -29,7 +24,7 @@
               <v-row>
                 <v-col>
                   <v-autocomplete
-                    label="Projeto * "
+                    label="Projeto"
                     v-model="formProject"
                     :items="this.projects"
                     required
@@ -37,7 +32,7 @@
                     id="project"
                     item-text="description"
                     item-value="idProject"
-                    :disabled="this.disabledProject()"
+                    :disabled=true
                     row-height="6"
                   ></v-autocomplete>
                 </v-col>
@@ -120,7 +115,7 @@
 
         <v-divider></v-divider>
 
-        <v-card-text v-if="this.formProject !== ''">
+        <v-card-text>
           <v-container>
             <table v-if="this.formProjectCriterias.length > 0">
               <thead>
@@ -168,14 +163,16 @@
 import api from "@/services/api";
 
 export default {
-  name: "project-criteria-add",
+  name: "project-criteria",
+  props: {
+    formProject: String,
+  },
   data: () => ({
     dialog: false,
     projects: [],
     criterias: [],
     /** Variables to inputs */
     formId: "",
-    formProject: "",
     formCriteria: "",
     formNotaMinima: "",
     formNotaMaxima: "",
@@ -187,37 +184,33 @@ export default {
   methods: {
     resetValues() {
       this.formId = "";
-      this.formProject = this.$store.getters.getCurrentProject;
       this.formCriteria = "";
       this.formNotaMinima = "0";
       this.formNotaMaxima = "3";
       this.formPesoNota = "1";
       this.formInactive = false;
       this.fetchProjectCriterias();
+      this.getCriterias();
     },
     async getProjects() {
       await api.get("project").then(
         (response) => {
           this.projects = response.data;
-          console.log(response.data);
         },
         (error) => {
           console.log(error);
         }
       );
-      console.log(this.projects);
     },
     async getCriterias() {
       await api.get("criteria").then(
         (response) => {
           this.criterias = response.data;
-          console.log(response.data);
         },
         (error) => {
           console.log(error);
         }
       );
-      console.log(this.criterias);
     },
     // Validação dos dados
     validate() {
@@ -325,12 +318,12 @@ export default {
         });
     },
     close() {
+      this.formProject = null;
       this.resetValues();
       this.dialog = false;
     },
     disabledProject() {
       if (this.$store.getters.getCurrentProject !== "") {
-        this.formProject = this.$store.getters.getCurrentProject;
         return true;
       }
       return false;
@@ -351,7 +344,7 @@ export default {
           .then(() => {
             this.resetValues();
             this.$store.dispatch(
-              "messageSuccess",
+              "messageSuccessFast",
               "Novo critério salvo com sucesso!"
             );
           })
@@ -366,7 +359,7 @@ export default {
           .then(() => {
             this.resetValues();
             this.$store.dispatch(
-              "messageSuccess",
+              "messageSuccessFast",
               "Critério alterado com sucesso!"
             );
           })
@@ -404,12 +397,12 @@ export default {
     editCriteria(crit) {
       if (this.$store.getters.getCurrentProject === crit.idProject) {
         this.formId = "1";
-        this.formProject = crit.idProject;
         this.formCriteria = crit.idCriteria;
         this.formNotaMinima = crit.minGrade.toString(10);
         this.formNotaMaxima = crit.maxGrade.toString(10);
         this.formPesoNota = crit.gradeWeight.toString(10);
         this.formInactive = crit.snActivated !== "S";
+        this.getCriterias();
         this.fetchProjectCriterias();
       } else {
         this.$store.dispatch(
@@ -421,10 +414,7 @@ export default {
   },
   beforeMount() {
     this.resetValues();
-    this.formProject = this.$store.getters.getCurrentProject;
-    this.fetchProjectCriterias();
     this.getProjects();
-    this.getCriterias();
   },
 };
 </script>
