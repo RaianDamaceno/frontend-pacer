@@ -11,6 +11,7 @@
           />
         </div>
         <div>
+
           <v-text-field
             id="usuario"
             style="width: 330px"
@@ -23,14 +24,17 @@
             id="senha"
             :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
             :type="show1 ? 'text' : 'password'"
-            @click:append="show1 = !show1"
+            @click:append="changePass()"
             placeholder="Senha"
             @keyup.native.enter="createLogin"
             v-model="login.password"
           />
+
         </div>
         <div>
+          <!-- Botão Login -->
           <button @click="createLogin">LogIn</button>
+          <!-- Botão Registre-se -->
           <button @click="wipeData(), (telaCadastro = true)">
             Registre-se
           </button>
@@ -41,6 +45,7 @@
         <h3>Quem sou eu</h3>
 
         <div class="login-role-avatares">
+          <!-- Avatar Administrador -->
           <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
               <div :class="{ yellow: admSelected }">
@@ -56,6 +61,7 @@
             <span>Administrador</span>
           </v-tooltip>
 
+          <!-- Avatar Professor -->
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
               <div :class="{ yellow: professorSelected }">
@@ -71,6 +77,7 @@
             <span>Professor</span>
           </v-tooltip>
 
+          <!-- Avatar Aluno -->
           <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
               <div :class="{ yellow: alunoSelected }">
@@ -89,22 +96,35 @@
 
         <div v-if="this.cadastro.role">
           <v-form ref="form" v-model="valid" lazy-validation>
+
+            <!-- Usuário -->
             <v-text-field
               id="cad_usuario"
               v-on:change="onChangeRegister"
               style="width: 330px"
               placeholder="Usuario"
               v-model="cadastro.login"
-              @keyup.native.enter="foco('cad_nome')"
+              @keyup.native.enter="foco('cad_nome','cad_usuario')"
               :rules="[(v) => !!v || 'Usuario é obrigatorio']"
             />
 
+            <!-- Nome -->
             <v-text-field
               id="cad_nome"
+              v-if="this.cadastro.role == 'USR'"
               v-on:change="onChangeRegister"
               placeholder="Nome"
               v-model="cadastro.name"
-              @keyup.native.enter="foco('cad_documento')"
+              @keyup.native.enter="foco('cad_documento','cad_nome')"
+              :rules="[(v) => !!v || 'Nome é obrigatorio']"
+            />
+            <v-text-field
+              id="cad_nome"
+              v-else
+              v-on:change="onChangeRegister"
+              placeholder="Nome"
+              v-model="cadastro.name"
+              @keyup.native.enter="foco('cad_email','cad_nome')"
               :rules="[(v) => !!v || 'Nome é obrigatorio']"
             />
 
@@ -114,7 +134,7 @@
               v-on:change="onChangeRegister"
               placeholder="RA"
               v-model="cadastro.document"
-              @keyup.native.enter="foco('cad_email')"
+              @keyup.native.enter="foco('cad_email','cad_documento')"
               :rules="[(v) => !!v || 'RA é obrigatorio']"
             />
 
@@ -123,7 +143,7 @@
               v-on:change="onChangeRegister"
               placeholder="E-mail"
               v-model="cadastro.email"
-              @keyup.native.enter="foco('cad_senha')"
+              @keyup.native.enter="foco('cad_senha','cad_email')"
               :rules="emailRules"
             />
             <v-text-field
@@ -131,7 +151,7 @@
               v-on:change="onChangeRegister"
               :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
               :type="show1 ? 'text' : 'password'"
-              @click:append="show1 = !show1"
+              @click:append="changePass()"
               placeholder="Senha"
               v-model="cadastro.password"
               @keyup.native.enter="createRegister"
@@ -140,7 +160,8 @@
           </v-form>
         </div>
         <div>
-          <button @click="createRegister">Enviar Cadastro</button>
+          <button v-if="this.cadastro.role" @click="createRegister">Enviar Cadastro</button>
+          <button @click="telaCadastro = false">Voltar</button>
         </div>
       </div>
 
@@ -172,6 +193,7 @@ export default {
     show1: false,
     valid: true,
     roles: [],
+    users: [],
     login: {
       login: "",
       password: "",
@@ -202,6 +224,10 @@ export default {
   methods: {
     goToDashboard() {
       this.$router.push("/dashboard");
+    },
+    changePass(){
+      this.show1 = !this.show1;
+      setTimeout(()=>{this.show1 = false;},10000);
     },
     createRegister() {
       if (this.cadastro.role == "") {
@@ -237,21 +263,32 @@ export default {
 
       this.$store.dispatch(
         "messageSuccess",
-        "Aguarde! Enviando dados de autenticação..."
+        "Aguarde! Autenticando..."
       );
       api
         .post("/auth/login", this.login)
         .then((response) => {
-          const token = response.data.token;
-          this.$store.dispatch("setToken", token);
+          this.$store.dispatch("setToken", response.data.token);
+          this.$store.dispatch("setUserId", response.data.sub);
           this.$router.push({ path: "/dashboard" });
         })
         .catch((error) => {
           this.$store.dispatch("messageError", error.response.data.message);
         });
     },
-    foco(id) {
-      document.getElementById(id).focus();
+    /** 
+     * Muda o foco para o próximo componente
+     * @param: next_id
+     * @param: cur_id - Se este parâmetro for passado só continua se tiver conteúdo
+     * */
+    foco(next_id, cur_id) {
+      if ( cur_id 
+           && document.getElementById(cur_id).value.replace(" ","").length === 0
+         ){
+        this.$store.dispatch("messageErrorFast", "Campo obrigatório!");
+        return;
+      }
+      document.getElementById(next_id).focus()
     },
     onChangeRegister() {
       this.$refs.form.validate();
@@ -265,6 +302,8 @@ export default {
         password: "",
         role: "",
       };
+      this.roles = [];
+      this.users = [];
     },
     selectedRole(role) {
       this.admSelected = false;
@@ -273,9 +312,11 @@ export default {
 
       if (role == "ADM") {
         this.admSelected = true;
+        this.cadastro.document = "";
       } else if (role == "USR") {
         this.alunoSelected = true;
       } else if (role == "TCH") {
+        this.cadastro.document = "";
         this.professorSelected = true;
       }
       //Coloca o foco de digitação no campo de usuário
@@ -287,6 +328,7 @@ export default {
   mounted() {
     document.getElementById("usuario").focus();
     this.roles = api.get("role");
+    this.users = api.get("user");
   },
 };
 </script>
