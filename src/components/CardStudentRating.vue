@@ -9,12 +9,12 @@
       <template v-slot:activator="{ on, attrs }">
         <v-btn
           color="red accent-2"
-          small                 
+          small
           fab
           v-bind="attrs"
           v-on="on"
           @click="card = true"
-          right 
+          right
           bottom
           absolute>
 
@@ -25,7 +25,7 @@
       <v-card class="card">
         <v-card-title class="text-h5">
           <span> {{ nome }} </span>
-        </v-card-title> 
+        </v-card-title>
         <div>
           <div>
             <div class="card-person">
@@ -33,7 +33,7 @@
             </div>
             <div class="card-rating">
               <div
-                v-for="nota in notasFeitasAvaliador" 
+                v-for="nota in notasFeitasAvaliador"
                 :key="nota.idEvaluation">
                   <v-slider
                     v-model="nota.note"
@@ -142,9 +142,9 @@ export default {
       console.log(this.sprintID);
       api.get(`notes-store/by-sprint/${this.sprintID}`).then(notes => {
         let notasUsuario = notes.data;
-        
+
         for (let i = 0; i < notasUsuario.length; i++) {
-          if (notasUsuario[i].idEvaluator == evaluatorId && notasUsuario[i].idEvaluated == this.estudanteID) {
+          if (notasUsuario[i].idEvaluator == evaluatorId && notasUsuario[i].idEvaluated == this.estudanteID && notasUsuario[i].idGroup === this.idGroup) {
             this.notasFeitasAvaliador.push(notasUsuario[i])
           }
         }
@@ -155,7 +155,6 @@ export default {
   }
 }
 </script>
-
 <style>
   span {
     color: #fff;

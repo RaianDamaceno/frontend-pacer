@@ -9,37 +9,37 @@
                 @click="getGruposFromProject(Projeto.idProject)"
             >
             <v-expansion-panel-header>
-                <div class="team-title"> 
-                    <div> 
+                <div class="team-title">
+                    <div>
                          <h3>{{ Projeto.description}}</h3>
                     </div>
-                    <div style="margin-right: 30px" v-if="!isAluno" > 
+                    <div style="margin-right: 30px" v-if="!isAluno" >
                         <add-teacher :projetoId="Projeto.idProject" />
                     </div>
-                </div>              
+                </div>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
             <v-expansion-panels focusable>
-                <br>  
+                <br>
                 <v-expansion-panel
                     v-for="Team in projectGrupos"
                     :key="Team.idTeam"
                     @click="getUserFromTeam(Team.idTeam)"
-                >           
-                    <v-expansion-panel-header> 
-                        <div class="team-title"> 
-                            <div> 
+                >
+                    <v-expansion-panel-header>
+                        <div class="team-title">
+                            <div>
                                 <h3>Time: {{ Team.teamName }} </h3>
                             </div>
-                            <div> 
-                                <card-float-button 
-                                    :team="Team.idTeam" 
+                            <div>
+                                <card-float-button
+                                    :team="Team.idTeam"
                                     :isAluno="isAluno"
                                     :isGrupoDoUsuario="isGrupoDoUsuario"
                                 />
                             </div>
                         </div>
-                      
+
                     </v-expansion-panel-header>
                 <v-expansion-panel-content>
                     <div>
@@ -118,7 +118,6 @@
   import CardStudentRating from '../components/CardStudentRating.vue'
   import CardFloatButton from '../components/CardFloatButton.vue'
   import AddTeacher from '../components/AddTeacher.vue'
-
   export default Vue.extend({
     name: 'Projetos',
     props: {
@@ -163,6 +162,8 @@
             }).catch(error => {
                 console.log(error);
             });
+
+            this.$emit('select-project', projectID);
         },
         getUserFromTeam(teamID) {
             this.grupoAtivo = teamID;
