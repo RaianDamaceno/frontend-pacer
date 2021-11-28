@@ -209,6 +209,7 @@ export default {
     },
     model: 0,
     telaCadastro: false,
+    telaSenha: false,
     items: [
       {
         src: "http://blog.feedbackmanager.com.br/wp-content/uploads/2017/08/aprimore.jpg",
