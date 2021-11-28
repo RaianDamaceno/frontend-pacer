@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="login-display">
-      <div class="login-display-form" v-if="!telaCadastro">
+      <div class="login-display-form" v-if="!telaCadastro && !telaSenha">
         <div>
           <img
             src="../../public/img/fatecsj.png"
@@ -30,16 +30,34 @@
           />
         </div>
         <div>
-          <button @click="createLogin">LogIn</button>
+          <button @click="telaSenha = true"> Recuperar Senha </button>
+          <button @click="createLogin"> LogIn </button>
           <button @click="wipeData(), (telaCadastro = true)">
             Registre-se
           </button>
         </div>
       </div>
 
-      <div class="login-display-form" v-if="telaCadastro">
-        <h3>Quem sou eu</h3>
+      <div class="login-display-form" v-if="telaSenha && !telaCadastro">
+         <h3> Recuperar a senha </h3>
+        <div>
+          <v-form 
+            ref="form"
+            v-model="valid" 
+            lazy-validation
+            >
+            <v-text-field  v-on:change="onChangeRegister" style="width:330px" placeholder="Usuario" v-model="recuperacaoSenha.login" :rules="[v => !!v || 'Usuario é obrigatorio']"/>
+            <v-text-field  v-on:change="onChangeRegister" placeholder="R.A" v-model="recuperacaoSenha.document" :rules="[v => !!v || 'R.A é obrigatorio']"/>
+            <v-text-field  v-on:change="onChangeRegister" placeholder="E-mail" v-model="recuperacaoSenha.email" :rules="emailRules"/>
+          </v-form>
+        </div>
+        <div>
+          <button @click="updatePassword"> Trocar Senha </button>
+        </div>
+      </div>
 
+      <div class="login-display-form" v-if="telaCadastro && !telaSenha">
+         <h3> Quem Sou eu </h3>
         <div class="login-role-avatares">
           <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
@@ -184,8 +202,14 @@ export default {
       password: "",
       role: "",
     },
+    recuperacaoSenha:{
+      login: '',
+      document: '',
+      email: ''
+    },
     model: 0,
     telaCadastro: false,
+    telaSenha: false,
     items: [
       {
         src: "http://blog.feedbackmanager.com.br/wp-content/uploads/2017/08/aprimore.jpg",
@@ -202,6 +226,17 @@ export default {
   methods: {
     goToDashboard() {
       this.$router.push("/dashboard");
+    },
+    updatePassword(){
+      api.put('/recovery-password', this.recuperacaoSenha).then(response => {
+        alert("Senha alterada com sucesso. Verifique o seu e-mail!");
+        this.telaSenha = false;
+        this.recuperacaoSenha.login = '';
+        this.recuperacaoSenha.document = '';
+        this.recuperacaoSenha.email = '';
+    }).catch(function(error){
+      alert('Ocorreu um erro. Verifique as informações.')
+      })
     },
     createRegister() {
       if (this.cadastro.role == "") {
