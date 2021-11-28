@@ -1,3 +1,4 @@
+
 <template>
     <div class="dashboard">
         <div class="dashboard-nav"> 
@@ -6,6 +7,7 @@
                 :estudantes="allEstudantes" 
                 :projetos="projetos"
                 :isAluno="isAluno"
+                :isAdmin="isAdmin"
             />
         </div>   
         <div class="dashboard-content">
@@ -43,6 +45,7 @@
                 :criterios="criterios"
                 :sprintSelected="sprintSelected"
                 :isAluno="isAluno"
+                :isAdmin="isAdmin"
                 :isSprintAtiva="activeSprint"
             />
         </div>
@@ -57,7 +60,6 @@
   import NavDrawer from "../components/nav/NavDrawer.vue";
   import api from '../services/api'
   import Projetos from "../components/Projetos.vue";
-  import AddTeacher from "../components/AddTeacher.vue";
   
 export default Vue.extend({
     name: "Dashboard",
@@ -83,10 +85,11 @@ export default Vue.extend({
        haveSM: false,
        idteam: "",
        isAluno: false,
+       isAdmin: false,
        showButtonScrum: false,
        minhaAvaliação:[],
        UserLoggedTeam: '',
-       userTeam: '',
+       userTeam: [],
        userProjeto:[],
        selectSprint: '',
        showGraph: false
@@ -192,9 +195,10 @@ export default Vue.extend({
                 });
             })
         },
-        getUserInformation: function() {
+        getUserInformation: function(): void {
             api.get(`/user/${this.userLogged}`).then((response) => {
-                if (response.data.role === "USR") this.isAluno = true;
+                this.isAluno = (response.data.role === "USR");
+                this.isAdmin = (response.data.role === "ADM");
             });
         },
     },
