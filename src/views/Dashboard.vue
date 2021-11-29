@@ -98,7 +98,7 @@ export default Vue.extend({
     sprints: [{}],
     sprintSelected: "",
     activeSprint: true,
-    notasFeitas: [],
+    notasFeitas: null,
     token: "",
     userLogged: "",
     projectGrupos: "",
@@ -139,16 +139,16 @@ export default Vue.extend({
       }
     });
     api.get("notes-store").then((response) => {
-      this.notasFeitas = response.data;
-
-      this.existNote =
-        this.notasFeitas.filter(
+      
+      this.notasFeitas = response.data.filter(
           (data) =>
             data.evaluated.idUser === this.userLogged &&
             data.idSprint === this.sprintSelected
-        ).length === 0
-          ? false
-          : true;
+      )
+
+      this.existNote = (!this.notasFeitas)
+                       ? false
+                       : true;
     });
   },
   mounted() {

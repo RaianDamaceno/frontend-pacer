@@ -32,11 +32,8 @@
 
         </div>
         <div>
-          <!-- Botão Login -->
           <button @click="createLogin">LogIn</button>
-          <!-- Botão Registre-se -->
           <button @click="telaSenha = true"> Recuperar Senha </button>
-          <button @click="createLogin"> LogIn </button>
           <button @click="wipeData(), (telaCadastro = true)">
             Registre-se
           </button>
@@ -255,8 +252,12 @@ export default {
       setTimeout(()=>{this.show1 = false;},10000);
     },
     updatePassword(){
-      api.put('/recovery-password', this.recuperacaoSenha).then(response => {
-        alert("Senha alterada com sucesso. Verifique o seu e-mail!");
+      api.put('/recovery-password', this.recuperacaoSenha)
+      .then(() => {
+        this.$store.dispatch(
+          "messageSuccessFast",
+          "Senha alterada com sucesso. Verifique o seu e-mail!"
+        );
         this.telaSenha = false;
         this.recuperacaoSenha.login = '';
         this.recuperacaoSenha.document = '';
@@ -264,7 +265,7 @@ export default {
     }).catch(function(error){
         this.$store.dispatch(
           "messageError",
-          "Ocorreu um erro. Verifique as informações."
+          error.response.data.message
         );
       })
     },

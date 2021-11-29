@@ -100,105 +100,104 @@
                   </v-slide-group>
                 </div>
               </v-expansion-panel-content>
-            <v-expansion-panel-header>
+              <v-expansion-panel-header>
                 <div class="team-title">
-                    <div>
-                         <h3>{{ Projeto.description}}</h3>
-                    </div>
-                    <div style="margin-right: 30px" v-if="!isAluno" >
-                        <add-teacher :projetoId="Projeto.idProject" />
-                    </div>
+                  <div>
+                    <h3>{{ Projeto.description }}</h3>
+                  </div>
+                  <div style="margin-right: 30px" v-if="!isAluno">
+                    <add-teacher :projetoId="Projeto.idProject" />
+                  </div>
                 </div>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-            <v-expansion-panels focusable>
-                <br>
-                <v-expansion-panel
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-expansion-panels focusable>
+                  <br />
+                  <v-expansion-panel
                     v-for="Team in projectGrupos"
                     :key="Team.idTeam"
                     @click="getUserFromTeam(Team.idTeam)"
-                >
+                  >
                     <v-expansion-panel-header>
-                        <div class="team-title">
-                            <div>
-                                <h3>Time: {{ Team.teamName }} </h3>
-                            </div>
-                            <div>
-                                <card-float-button
-                                    :team="Team.idTeam"
-                                    :isAluno="isAluno"
-                                    :isGrupoDoUsuario="isGrupoDoUsuario"
-                                />
-                            </div>
+                      <div class="team-title">
+                        <div>
+                          <h3>Time: {{ Team.teamName }}</h3>
                         </div>
-
+                        <div>
+                          <card-float-button
+                            :team="Team.idTeam"
+                            :isAluno="isAluno"
+                            :isGrupoDoUsuario="isGrupoDoUsuario"
+                          />
+                        </div>
+                      </div>
                     </v-expansion-panel-header>
-                <v-expansion-panel-content>
-                    <div>
+                    <v-expansion-panel-content>
+                      <div>
                         <v-slide-group class="pa-4" center-active show-arrows>
-                        <v-slide-item
+                          <v-slide-item
                             v-for="estudante in estudantes"
                             :key="estudante.idUser"
-                        >
+                          >
                             <v-card class="ma-4" height="200" width="190">
-                                <div class="dashboard-group-person-minify">
-                                    <div
-                                        class="dashboard-group-person-minify-pictures"
-                                    >
-                                        <div></div>
-                                    </div>
-                                    <div class="dashboard-group-person-name">
-                                        <span> {{ estudante.user.name }} </span>
-                                    </div>
-                                    <div
-                                        class="dashboard-group-person-button"
-                                        v-if="!isAluno && isSprintAtiva"
-                                    >
-                                        <card-student-rating
-                                            :criterios="criterios"
-                                            :nome="estudante.user.name"
-                                            :estudanteID="estudante.idUser"
-                                            :sprintID="sprintSelected"
-                                            :idEvaluator="userLogged"
-                                            :idGroup="grupoAtivo"
-                                        />
-                                    </div>
-                                    <div
-                                        class="dashboard-group-person-button"
-                                        v-if="isAluno && isSprintAtiva && isGrupoDoUsuario"
-                                    >
-                                        <card-student-rating
-                                            :criterios="criterios"
-                                            :nome="estudante.user.name"
-                                            :estudanteID="estudante.idUser"
-                                            :sprintID="sprintSelected"
-                                            :idEvaluator="userLogged"
-                                            :idGroup="grupoAtivo"
-                                        />
-                                    </div>
-                                    <div
-                                        class="dashboard-group-person-button"
-                                        v-else
-                                    >
-                                        <card-toast-sprint
-                                            text="Sprint finalizada"
-                                        />
-                                    </div>
-                                </div>
-                                <v-row
-                                    class="fill-height"
-                                    align="center"
-                                    justify="center"
+                              <div class="dashboard-group-person-minify">
+                                <div
+                                  class="dashboard-group-person-minify-pictures"
                                 >
-                                </v-row>
+                                  <div></div>
+                                </div>
+                                <div class="dashboard-group-person-name">
+                                  <span> {{ estudante.user.name }} </span>
+                                </div>
+                                <div
+                                  class="dashboard-group-person-button"
+                                  v-if="!isAluno && isSprintAtiva"
+                                >
+                                  <card-student-rating
+                                    :criterios="criterios"
+                                    :nome="estudante.user.name"
+                                    :estudanteID="estudante.idUser"
+                                    :sprintID="sprintSelected"
+                                    :idEvaluator="userLogged"
+                                    :idGroup="grupoAtivo"
+                                  />
+                                </div>
+                                <div
+                                  class="dashboard-group-person-button"
+                                  v-if="
+                                    isAluno && isSprintAtiva && isGrupoDoUsuario
+                                  "
+                                >
+                                  <card-student-rating
+                                    :criterios="criterios"
+                                    :nome="estudante.user.name"
+                                    :estudanteID="estudante.idUser"
+                                    :sprintID="sprintSelected"
+                                    :idEvaluator="userLogged"
+                                    :idGroup="grupoAtivo"
+                                  />
+                                </div>
+                                <div
+                                  class="dashboard-group-person-button"
+                                  v-else
+                                >
+                                  <card-toast-sprint text="Sprint finalizada" />
+                                </div>
+                              </div>
+                              <v-row
+                                class="fill-height"
+                                align="center"
+                                justify="center"
+                              >
+                              </v-row>
                             </v-card>
-                        </v-slide-item>
-                    </v-slide-group>
-                    </div>
-                </v-expansion-panel-content>
-                </v-expansion-panel>
-             </v-expansion-panels>
-            </v-expansion-panel-content>
+                          </v-slide-item>
+                        </v-slide-group>
+                      </div>
+                    </v-expansion-panel-content>
+                  </v-expansion-panel>
+                </v-expansion-panels>
+              </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
         </v-expansion-panel-content>
@@ -254,68 +253,71 @@ export default Vue.extend({
       setTimeout(() => (this[l] = false), 3000);
     },
   },
+  data: () => ({
+    myTeams: [],
+    estudantes: "",
+    idteam: "",
+    activeSprint: true,
+    grupoAtivo: "",
+    loading: false,
+    loader: null,
+    projectGrupos: "",
+    isGrupoDoUsuario: true,
+    showButtonScrum: "",
+  }),
+  watch: {
+    loader() {
+      const l = this.loader;
+      this[l] = !this[l];
+
+      setTimeout(() => (this[l] = false), 3000);
+    },
+  },
   methods: {
     getGruposFromProject(projectID) {
-      api.get(`project/${projectID}`).then((response) => {
-        this.projectGrupos = response.data.teams;
-      });
-    },
-    data: () => ({
-        myTeams: [],
-        estudantes: '',
-        idteam: '',
-        activeSprint: true,
-        grupoAtivo: '',
-        loading: false,
-        loader: null,
-        projectGrupos: '',
-        isGrupoDoUsuario: true,
-        showButtonScrum: ''
-    }),
-    watch: {
-      loader () {
-        const l = this.loader
-        this[l] = !this[l]
+      api
+        .get(`project/${projectID}`)
+        .then((response) => {
+          this.projectGrupos = response.data.teams;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
 
-        setTimeout(() => (this[l] = false), 3000)
-      },
+      this.$emit("select-project", projectID);
     },
-    methods: {
-        getGruposFromProject(projectID) {
-            api.get(`project/${projectID}`).then((response) => {
-                this.projectGrupos = response.data.teams;
-            }).catch(error => {
-                console.log(error);
-            });
-
-            this.$emit('select-project', projectID);
-        },
-        getUserFromTeam(teamID) {
-            this.grupoAtivo = teamID;
-            api.get(`user-team?idTeam=${teamID}`).then((response) => {
-                this.idteam = teamID;
-                this.estudantes = response.data;
-                this.isGrupoDoUsuario = false;
-                for (let i = 0; i < this.estudantes.length; i++) {
-                    if(this.userLogged == this.estudantes[i].idUser && teamID == this.estudantes[i].idTeam) {
-                        this.isGrupoDoUsuario = true;
-                    }
-                    if (this.estudantes[i].isScrumMaster) {
-                        this.haveSM = true;
-                        break;
-                    } else {
-                        this.haveSM = false;
-                    }
-                }
-                if (this.isAluno && !this.haveSM) {
-                    this.showButtonScrum = true;
-                }
-            }).catch(error => {
-                console.log(error);
-            });
-        },
-    }
-  })
+    getUserFromTeam(teamID) {
+      this.grupoAtivo = teamID;
+      api
+        .get(`user-team?idTeam=${teamID}`)
+        .then((response) => {
+          this.idteam = teamID;
+          this.estudantes = response.data;
+          this.isGrupoDoUsuario = false;
+          for (let i = 0; i < this.estudantes.length; i++) {
+            if (
+              this.userLogged == this.estudantes[i].idUser &&
+              teamID == this.estudantes[i].idTeam
+            ) {
+              this.isGrupoDoUsuario = true;
+            }
+            if (this.estudantes[i].isScrumMaster) {
+              this.haveSM = true;
+              break;
+            } else {
+              this.haveSM = false;
+            }
+          }
+          if (this.isAluno && !this.haveSM) {
+            this.showButtonScrum = true;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
+});
 </script>
 
 <style>
