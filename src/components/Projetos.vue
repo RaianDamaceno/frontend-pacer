@@ -253,51 +253,42 @@ export default Vue.extend({
       setTimeout(() => (this[l] = false), 3000);
     },
   },
-  methods: {
-    getGruposFromProject(projectID) {
-      api
-        .get(`project/${projectID}`)
-        .then((response) => {
-          this.projectGrupos = response.data.teams;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    methods: {
+        getGruposFromProject(projectID) {
+            api.get(`project/${projectID}`).then((response) => {
+                this.projectGrupos = response.data.teams;
+            }).catch(error => {
+                console.log(error);
+            });
 
-      this.$emit("select-project", projectID);
+            this.$emit('select-project', projectID);
+        },
+        getUserFromTeam(teamID) {
+            this.grupoAtivo = teamID;
+            api.get(`user-team?idTeam=${teamID}`).then((response) => {
+                this.idteam = teamID;
+                this.estudantes = response.data;
+                this.isGrupoDoUsuario = false;
+                for (let i = 0; i < this.estudantes.length; i++) {
+                    if(this.userLogged == this.estudantes[i].idUser && teamID == this.estudantes[i].idTeam) {
+                        this.isGrupoDoUsuario = true;
+                    }
+                    if (this.estudantes[i].isScrumMaster) {
+                        this.haveSM = true;
+                        break;
+                    } else {
+                        this.haveSM = false;
+                    }
+                }
+                if (this.isAluno && !this.haveSM) {
+                    this.showButtonScrum = true;
+                }
+            }).catch(error => {
+                console.log(error);
+            });
+        },
     },
-    getUserFromTeam(teamID) {
-      this.grupoAtivo = teamID;
-      api
-        .get(`user-team?idTeam=${teamID}`)
-        .then((response) => {
-          this.idteam = teamID;
-          this.estudantes = response.data;
-          this.isGrupoDoUsuario = false;
-          for (let i = 0; i < this.estudantes.length; i++) {
-            if (
-              this.userLogged == this.estudantes[i].idUser &&
-              teamID == this.estudantes[i].idTeam
-            ) {
-              this.isGrupoDoUsuario = true;
-            }
-            if (this.estudantes[i].isScrumMaster) {
-              this.haveSM = true;
-              break;
-            } else {
-              this.haveSM = false;
-            }
-          }
-          if (this.isAluno && !this.haveSM) {
-            this.showButtonScrum = true;
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-  },
-});
+})
 </script>
 
 <style>
