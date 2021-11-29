@@ -255,7 +255,7 @@ export default {
       api.put('/recovery-password', this.recuperacaoSenha)
       .then(() => {
         this.$store.dispatch(
-          "messageSuccessFast",
+          "messageSuccess",
           "Senha alterada com sucesso. Verifique o seu e-mail!"
         );
         this.telaSenha = false;

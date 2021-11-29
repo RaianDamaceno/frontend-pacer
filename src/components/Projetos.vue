@@ -253,26 +253,6 @@ export default Vue.extend({
       setTimeout(() => (this[l] = false), 3000);
     },
   },
-  data: () => ({
-    myTeams: [],
-    estudantes: "",
-    idteam: "",
-    activeSprint: true,
-    grupoAtivo: "",
-    loading: false,
-    loader: null,
-    projectGrupos: "",
-    isGrupoDoUsuario: true,
-    showButtonScrum: "",
-  }),
-  watch: {
-    loader() {
-      const l = this.loader;
-      this[l] = !this[l];
-
-      setTimeout(() => (this[l] = false), 3000);
-    },
-  },
   methods: {
     getGruposFromProject(projectID) {
       api

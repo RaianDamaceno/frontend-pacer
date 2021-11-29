@@ -163,7 +163,7 @@
             this.$store.dispatch("messageSuccess", "Time Cadastrado Com sucesso");
           }
         }).catch( error => {
-          this.$store.dispatch("messageError", "Time Cadastrado Com sucesso");
+          this.$store.dispatch("messageError", error.response.data.message);
         })
       },
       addAlunos: function(teamResponse) {

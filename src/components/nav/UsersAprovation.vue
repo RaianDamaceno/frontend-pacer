@@ -90,7 +90,7 @@ export default {
 
       });
       await api.post("user/approve", updateArray).then(
-        (response) => {
+        () => {
           this.$store.dispatch("messageSuccess", "Cadastro feito com sucesso");
           window.location.reload(true);
         },

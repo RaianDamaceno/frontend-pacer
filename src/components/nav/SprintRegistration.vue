@@ -120,11 +120,11 @@
             'finalDate':    this.finalDateNew.split("/").reverse().join("/"),
             'idProject':    this.selectProject.idProject
           }
-           api.post('sprint', CreateSprint).then((response) => {
+           api.post('sprint', CreateSprint).then(() => {
               this.$store.dispatch("messageSuccess", "Cadastro de sprint realizado com sucesso");
             }, (error) => {
               console.log(error);
-              this.$store.dispatch("messageError", "Erro no cadastro de Sprint");
+              this.$store.dispatch("messageError", error.response.data.message);
             });
             this.$refs.form.reset();
         },

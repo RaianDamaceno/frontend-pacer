@@ -100,11 +100,11 @@ export default {
       };
       api
         .patch(`user/${userId}`, updatePassword)
-        .then((response) => {
+        .then(() => {
           this.$store.dispatch("messageSuccess", "Nota Atualizada Com sucesso");
         })
         .catch((error) => {
-          this.$store.dispatch("messageError", "Erro ao atualizar cadastro");
+          this.$store.dispatch("messageError", error.response.data.message);
         });
     },
   },
