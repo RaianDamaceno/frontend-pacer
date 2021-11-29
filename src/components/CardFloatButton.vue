@@ -9,7 +9,7 @@
             :direction="direction"
             :open-on-hover="hover"
             :transition="transition"
-            background
+            background="transparent"
         >
         <template v-slot:activator>
             <v-btn
@@ -31,6 +31,7 @@
          <v-dialog
             v-model="dialog"
             width="420"
+            v-if="isAluno && !isGrupoDoUsuario"
           >
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -45,7 +46,7 @@
               </v-btn>
             </template>
 
-            <v-card>
+            <v-card >
               <v-card-title class="text-h5 grey lighten-2" >
                 Ingressar na Equipe
               </v-card-title>
@@ -83,6 +84,7 @@
             dark
             small
             color="red"
+            v-if="!isAluno"
         >
             <v-icon v-on:click="deleteTeam">mdi-delete</v-icon>
         </v-btn>
@@ -96,6 +98,8 @@
   export default {
     props: {
          team: String,
+         isAluno: Boolean,
+         isGrupoDoUsuario: Boolean
     },
     data: () => ({
       direction: 'left',
@@ -106,10 +110,10 @@
       top: false,
       right: false,
       bottom: false,
-      left: true,
+      left: false,
       scrumMaster: true,
       user_exist: false,
-      id_user: '9288a850-588d-4a18-86ff-77b6d21a8464',
+      idUser: '',
       transition: 'slide-y-reverse-transition',
       user_team: null,
       team_values: null,
@@ -132,6 +136,9 @@
         this.right = !val
       },
     },
+    mounted() {
+        this.idUser = this.$store.getters.getUserId;
+    },
     created() {
       api.get('user-team',  { params: { idTeam: this.team } }).then(response => { 
         this.user_team = response.data;
@@ -152,7 +159,9 @@
         }
         await this.sleep(3000)
         api.delete(`team/${this.team}`).then(response => { 
-          response.status === 200 ? alert("Time deletado com sucesso") : alert("Erro ao deletar time")
+          this.$store.dispatch("messageSuccess", "Time deletado com sucesso")   
+        }).catch(function () { 
+          this.$store.dispatch("messageError", "Erro ao deletar time")
         })
       },
       sleep: function(ms) {
@@ -177,34 +186,33 @@
               if(this.sprint_values[i].initialDate <= full_day){
                 this.strint_started = true
               }
-              if(this.user_team[i].idUser == this.id_user){
+              if(this.user_team[i].idUser == this.idUser){
                 this.user_exist = true;
               }
               if(this.user_team[i].isScrumMaster == false){
                 this.scrumMaster = false;
-                console.log(this.scrumMaster)
               }
             }
           }
 
           if(this.scrumMaster == true && this.is_SM == true){
-            alert("Esta equipe ja possui Scrum Master");
+            this.$store.dispatch("messageError", "Esta equipe ja possui Scrum Master")   
           }else{
            if(!this.strint_started){
             if(!this.user_exist){
                 UserTeamPayload = {
-                "idUser": this.id_user,
+                "idUser": this.idUser,
                 "idTeam": this.team,
                 "isScrumMaster": this.is_SM,
                 "snActivated": "S"    
                 }
               api.post("user-team", UserTeamPayload)
-              alert("Adicionado com sucesso!");
+              this.$store.dispatch("messageSuccess", "Adicionado com sucesso!")   
             }else{
-              alert("Você já faz parte desta equipe!");
+              this.$store.dispatch("messageError", "Você já faz parte desta equipe!")   
             }
             }else{
-              alert("Você não pode se juntar a este time, sprint ja iniciada")
+              this.$store.dispatch("messageError", "Você não pode se juntar a este time, sprint ja iniciada")   
            }
         }
       }
@@ -213,10 +221,6 @@
 </script>
 
 <style>
-  .theme--light.v-sheet #create {
-    background: rgb(2,0,36);
-    background: linear-gradient(47deg, rgba(13,44,82,1) 31%, rgba(90,26,159,1));
-  }
   #create .v-speed-dial {
     position: relative;
   }

@@ -1,41 +1,67 @@
 /* eslint-disable vue/require-prop-type-constructor */
 <template>
-    <highcharts class="hc" :options="chartOptions"></highcharts>
+    <div  style="width:100%">
+        <highcharts class="hc" :options="chartOptions"></highcharts>
+    </div>
 </template>
 
 <style>
 .hc {
-    height: 100%;
+    width: 60%;
 }
 </style>
 
 <script>
 import Vue from "vue";
+import api from "../services/api";
 Vue.prototype.total = [];
-Vue.prototype.criterios = [];
-Vue.prototype.sprint = [];
+Vue.prototype.notesTeam = [];
+Vue.prototype.notesSelf = [];
 export default Vue.extend({
     name: "GraphSpider",
     props: {
-        notas: Array,
+        criterios: Array,
         sprintSelected: String,
         user: String,
+        project: String,
     },
-    beforeMount() {
-        this.notas
-            .filter(
-                (data) =>
-                    data.evaluated.idUser === this.user && data.idSprint === this.sprintSelected
-            )
-            .map((nt) => {
-                this.criterios.push(nt.criterio.descCriteria);
-                this.total.push(nt.note === null ? 0 : nt.note);
-                if (this.sprint.length === 0) {
-                    this.sprint.push(
-                        nt.sprint.initialDate + " | " + nt.sprint.finalDate
-                    );
-                }
+    beforeCreate() {
+        this.notesSelf = [];
+        this.notesTeam = [];
+        this.total = [];
+        setTimeout(() => {
+            this.criterios.map((data) => {
+                api.get(
+                    `notes-store/sprint/${this.sprintSelected}/${this.user}/${this.project}/${data.idCriteria}`
+                )
+                    .then((response) => {
+                        this.notesSelf.push(
+                            response.data.selfNotes.selfNoteAvg
+                        );
+                        this.notesTeam.push(
+                            response.data.teamNotes.teamNoteAvg
+                        );
+                    })
+                    .catch((error) => {
+                        alert(
+                            "Ocorreu um erro ao realizar a população do grafico. Por favor tente novamente mais tarde"
+                        );
+                        console.log(error);
+                        return;
+                    });
             });
+
+            this.total.push(
+                {
+                    name: "Media da Equipe",
+                    data: this.notesTeam,
+                },
+                {
+                    name: "Minha média",
+                    data: this.notesSelf,
+                }
+            );
+        });
     },
     data() {
         return {
@@ -43,6 +69,7 @@ export default Vue.extend({
                 chart: {
                     type: "line",
                     polar: true,
+                    backgroundColor: 'transparent'
                 },
 
                 credits: {
@@ -50,20 +77,23 @@ export default Vue.extend({
                 },
 
                 title: {
-                    text: "Grafico para acompanhamento",
+                    text: "Media de Notas",
                 },
 
                 xAxis: {
-                    categories: this.criterios || [],
+                    categories:
+                        this.criterios.map((cri) => {
+                            return cri.descCriteria;
+                        }) || [],
                     tickmarkPlacement: "on",
-                    lineWidth: 0,
+                    lineWidth: 0
                 },
 
                 yAxis: {
                     gridLineInterpolation: "polygon",
                     min: 0,
-                    max: 10,
-                    tickInterval: 2,
+                    max: 100,
+                    tickInterval: 10
                 },
 
                 legend: {
@@ -77,13 +107,7 @@ export default Vue.extend({
                     valueSuffix: " Pontos",
                 },
 
-                series: [
-                    {
-                        name: this.sprint || "",
-                        data: this.total || [],
-                        pointPlacement: "on",
-                    },
-                ],
+                series: this.total || [],
             },
         };
     },

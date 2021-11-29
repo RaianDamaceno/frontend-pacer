@@ -2,8 +2,15 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" scrollable max-width="700px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn color="primary" dark v-bind="attrs" v-on="on">
-          Cadastro de Projeto
+        <v-btn
+            v-bind="attrs"
+            v-on="on"
+            width="100%"
+            class="light-blue darken-3"
+            elevation="0"
+            x-large
+            >
+           Cadastro Projeto
         </v-btn>
       </template>
 
@@ -64,7 +71,7 @@
 </template>
 
 <script>
-import api from "../services/api";
+import api from "../../services/api";
 
 export default {
   data: () => ({
@@ -103,16 +110,12 @@ export default {
         description: this.Description,
         evaluationFormat: this.evaluationFormat.charAt(0,1), //Será T ou U.
       };
-      console.log(this.initialDateNew);
-      console.log(this.CreateProject);
-      await api.post("project", CreateProject).then(
-        (response) => {
-          console.log(response.data);
-          alert("Cadastro feito com sucesso");
+      await api.post("project", CreateProject).then((response) => {
+          this.$store.dispatch("messageSuccess", "Cadastro feito com sucesso!")
+          window.location.reload(true);
         },
         (error) => {
-          console.log(error);
-          alert("Erro no cadastro");
+          this.$store.dispatch("messageError", "Erro no cadastro de projeto")
         }
       );
       this.$refs.form.reset();

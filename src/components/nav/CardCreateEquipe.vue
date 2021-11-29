@@ -7,16 +7,14 @@
     >
     <template v-slot:activator="{ on, attrs }">
         <v-btn
-            color="red accent-2"
-            small                 
-            fab
-            right 
-            bottom
             v-bind="attrs"
             v-on="on"
-            @click="card = true"
+            width="100%"
+            class="light-blue darken-2"
+            elevation="0"
+            x-large
             >
-            <v-icon>mdi-plus</v-icon>
+           Cadastro de Time
         </v-btn>
     </template>
       <v-card>
@@ -52,7 +50,7 @@
               >
               <v-select
                   v-model="selectUsuario"
-                  :items="estudantes"
+                  :items="allEstudantes"
                   label="Alunos"
                   item-text="name"
                   persistent-hint
@@ -64,13 +62,27 @@
               </v-col>
               <v-col
                 cols="12"
+                v-if="scrumButton"
               >
                 <v-switch
                   v-model="isScrum"
-                  v-if="scrumButton"
                   inset
                   :label="'É Scrum Master'"
                 ></v-switch>
+              </v-col>
+              <v-col
+                cols="12"
+                v-if="!scrumButton"
+              > 
+              <v-select
+                  v-model="scrumID"
+                  :items="selectUsuario"
+                  label="Escolha o Scrum Master"
+                  item-text="name"
+                  persistent-hint
+                  return-object
+                  single-line
+                />
               </v-col>
             </v-row>
           </v-container>
@@ -100,11 +112,11 @@
 </template>
 
 <script>
-  import api from '../services/api'
+  import api from '../../services/api'
   export default {
     props: {
-         projetos: Array,
-         estudantes: Array
+      projetos: Array,
+      estudantes: Array
     },
     data: () => ({
       dialog: false,
@@ -115,45 +127,67 @@
       snActivated: "s",
       teamResponse: "",
       isScrum: false,
-      scrumButton: true
+      scrumButton: true,
+      scrumID: '',
+      allEstudantes: []
     }),
-     methods: {
-        checkScrumMaster: function() {
-          if(this.selectUsuario.length > 1) {
-            this.scrumButton = false
-          } else {
-            this.scrumButton = true
-          }
-        },
-        createTeam: function() {
-            let payload = { 
-                idProject: this.selectProjeto.idProject, 
-                teamName: this.teamName, 
-                snActivated: this.snActivated 
-            };
-            api.post("team", payload).then(response => {
-              if(response.status === 201) {
-                this.teamResponse = response.data
-                if(this.selectUsuario.length != 0) {
-                  this.addAlunos(this.teamResponse)
-                }
-                alert("Time Cadastrado Com sucesso")
-              } else {
-                alert("Ocorreu um erro ao realizar o cadastro do Time")
-              }
-          })
-        },
-        addAlunos: function(teamResponse) {
-          for(let i = 0; i < this.selectUsuario.length; i++) {
-              let UserTeamPayload = {
-                "idUser": this.selectUsuario[i].idUser,
-                "idTeam": teamResponse.idTeam,
-                "isScrumMaster": this.isScrum,
-                "snActivated": "S"
-              }
-              api.post("user-team", UserTeamPayload)
-          }
+    mounted() {
+      this.getAlunos();
+    },
+    methods: {
+      getAlunos: function() {
+          api.get('user').then(response => {
+            this.allEstudantes = response.data.filter(function(el) {
+              return el.role == "USR";
+            });
+        })
+      },
+      checkScrumMaster: function() {
+        if (this.selectUsuario.length > 1) {
+          this.scrumButton = false
+        } else {
+          this.scrumButton = true
         }
+      },
+      createTeam: function() {
+        let payload = {
+          idProject: this.selectProjeto.idProject,
+          teamName: this.teamName,
+          snActivated: this.snActivated
+        };
+        api.post("team", payload).then(response => {
+          if (response.status === 201) {
+            this.teamResponse = response.data
+            if (this.selectUsuario.length > 0) {
+              this.addAlunos(this.teamResponse)
+            }
+            this.$store.dispatch("messageSuccess", "Time Cadastrado Com sucesso");
+          }
+        }).catch( error => {
+          this.$store.dispatch("messageError", "Time Cadastrado Com sucesso");
+        })
+      },
+      addAlunos: function(teamResponse) {
+        let UserTeamPayload = null
+        for (let i = 0; i < this.selectUsuario.length; i++) {
+          if(this.scrumID != '') {
+              UserTeamPayload = {
+              "idUser": this.selectUsuario[i].idUser,
+              "idTeam": teamResponse.idTeam,
+              "isScrumMaster": this.selectUsuario[i].idUser == this.scrumID.idUser ? true : false,
+              "snActivated": "S"
+              }
+          } else {
+              UserTeamPayload = {
+              "idUser": this.selectUsuario[i].idUser,
+              "idTeam": teamResponse.idTeam,
+              "isScrumMaster": this.isScrum,
+              "snActivated": "S"
+              }
+          }
+          api.post("user-team", UserTeamPayload)
+        }
+      }
     }
-  }
+  } 
 </script>

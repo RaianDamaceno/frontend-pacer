@@ -1,21 +1,23 @@
 <template>
-  <div v-if="role === 'P'">
     <v-row
       justify="center"
     >
-      <v-btn
-        color="primary"
-        class="ma-2"
-        dark
-        @click="dialog = true"
-      >
-        Usuários para aprovação
-      </v-btn>
+        <v-btn
+            width="100%"
+            class="light-blue darken-2"
+            elevation="0"
+            x-large
+            center
+            @click="dialog = true"
+            >
+            <v-icon>>mdi-view-dashboard</v-icon>
+            Aprovacao de usuarios
+        </v-btn>
       <v-menu
         bottom
         offset-y
       >
-        AdicionaCriteriosAva
+        ProjectCriteriaAdd
       </v-menu>
       <v-dialog
         v-model="dialog"
@@ -77,12 +79,10 @@
         </v-card>
       </v-dialog>
     </v-row>
-  </div>
 </template>
 
 <script>
-  import axios from 'axios'
-  import api from '../services/api'
+  import api from '../../services/api'
 
   export default {
     data () {
@@ -117,13 +117,12 @@
             updateArray.push(updateUser);
             console.log(updateUser);  
           })
-          await axios.post('http://localhost:3000/user/approve', updateArray)
+          await api.post('user/approve', updateArray)
             .then((response) => {
-              console.log(response.data);
-              alert("Cadastro feito com sucesso");
+              this.$store.dispatch("messageSuccess", "Cadastro feito com sucesso");
+              window.location.reload(true);
             }, (error) => {
-              console.log(error);
-              alert("Erro no cadastro");
+              this.$store.dispatch("messageError", "Erro no cadastro");
             });
             this.$refs.form.reset();
           }

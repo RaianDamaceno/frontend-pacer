@@ -7,12 +7,14 @@
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-          color="primary"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          Critérios Avaliação
+            v-bind="attrs"
+            v-on="on"
+            width="100%"
+            class="light-blue darken-3"
+            elevation="0"
+            x-large
+            >
+            Critérios Avaliação
         </v-btn>
       </template>
 
@@ -98,8 +100,7 @@
 
 <script>
 
-  import axios from 'axios'
-
+  import api from '../../services/api'
   export default {
     data: () => ({
       dialog: false,
@@ -113,22 +114,20 @@
     }),
     methods: {
         async getProjects() {
-            await axios.get('http://localhost:3000/project').then((response) => {
+            await api.get('project').then((response) => {
               this.projects = response.data;
               console.log(response.data);
             }, (error) => {
               console.log(error);
-            });
-            console.log (this.projects)
+            }); 
         },
         async getCriterias() {
-            await axios.get('http://localhost:3000/criteria').then((response) => {
+            await api.get('criteria').then((response) => {
               this.criterias = response.data;
               console.log(response.data);
             }, (error) => {
               console.log(error);
             });
-            console.log (this.criterias)
         },
         async submitForm(){
           this.dialog=false
@@ -140,13 +139,10 @@
             'gradeWeight':parseInt(this.formPesoNota, 10),
             'snActivated': "s"
           }
-
-           await axios.post('http://localhost:3000/criteria-project', associateCriteria).then((response) => {
-              console.log(response.data);
-              alert("Cadastro feito com sucesso");
+           await api.post('criteria-project', associateCriteria).then((response) => {
+              this.$store.dispatch("messageSuccess", "Cadastro feito com sucesso");
             }, (error) => {
-              console.log(error);
-              alert("Erro no cadastro");
+              this.$store.dispatch("messageError", "Erro no cadastro");
             });
             this.$refs.form.reset();
         }
@@ -159,7 +155,6 @@
 </script>
 
 <style scoped lang="scss">
-
     .card {
        width: 100%;
        height: 100%;

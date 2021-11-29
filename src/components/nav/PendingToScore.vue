@@ -2,8 +2,16 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" scrollable max-width="700px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn color="primary" dark v-bind="attrs" v-on="on">
-          Avaliações Pendentes
+        <v-btn
+            v-bind="attrs"
+            v-on="on"
+            width="100%"
+            class="light-blue darken-2"
+            elevation="0"
+            x-large
+            >
+            <v-icon>>mdi-view-dashboard</v-icon>
+            Pendencias de Avaliação
         </v-btn>
       </template>
 
@@ -68,11 +76,6 @@
                   <td>{{ maskData(pend.initialDate) }} ~ {{maskData(pend.finalDate) }}</td>
                   <td></td>
                   <td>{{pend.name}}</td>
-                  <td class="pontuar-links">
-                    <button @click="btnPontuar(pend.completo)">
-                      <i> pontuar </i>
-                    </button>
-                  </td>
                 </tr>
               </tbody>
             </table>
@@ -90,7 +93,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import api from '../../services/api'
 
 export default {
   data: () => ({
@@ -108,14 +111,13 @@ export default {
       this.getPendencias();
     },
     async fetchSprints() {
-      await axios.get(`sprint`)
+      await api.get(`sprint`)
         .then( response => {
           this.sprints = response.data;
         });
-      // this.sprintId = "782274b5-d979-45ec-a8e5-8db9b9ddacbe";
     },
     async getPendencias() {
-      await axios.get(`notes-store/pending/${this.idEvaluator}/${this.sprintId}`).then(
+      await api.get(`notes-store/pending/${this.idEvaluator}/${this.sprintId}`).then(
         (response) => {
           console.log(`Response pendencias ${response}`);
           this.pendencias = response.data;
@@ -172,10 +174,7 @@ export default {
     },
     maskData(data) {
       return data.substring(8,10) + "." + data.substring(5,7) + "." + data.substring(0,4);
-    },
-    btnPontuar(aluno){
-      this.mostraMsg("Atalho para pontuação não resolvido para esta Sprint! Nome do Aluno: " + aluno.evaluated.name,3);
-    },
+    }
   },
   mounted() {
     this.idEvaluator = this.$store.getters.getUserId;

@@ -7,10 +7,12 @@
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-          color="primary"
-          dark
-          v-bind="attrs"
-          v-on="on"
+            v-bind="attrs"
+            v-on="on"
+            width="100%"
+            class="light-blue darken-3"
+            elevation="0"
+            x-large
         >
           Cadastro de Sprint
         </v-btn>
@@ -48,12 +50,12 @@
                     cols="12"
                     sm="6"
                     >
-                    <v-text-field
-                        v-model="dateRangeText"
-                        label="Date range"
-                        prepend-icon="mdi-calendar"
-                        readonly
-                    ></v-text-field>
+                      <v-text-field
+                          v-model="dateRangeText"
+                          label="Date range"
+                          prepend-icon="mdi-calendar"
+                          readonly
+                      ></v-text-field>
                     </v-col>
                 </v-row>
             </v-form>
@@ -83,14 +85,13 @@
 </template>
 
 <script>
-
-  import axios from 'axios'
-  import api from '../services/api'
-
+  var today = new Date();
+  var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  import api from '../../services/api'
   export default {
     data: () => ({
       dialog: false,
-      formDates: [''],
+      formDates: [date],
       initialDate: '',
       finalDate: '',
       initialDateNew: '',
@@ -98,19 +99,16 @@
       selectProject:''
       
     }),
-
     beforeMount() {
       api.get('project').then(response => {
-            this.projetos = response.data
-        })
+        this.projetos = response.data
+      });
     },
-
     computed: {
       dateRangeText () {
         return this.formDates.join(' ~ ')
       },
     },
-
     methods: {
         async submitForm(){
           this.dialog=false
@@ -122,33 +120,27 @@
             'finalDate':    this.finalDateNew.split("/").reverse().join("/"),
             'idProject':    this.selectProject.idProject
           }
-          console.log(this.initialDateNew);
-          console.log(this.CreateSprint);
-           await axios.post('http://localhost:3000/sprint', CreateSprint).then((response) => {
-              console.log(response.data);
-              alert("Cadastro feito com sucesso");
+           api.post('sprint', CreateSprint).then((response) => {
+              this.$store.dispatch("messageSuccess", "Cadastro de sprint realizado com sucesso");
             }, (error) => {
               console.log(error);
-              alert("Erro no cadastro");
+              this.$store.dispatch("messageError", "Erro no cadastro de Sprint");
             });
             this.$refs.form.reset();
         },
-
       }
   }
-
-
 </script>
 
 
 <style scoped lang="scss">
-
-    .card {
-       width: 100%;
-       height: 100%;
-    }
-    .container{
-        width: 100%;
-       height: 100%;
-    }
+  .card {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .container{
+    width: 100%;
+    height: 100%;
+  }
 </style>
