@@ -52,23 +52,11 @@
           :criterios="criterios"
           :sprintSelected="sprintSelected"
           :isAluno="isAluno"
+          :isAdmin="isAdmin"
           :isSprintAtiva="activeSprint"
           v-on:select-project="getProjectSelect"
         />
       </div>
-    </div>
-    <div class="dashboard-content-projeto">
-      <projetos
-        :Projetos="this.projetos"
-        :Teams="this.userTeam"
-        :Estudantes="allEstudantes"
-        :userLogged="userLogged"
-        :criterios="criterios"
-        :sprintSelected="sprintSelected"
-        :isAluno="isAluno"
-        :isAdmin="isAdmin"
-        :isSprintAtiva="activeSprint"
-      />
     </div>
   </div>
 </template>
@@ -139,16 +127,13 @@ export default Vue.extend({
       }
     });
     api.get("notes-store").then((response) => {
-      
       this.notasFeitas = response.data.filter(
-          (data) =>
-            data.evaluated.idUser === this.userLogged &&
-            data.idSprint === this.sprintSelected
-      )
+        (data) =>
+          data.evaluated.idUser === this.userLogged &&
+          data.idSprint === this.sprintSelected
+      );
 
-      this.existNote = (!this.notasFeitas)
-                       ? false
-                       : true;
+      this.existNote = !this.notasFeitas ? false : true;
     });
   },
   mounted() {
