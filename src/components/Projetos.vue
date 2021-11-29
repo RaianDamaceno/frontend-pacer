@@ -4,22 +4,22 @@
     <br />
     <v-expansion-panels focusable>
       <v-expansion-panel
-        v-for="Projeto in Projetos"
-        :key="Projeto.idProject"
-        @click="getGruposFromProject(Projeto.idProject)"
+        v-for="projeto in Projetos"
+        :key="projeto.idProject"
+        @click="getGruposFromProject(projeto.idProject)"
       >
         <v-expansion-panel-header>
           <div class="team-title">
             <div>
-              <h3>{{ Projeto.description }}</h3>
+              <h3>{{ projeto.description }}</h3>
             </div>
             <div style="margin-right: 30px" v-if="!isAluno">
               <v-row>
                 <v-col>
-                  <project-criteria :formProject="Projeto.idProject" />
+                  <project-criteria :formProject="projeto.idProject" />
                 </v-col>
                 <v-col>
-                  <add-teacher :projetoId="Projeto.idProject" />
+                  <add-teacher :projetoId="projeto.idProject" />
                 </v-col>
               </v-row>
             </div>

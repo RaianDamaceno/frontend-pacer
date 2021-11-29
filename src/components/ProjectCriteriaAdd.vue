@@ -330,15 +330,8 @@ export default {
       if (!this.formProjectCriterias) this.formProjectCriterias = [];
     },
     close() {
-      this.formProject = null;
       this.resetValues();
       this.dialog = false;
-    },
-    disabledProject() {
-      if (this.$store.getters.getCurrentProject !== "") {
-        return true;
-      }
-      return false;
     },
     saveProjectCriteria() {
       let associateCriteria = {
@@ -407,7 +400,7 @@ export default {
       }
     },
     editCriteria(crit) {
-      if (this.$store.getters.getCurrentProject === crit.idProject) {
+      if (this.formProject === crit.idProject) {
         this.formId = "1";
         this.formCriteria = crit.idCriteria;
         this.formNotaMinima = crit.minGrade.toString(10);
