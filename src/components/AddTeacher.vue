@@ -75,9 +75,9 @@
           </v-card-actions>
 
           <!-- LISTA DE PROFESSORES -->
-          <v-card-text v-if="this.projectTeachers.length > 0">
+          <v-card-text>
             <v-container>
-              <table>
+              <table v-if="this.listaProfessoresDoProjeto.length > 0">
                 <thead>
                   <th width="200px" style="text-align: left">Professor(a)</th>
                   <th width="200px" style="text-align: center">Situação</th>
@@ -85,7 +85,7 @@
                 </thead>
                 <tbody>
                   <tr
-                    v-for="prof in this.projectTeachers"
+                    v-for="prof in listaProfessoresDoProjeto"
                     :key="prof.user.name"
                   >
                     <td style="text-align: left">
@@ -127,8 +127,7 @@ export default {
     dialog: false,
     projects: [],
     teachers: [],
-    curProjectId: "",
-    projectTeachers: [],
+    listaProfessoresDoProjeto: [],
     alteracao: false,
     /** Variables to inputs */
     professorSelecionado: null,
@@ -149,7 +148,6 @@ export default {
       this.inativo = prof.snActivated !== "S";
     },
     close() {
-      this.projetoId = null;
       this.resetValues();
       this.dialog = false;
     },
@@ -157,7 +155,7 @@ export default {
       api
         .get(`project-user/idproject/${this.projetoId}`)
         .then((response) => {
-          this.projectTeachers = response.data;
+          this.listaProfessoresDoProjeto = response.data;
         })
         .catch((error) => {
           this.$store.dispatch("messageError", error.response.data.message);
@@ -198,8 +196,9 @@ export default {
           .patch("project-user", payload)
           .then(() => {
             this.resetValues();
+            this.getProjectProfessores();
             this.$store.dispatch(
-              "messageSuccess",
+              "messageSuccessFast",
               "Professor alterado com sucesso!"
             );
           })
@@ -212,6 +211,7 @@ export default {
           .post("project-user", payload)
           .then(() => {
             this.resetValues();
+            this.getProjectProfessores();
             this.$store.dispatch(
               "messageSuccess",
               "Professor adicionado com sucesso!"
@@ -221,12 +221,12 @@ export default {
             this.$store.dispatch("messageError", error.response.data.message);
           });
       }
-      this.getProjectProfessores();
       this.resetValues();
     },
   },
   mounted() {
     this.resetValues();
+    this.getProjectProfessores();
   },
 };
 </script>
