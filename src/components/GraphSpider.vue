@@ -7,21 +7,61 @@
 
 <style>
 .hc {
-    height: 100%;
-    width: 50%;
+    width: 60%;
 }
 </style>
 
 <script>
 import Vue from "vue";
+import api from "../services/api";
 Vue.prototype.total = [];
-Vue.prototype.sprint = [];
-Vue.prototype.maxNote = 0;
-Vue.prototype.aux = [];
+Vue.prototype.notesTeam = [];
+Vue.prototype.notesSelf = [];
 export default Vue.extend({
     name: "GraphSpider",
     props: {
         criterios: Array,
+        sprintSelected: String,
+        user: String,
+        project: String,
+    },
+    beforeCreate() {
+        this.notesSelf = [];
+        this.notesTeam = [];
+        this.total = [];
+        setTimeout(() => {
+            this.criterios.map((data) => {
+                api.get(
+                    `notes-store/sprint/${this.sprintSelected}/${this.user}/${this.project}/${data.idCriteria}`
+                )
+                    .then((response) => {
+                        this.notesSelf.push(
+                            response.data.selfNotes.selfNoteAvg
+                        );
+                        this.notesTeam.push(
+                            response.data.teamNotes.teamNoteAvg
+                        );
+                    })
+                    .catch((error) => {
+                        alert(
+                            "Ocorreu um erro ao realizar a população do grafico. Por favor tente novamente mais tarde"
+                        );
+                        console.log(error);
+                        return;
+                    });
+            });
+
+            this.total.push(
+                {
+                    name: "Media da Equipe",
+                    data: this.notesTeam,
+                },
+                {
+                    name: "Minha média",
+                    data: this.notesSelf,
+                }
+            );
+        });
     },
     data() {
         return {
@@ -29,6 +69,7 @@ export default Vue.extend({
                 chart: {
                     type: "line",
                     polar: true,
+                    backgroundColor: 'transparent'
                 },
 
                 credits: {
@@ -45,14 +86,14 @@ export default Vue.extend({
                             return cri.descCriteria;
                         }) || [],
                     tickmarkPlacement: "on",
-                    lineWidth: 0,
+                    lineWidth: 0
                 },
 
                 yAxis: {
                     gridLineInterpolation: "polygon",
                     min: 0,
                     max: 100,
-                    tickInterval: 10,
+                    tickInterval: 10
                 },
 
                 legend: {
@@ -66,20 +107,7 @@ export default Vue.extend({
                     valueSuffix: " Pontos",
                 },
 
-
-                //Data Mock. Wait call to backend with data;
-                series: [
-                    {
-                        name: "Media da Sala",
-                        data: [87, 95, 45, 7, 50 ],
-                        color: 'blue'
-                    },
-                    {
-                        name: "Notas dos Colegas",
-                        data: [94, 30, 82, 6, 20 ],
-                        color: 'green'
-                    },
-                ],
+                series: this.total || [],
             },
         };
     },

@@ -76,11 +76,6 @@
                   <td>{{ maskData(pend.initialDate) }} ~ {{maskData(pend.finalDate) }}</td>
                   <td></td>
                   <td>{{pend.name}}</td>
-                  <td class="pontuar-links">
-                    <button @click="btnPontuar(pend.completo)">
-                      <i> pontuar </i>
-                    </button>
-                  </td>
                 </tr>
               </tbody>
             </table>
@@ -179,10 +174,7 @@ export default {
     },
     maskData(data) {
       return data.substring(8,10) + "." + data.substring(5,7) + "." + data.substring(0,4);
-    },
-    btnPontuar(aluno){
-      this.mostraMsg("Atalho para pontuação não resolvido para esta Sprint! Nome do Aluno: " + aluno.evaluated.name,3);
-    },
+    }
   },
   mounted() {
     this.idEvaluator = this.$store.getters.getUserId;
