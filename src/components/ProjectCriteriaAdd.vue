@@ -317,14 +317,17 @@ export default {
       this.saveProjectCriteria();
     },
     fetchProjectCriterias() {
+      this.formProjectCriterias = null;
       api
         .get(`criteria-project/${this.formProject}`)
         .then((response) => {
           this.formProjectCriterias = response.data;
         })
         .catch((error) => {
-          this.$store.dispatch("messageError", error.response.data.message);
+          console.log(error.response.data.message);
+          this.formProjectCriterias = [];
         });
+      if (!this.formProjectCriterias) this.formProjectCriterias = [];
     },
     close() {
       this.formProject = null;
