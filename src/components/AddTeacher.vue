@@ -5,7 +5,7 @@
         <template v-slot:activator="{ on, attrs }">
           <div class="text-xs-center">
             <v-btn fab dark small color="primary" v-bind="attrs" v-on="on">
-              <v-icon> mdi-account-tie-outline </v-icon>
+              <v-icon> mdi-account-star-outline </v-icon>
             </v-btn>
           </div>
         </template>
