@@ -12,10 +12,10 @@
 
         <v-card>
           <v-card-title v-if="this.formId === ''">
-            <span class="text-h5">Vínculo de Critério no Projeto</span>
+            <span class="text-h5">Adicionar Critério ao Projeto</span>
           </v-card-title>
           <v-card-title v-else>
-            <span class="text-h5">Alteração de Critério no Projeto</span>
+            <span class="text-h5">Alteração de Critério do Projeto</span>
           </v-card-title>
 
           <v-card-text>
