@@ -5,7 +5,7 @@
         <template v-slot:activator="{ on, attrs }">
           <div class="text-xs-center">
             <v-btn fab dark small color="primary" v-bind="attrs" v-on="on">
-              <v-icon> mdi-human-child </v-icon>
+              <v-icon> mdi-microsoft-teams </v-icon>
             </v-btn>
           </div>
         </template>
