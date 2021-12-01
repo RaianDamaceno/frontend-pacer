@@ -25,6 +25,7 @@ export default Vue.extend({
         user: String,
         project: String,
     },
+    
     beforeCreate() {
         this.notesSelf = [];
         this.notesTeam = [];
@@ -65,6 +66,7 @@ export default Vue.extend({
     },
     data() {
         return {
+            var_teste: [],
             chartOptions: {
                 chart: {
                     type: "line",
@@ -91,9 +93,9 @@ export default Vue.extend({
 
                 yAxis: {
                     gridLineInterpolation: "polygon",
-                    min: 0,
-                    max: 100,
-                    tickInterval: 10
+                    min: 1,
+                    max: 12,
+                    tickInterval: 1
                 },
 
                 legend: {
