@@ -40,8 +40,8 @@
                     always-dirty
                     class="mx-5"
                     id="slider"
-                    min="0"
-                    max="100"
+                    :min="nota.min"
+                    :max="nota.max"
                     thumb-label="always"
                     :label="nota.criterio.descCriteria"
                     color="deep-orange accent-3"
@@ -98,11 +98,12 @@ export default {
       update: [],
       rating: {},
       notasFeitasAvaliador: [],
-      notasUsuario: []
+      notasUsuario: [],
+      var_teste: []
     }
   },
   beforeMount() {
-    this.getNotes()
+    this.getNotes();
   },
   methods: {
     vChangeUpdate: function (idRating, idCriteira, nota) {
@@ -139,19 +140,27 @@ export default {
       if(!this.sprintID || this.sprintID === undefined) {
         return;
       }
-      console.log(this.sprintID);
+
       api.get(`notes-store/by-sprint/${this.sprintID}`).then(notes => {
         let notasUsuario = notes.data;
-
         for (let i = 0; i < notasUsuario.length; i++) {
-          if (notasUsuario[i].idEvaluator == evaluatorId && notasUsuario[i].idEvaluated == this.estudanteID && notasUsuario[i].idGroup === this.idGroup) {
-            this.notasFeitasAvaliador.push(notasUsuario[i])
-          }
+          api.get(`criteria-project`).then(notes => {
+            for (let x = 0; x < notes.data.length; x++) {
+              this.var_teste.push(notes.data[x])
+              if (this.var_teste[x].idCriteria == notasUsuario[i].idCriteria){
+                if (notasUsuario[i].idEvaluator == evaluatorId && notasUsuario[i].idEvaluated == this.estudanteID && notasUsuario[i].idGroup === this.idGroup) {
+                  notasUsuario[i]["max"] = this.var_teste[x].maxGrade
+                  notasUsuario[i]["min"] = this.var_teste[x].minGrade
+                  this.notasFeitasAvaliador.push(notasUsuario[i])
+                }
+              }
+            }
+          });
         }
       }).catch(error => {
-        console.log(error.response.data.message);
+          console.log(error.response.data.message);
       });
-    }
+    },
   }
 }
 </script>
