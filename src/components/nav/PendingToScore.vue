@@ -11,7 +11,7 @@
             x-large
             >
             <v-icon>>mdi-view-dashboard</v-icon>
-            Pendencias de Avaliação
+            Pendências de Avaliação
         </v-btn>
       </template>
 

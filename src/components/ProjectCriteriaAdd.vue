@@ -1,181 +1,187 @@
 <template>
-  <v-row justify="left">
-    <v-dialog v-model="dialog" scrollable max-width="600px">
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          v-bind="attrs"
-          v-on="on"
-          width="100%"
-          class="light-blue darken-3"
-          elevation="0"
-          x-large
-        >
-          Vínculo de Critérios nos Projetos
-        </v-btn>
-      </template>
+  <div>
+    <v-row style="padding-top: 16%">
+      <v-dialog v-model="dialog" scrollable max-width="600px">
+        <template v-slot:activator="{ on, attrs }">
+          <div class="text-xs-center">
+            <v-btn fab dark small color="primary" v-bind="attrs" v-on="on">
+              <v-icon> mdi-playlist-star </v-icon>
+            </v-btn>
+          </div>
+        </template>
 
-      <v-card>
-        <v-card-title v-if="this.formId === ''">
-          <span class="text-h5">Vínculo de Critério no Projeto</span>
-        </v-card-title>
-        <v-card-title v-else>
-          <span class="text-h5">Alteração de Critério no Projeto</span>
-        </v-card-title>
+        <v-card>
+          <v-card-title v-if="this.formId === ''">
+            <span class="text-h5">Adicionar Critério ao Projeto</span>
+          </v-card-title>
+          <v-card-title v-else>
+            <span class="text-h5">Alteração de Critério do Projeto</span>
+          </v-card-title>
 
-        <v-card-text>
-          <v-container>
-            <v-form ref="form">
-              <!-- PROJETO -->
-              <v-row>
-                <v-col>
-                  <v-autocomplete
-                    label="Projeto * "
-                    v-model="formProject"
-                    :items="this.projects"
-                    required
-                    dense
-                    id="project"
-                    item-text="description"
-                    item-value="idProject"
-                    :disabled="this.disabledProject()"
-                    row-height="6"
-                  ></v-autocomplete>
-                </v-col>
-              </v-row>
+          <v-card-text>
+            <v-container>
+              <v-form ref="form">
+                <!-- PROJETO -->
+                <v-row>
+                  <v-col>
+                    <v-autocomplete
+                      label="Projeto"
+                      v-model="formProject"
+                      :items="this.projects"
+                      required
+                      dense
+                      id="project"
+                      item-text="description"
+                      item-value="idProject"
+                      :disabled="true"
+                      row-height="6"
+                    ></v-autocomplete>
+                  </v-col>
+                </v-row>
 
-              <!-- CRITERIO -->
-              <v-row>
-                <v-col>
-                  <v-autocomplete
-                    :items="this.criterias"
-                    label="Critério *"
-                    required
-                    dense
-                    id="criteria"
-                    item-text="descCriteria"
-                    item-value="idCriteria"
-                    v-model="formCriteria"
-                    row-height="6"
-                  ></v-autocomplete>
-                </v-col>
-              </v-row>
+                <!-- CRITERIO -->
+                <v-row>
+                  <v-col>
+                    <v-autocomplete
+                      :items="this.criterias"
+                      label="Critério *"
+                      required
+                      dense
+                      id="criteria"
+                      item-text="descCriteria"
+                      item-value="idCriteria"
+                      v-model="formCriteria"
+                      row-height="6"
+                    ></v-autocomplete>
+                  </v-col>
+                </v-row>
 
-              <!-- NOTAS E PESO -->
-              <v-row>
-                <v-col cols="4">
-                  <v-text-field
-                    label="Nota Mínima"
-                    type="number"
-                    required
-                    id="notaMinima"
-                    v-model="formNotaMinima"
-                    :min="0"
-                    :max="9"
-                    row-height="6"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="4">
-                  <v-text-field
-                    label="Nota Máxima"
-                    type="number"
-                    required
-                    id="notaMaxima"
-                    v-model="formNotaMaxima"
-                    :min="1"
-                    :max="10"
-                    row-height="6"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="4">
-                  <v-text-field
-                    label="Peso"
-                    type="number"
-                    required
-                    id="pesoCriterio"
-                    v-model="formPesoNota"
-                    :min="1"
-                    :max="10"
-                    row-height="6"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-              <v-checkbox
-                v-if="this.formId !== ''"
-                label="Inativo"
-                color="primary"
-                v-model="formInactive"
-                dense
-                row-height="1"
-              >
-              </v-checkbox>
-              <small dense>* Campos obrigatorios</small>
-            </v-form>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="close()"> Fechar </v-btn>
-          <v-btn color="blue darken-1" text @click="validate()"> Salvar </v-btn>
-        </v-card-actions>
-
-        <v-divider></v-divider>
-
-        <v-card-text v-if="this.formProject !== ''">
-          <v-container>
-            <table v-if="this.formProjectCriterias.length > 0">
-              <thead>
-                <th width="200px" style="text-align: left">Critérios</th>
-                <th width="100px" style="text-align: center">Notas (Peso)</th>
-                <th width="120px" style="text-align: center">Situação</th>
-                <th width="090px" style="text-align: center"></th>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="crit in this.formProjectCriterias"
-                  :key="crit.criteria.descCriteria"
+                <!-- NOTAS E PESO -->
+                <v-row>
+                  <v-col cols="4">
+                    <v-text-field
+                      label="Nota Mínima"
+                      type="number"
+                      required
+                      id="notaMinima"
+                      v-model="formNotaMinima"
+                      :min="0"
+                      :max="9"
+                      row-height="6"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="4">
+                    <v-text-field
+                      label="Nota Máxima"
+                      type="number"
+                      required
+                      id="notaMaxima"
+                      v-model="formNotaMaxima"
+                      :min="1"
+                      :max="10"
+                      row-height="6"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="4">
+                    <v-text-field
+                      label="Peso"
+                      type="number"
+                      required
+                      id="pesoCriterio"
+                      v-model="formPesoNota"
+                      :min="1"
+                      :max="10"
+                      row-height="6"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-checkbox
+                  v-if="this.formId !== ''"
+                  label="Inativo"
+                  color="primary"
+                  v-model="formInactive"
+                  dense
+                  row-height="1"
                 >
-                  <td style="text-align: left">
-                    {{ crit.criteria.descCriteria }}
-                  </td>
-                  <td style="text-align: center">
-                    {{ crit.minGrade }} a {{ crit.maxGrade }} (
-                    {{ crit.gradeWeight }} )
-                  </td>
-                  <td v-if="crit.snActivated == 'S'" style="text-align: center">
-                    ativo
-                  </td>
-                  <td v-else style="text-align: center; color: red">inativo</td>
-                  <td>
-                    <button @click="editCriteria(crit)" class="btn_editar">
-                      <i>editar</i>
-                    </button>
-                    <span> </span>
-                    <button @click="deleteCriteria(crit)" class="btn_excluir">
-                      <i>&nbsp;excluir</i>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </v-container>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-  </v-row>
+                </v-checkbox>
+                <small dense>* Campos obrigatorios</small>
+              </v-form>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" text @click="close()"> Fechar </v-btn>
+            <v-btn color="blue darken-1" text @click="validate()">
+              Salvar
+            </v-btn>
+          </v-card-actions>
+
+          <v-divider></v-divider>
+
+          <v-card-text>
+            <v-container>
+              <table v-if="this.formProjectCriterias.length > 0">
+                <thead>
+                  <th width="200px" style="text-align: left">Critérios</th>
+                  <th width="100px" style="text-align: center">Notas (Peso)</th>
+                  <th width="120px" style="text-align: center">Situação</th>
+                  <th width="090px" style="text-align: center"></th>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="crit in this.formProjectCriterias"
+                    :key="crit.criteria.descCriteria"
+                  >
+                    <td style="text-align: left">
+                      {{ crit.criteria.descCriteria }}
+                    </td>
+                    <td style="text-align: center">
+                      {{ crit.minGrade }} a {{ crit.maxGrade }} (
+                      {{ crit.gradeWeight }} )
+                    </td>
+                    <td
+                      v-if="crit.snActivated == 'S'"
+                      style="text-align: center"
+                    >
+                      ativo
+                    </td>
+                    <td v-else style="text-align: center; color: red">
+                      inativo
+                    </td>
+                    <td>
+                      <button @click="editCriteria(crit)" class="btn_editar">
+                        <i>editar</i>
+                      </button>
+                      <span> </span>
+                      <button @click="deleteCriteria(crit)" class="btn_excluir">
+                        <i>&nbsp;excluir</i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </v-container>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+    </v-row>
+  </div>
 </template>
 
 <script>
 import api from "@/services/api";
 
 export default {
-  name: "project-criteria-add",
+  name: "project-criteria",
+  props: {
+    formProject: String,
+  },
   data: () => ({
     dialog: false,
     projects: [],
     criterias: [],
     /** Variables to inputs */
     formId: "",
-    formProject: "",
     formCriteria: "",
     formNotaMinima: "",
     formNotaMaxima: "",
@@ -187,37 +193,33 @@ export default {
   methods: {
     resetValues() {
       this.formId = "";
-      this.formProject = this.$store.getters.getCurrentProject;
       this.formCriteria = "";
       this.formNotaMinima = "0";
       this.formNotaMaxima = "3";
       this.formPesoNota = "1";
       this.formInactive = false;
       this.fetchProjectCriterias();
+      this.getCriterias();
     },
     async getProjects() {
       await api.get("project").then(
         (response) => {
           this.projects = response.data;
-          console.log(response.data);
         },
         (error) => {
           console.log(error);
         }
       );
-      console.log(this.projects);
     },
     async getCriterias() {
       await api.get("criteria").then(
         (response) => {
           this.criterias = response.data;
-          console.log(response.data);
         },
         (error) => {
           console.log(error);
         }
       );
-      console.log(this.criterias);
     },
     // Validação dos dados
     validate() {
@@ -315,25 +317,21 @@ export default {
       this.saveProjectCriteria();
     },
     fetchProjectCriterias() {
+      this.formProjectCriterias = null;
       api
         .get(`criteria-project/${this.formProject}`)
         .then((response) => {
           this.formProjectCriterias = response.data;
         })
         .catch((error) => {
-          this.$store.dispatch("messageError", error.response.data.message);
+          console.log(error.response.data.message);
+          this.formProjectCriterias = [];
         });
+      if (!this.formProjectCriterias) this.formProjectCriterias = [];
     },
     close() {
       this.resetValues();
       this.dialog = false;
-    },
-    disabledProject() {
-      if (this.$store.getters.getCurrentProject !== "") {
-        this.formProject = this.$store.getters.getCurrentProject;
-        return true;
-      }
-      return false;
     },
     saveProjectCriteria() {
       let associateCriteria = {
@@ -351,7 +349,7 @@ export default {
           .then(() => {
             this.resetValues();
             this.$store.dispatch(
-              "messageSuccess",
+              "messageSuccessFast",
               "Novo critério salvo com sucesso!"
             );
           })
@@ -366,7 +364,7 @@ export default {
           .then(() => {
             this.resetValues();
             this.$store.dispatch(
-              "messageSuccess",
+              "messageSuccessFast",
               "Critério alterado com sucesso!"
             );
           })
@@ -402,14 +400,14 @@ export default {
       }
     },
     editCriteria(crit) {
-      if (this.$store.getters.getCurrentProject === crit.idProject) {
+      if (this.formProject === crit.idProject) {
         this.formId = "1";
-        this.formProject = crit.idProject;
         this.formCriteria = crit.idCriteria;
         this.formNotaMinima = crit.minGrade.toString(10);
         this.formNotaMaxima = crit.maxGrade.toString(10);
         this.formPesoNota = crit.gradeWeight.toString(10);
         this.formInactive = crit.snActivated !== "S";
+        this.getCriterias();
         this.fetchProjectCriterias();
       } else {
         this.$store.dispatch(
@@ -421,10 +419,7 @@ export default {
   },
   beforeMount() {
     this.resetValues();
-    this.formProject = this.$store.getters.getCurrentProject;
-    this.fetchProjectCriterias();
     this.getProjects();
-    this.getCriterias();
   },
 };
 </script>

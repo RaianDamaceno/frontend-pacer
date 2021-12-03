@@ -8,16 +8,30 @@
                 :key="Projeto.idProject"
                 @click="getGruposFromProject(Projeto.idProject)"
             >
-            <v-expansion-panel-header>
+            <v-expansion-panel-header >
                 <div class="team-title">
                     <div>
                          <h3>{{ Projeto.description}}</h3>
                     </div>
+
+                    
                     <div style="margin-right: 30px" v-if="!isAluno" >
-                        <add-teacher :projetoId="Projeto.idProject" />
+                        <v-row>
+                            <!-- ÍCONE CADASTRO DE CRITÉRIOS -->
+                            <v-col>
+                                <project-criteria-add :formProject="Projeto.idProject" />
+                            </v-col>
+                            
+                            <!-- ÍCONE CADASTRO DE PROFESSORES -->
+                            <v-col>
+                                <add-teacher :projetoId="Projeto.idProject" />
+                            </v-col>
+                        </v-row>
                     </div>
+
                 </div>
             </v-expansion-panel-header>
+
             <v-expansion-panel-content>
             <v-expansion-panels focusable>
                 <br>
@@ -29,7 +43,7 @@
                     <v-expansion-panel-header>
                         <div class="team-title">
                             <div>
-                                <h3>Time: {{ Team.teamName }} </h3>
+                                <h3>Equipe: {{ Team.teamName }} </h3>
                             </div>
                             <div>
                                 <card-float-button
@@ -67,6 +81,7 @@
                                             :nome="estudante.user.name"
                                             :estudanteID="estudante.idUser"
                                             :sprintID="sprintSelected"
+                                            :notasFeitas="notasFeitas"
                                             :idEvaluator="userLogged"
                                             :idGroup="grupoAtivo"
                                         />
@@ -80,6 +95,7 @@
                                             :nome="estudante.user.name"
                                             :estudanteID="estudante.idUser"
                                             :sprintID="sprintSelected"
+                                            :notasFeitas="notasFeitas"
                                             :idEvaluator="userLogged"
                                             :idGroup="grupoAtivo"
                                         />
@@ -117,6 +133,7 @@
   import api from '../services/api'
   import CardStudentRating from '../components/CardStudentRating.vue'
   import CardFloatButton from '../components/CardFloatButton.vue'
+  import ProjectCriteriaAdd from '../components/ProjectCriteriaAdd.vue'
   import AddTeacher from '../components/AddTeacher.vue'
   export default Vue.extend({
     name: 'Projetos',
@@ -124,6 +141,7 @@
         Projetos: Array,
         Teams: Array,
         Estudantes: Array,
+        notasFeitas: Array,
         userLogged: String,
         criterios: Array,
         sprintSelected: String,
@@ -133,7 +151,8 @@
     components: {
         CardStudentRating,
         CardFloatButton,
-        AddTeacher
+        AddTeacher,
+        ProjectCriteriaAdd
     },
     data: () => ({
         myTeams: [],

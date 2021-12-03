@@ -6,6 +6,7 @@
                 :estudantes="allEstudantes"
                 :projetos="projetos"
                 :isAluno="isAluno"
+                :isAdmin="isAdmin"
             />
         </div>
         <div class="dashboard-content">
@@ -45,6 +46,7 @@
                     :criterios="criterios"
                     :sprintSelected="sprintSelected"
                     :isAluno="isAluno"
+                    :isAdmin="isAdmin"
                     :isSprintAtiva="activeSprint"
                     v-on:select-project="getProjectSelect"
                 />
@@ -85,6 +87,7 @@ export default Vue.extend({
         haveSM: false,
         idteam: "",
         isAluno: false,
+        isAdmin: false,
         showButtonScrum: false,
         minhaAvaliação: [],
         UserLoggedTeam: "",
