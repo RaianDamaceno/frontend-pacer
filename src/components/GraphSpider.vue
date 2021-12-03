@@ -1,6 +1,6 @@
 /* eslint-disable vue/require-prop-type-constructor */
 <template>
-    <div  style="width:100%">
+    <div style="width: 100%">
         <highcharts class="hc" :options="chartOptions"></highcharts>
     </div>
 </template>
@@ -25,7 +25,7 @@ export default Vue.extend({
         user: String,
         project: String,
     },
-    
+
     beforeCreate() {
         this.notesSelf = [];
         this.notesTeam = [];
@@ -56,10 +56,12 @@ export default Vue.extend({
                 {
                     name: "Media da Equipe",
                     data: this.notesTeam,
+                    pointPlacement: "on",
                 },
                 {
                     name: "Minha média",
                     data: this.notesSelf,
+                    pointPlacement: "on",
                 }
             );
         });
@@ -71,7 +73,7 @@ export default Vue.extend({
                 chart: {
                     type: "line",
                     polar: true,
-                    backgroundColor: 'transparent'
+                    backgroundColor: "#c7c7c7"
                 },
 
                 credits: {
@@ -87,15 +89,12 @@ export default Vue.extend({
                         this.criterios.map((cri) => {
                             return cri.descCriteria;
                         }) || [],
-                    tickmarkPlacement: "on",
-                    lineWidth: 0
+                    lineWidth: 0,
                 },
 
                 yAxis: {
                     gridLineInterpolation: "polygon",
-                    min: 1,
-                    max: 12,
-                    tickInterval: 1
+                    lineWidth: 0,
                 },
 
                 legend: {
@@ -105,8 +104,8 @@ export default Vue.extend({
                 },
 
                 tooltip: {
-                    shared: false,
-                    valueSuffix: " Pontos",
+                    shared: true,
+                    valueSuffix: " Pontos"
                 },
 
                 series: this.total || [],
