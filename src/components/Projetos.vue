@@ -88,9 +88,6 @@
                                         class="dashboard-group-person-button"
                                         v-else
                                     >
-                                        <card-toast-sprint
-                                            text="Sprint finalizada"
-                                        />
                                     </div>
                                 </div>
                                 <v-row
@@ -145,7 +142,8 @@
         loader: null,
         projectGrupos: '',
         isGrupoDoUsuario: true,
-        showButtonScrum: ''
+        showButtonScrum: '',
+        haveSM: false
     }),
     watch: {
       loader () {
@@ -172,18 +170,13 @@
                 this.estudantes = response.data;
                 this.isGrupoDoUsuario = false;
                 for (let i = 0; i < this.estudantes.length; i++) {
-                    if(this.userLogged == this.estudantes[i].idUser && teamID == this.estudantes[i].idTeam) {
+                    if(this.userLogged == this.estudantes[i].idUser && this.idteam == this.estudantes[i].idTeam) {
                         this.isGrupoDoUsuario = true;
                     }
-                    if (this.estudantes[i].isScrumMaster) {
+                    if (this.estudantes[i].isScrumMaster && !this.haveSM) {
                         this.haveSM = true;
-                        break;
-                    } else {
-                        this.haveSM = false;
-                    }
-                }
-                if (this.isAluno && !this.haveSM) {
-                    this.showButtonScrum = true;
+                        this.showButtonScrum = true;
+                    }                    
                 }
             }).catch(error => {
                 console.log(error);
