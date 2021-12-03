@@ -175,6 +175,8 @@
         goDashboard() {
             this.$router.push({ path: 'dashboard' })
         },
-  },
+    },mounted(){
+        
+    }
   }
 </script>

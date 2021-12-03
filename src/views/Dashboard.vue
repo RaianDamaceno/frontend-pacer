@@ -88,7 +88,7 @@ export default Vue.extend({
         showButtonScrum: false,
         minhaAvaliação: [],
         UserLoggedTeam: "",
-        userTeam: [],
+        userTeam: [""],
         userProjeto: [],
         selectSprint: "",
         showGraph: false,
